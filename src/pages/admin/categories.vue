@@ -144,7 +144,10 @@ const deleteMany = async () => {
   }
 };
 const duplicate = (category: Category) => {
-  openDialog({ ...category, id: undefined, name: category.name + " копия" });
+  openDialog({
+    name: category.name + " копия",
+    parentId: category.parentId,
+  });
 };
 
 const confirmDeleteCategory = (category: Category) => {
