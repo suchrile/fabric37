@@ -14,16 +14,12 @@ import {
   ProductAttributeSelectValue,
   ProductAttributeStringValue,
   ProductAttributeSelectOption,
-  Prisma,
 } from "@prisma/client";
-import JsonNull = Prisma.NullTypes.JsonNull;
-import InputJsonValue = Prisma.InputJsonValue;
 
 export type DatabaseObject<T> = {
   id: number;
   data: T;
 };
-export type DatabaseObjectDto = JsonNull | InputJsonValue;
 
 export type Info = {
   app: {
