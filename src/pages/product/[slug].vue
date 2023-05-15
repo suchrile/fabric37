@@ -18,10 +18,8 @@
         <Galleria
           :value="product.images"
           :num-visible="4"
-          :circular="true"
-          :show-thumbnail-navigators="true"
           thumbnails-position="left"
-          vertical-thumbnail-view-port-height="372px"
+          vertical-thumbnail-view-port-height="344px"
         >
           <template #item="slotProps">
             <img
@@ -188,7 +186,7 @@ useSeoMeta({
   }
   &__content {
     display: grid;
-    grid-template-columns: 756px 1fr;
+    grid-template-columns: auto 1fr;
     gap: 25px;
   }
   & .details {
@@ -261,27 +259,27 @@ useSeoMeta({
     &__image,
     &__thumbnail {
       display: block;
-      width: 100%;
-      height: 100%;
       object-fit: cover;
       border-radius: var(--border-radius);
     }
     &__image {
-      width: 660px;
-      height: 440px;
-      aspect-ratio: 1.5/1 !important;
+      width: 630px;
+      aspect-ratio: 1.5/1;
     }
     &__thumbnail {
-      width: 88px;
+      width: 82.25px;
       aspect-ratio: 1/1;
       border: 2px solid transparent;
     }
     .p-galleria-thumbnail-container {
-      padding: 0 10px 0 0;
+      padding: 0 15px 0 0;
       background-color: transparent;
     }
+    .p-galleria-thumbnail-items {
+      height: auto;
+      gap: 5px;
+    }
     .p-galleria-thumbnail-item {
-      aspect-ratio: 1/1;
       opacity: 1;
     }
     .p-galleria-thumbnail-item-current .gallery__thumbnail {
@@ -294,7 +292,7 @@ useSeoMeta({
     }
     .p-galleria-thumbnail-prev,
     .p-galleria-thumbnail-next {
-      margin: 3px;
+      margin: 5px;
       color: var(--primary-color) !important;
     }
   }
