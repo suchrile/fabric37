@@ -13,7 +13,10 @@
       </div>
 
       <div class="header-top__contacts contacts">
-        <div class="contacts__phone-numbers phone-numbers">
+        <div
+          v-if="info.contacts.phoneNumbers.length"
+          class="contacts__phone-numbers phone-numbers"
+        >
           <i class="pi pi-phone" />
           <a :href="`tel:${info.contacts.phoneNumbers[0]}`">
             {{ info.contacts.phoneNumbers[0] }}
@@ -59,6 +62,7 @@ if (data.value) {
 
 <style scoped lang="scss">
 .header-top {
+  min-height: 46px;
   background-color: var(--purple-800);
 
   &__container {

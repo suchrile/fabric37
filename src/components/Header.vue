@@ -1,6 +1,10 @@
 <template>
   <div>
-    <HeaderTop />
+    <HeaderTop
+      v-if="
+        links.length || info.contacts.email || info.contacts.phoneNumbers.length
+      "
+    />
 
     <header class="header">
       <div class="header__container">
