@@ -1,8 +1,6 @@
 <template>
   <footer class="footer">
-    <div
-      class="footer__container container flex align-items-center justify-content-between"
-    >
+    <div class="footer__container container">
       <div class="footer__copyright">© {{ year }} ИП Яровицына Н.В.</div>
       <div class="inn">ИНН: 373000173354</div>
       <div class="inn">ОГРНИП: 306370222300071</div>
@@ -22,10 +20,21 @@ const year = computed(() => new Date().getFullYear());
   background-color: var(--purple-800);
 
   &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   &__logo {
     margin: 0;
+  }
+
+  @media screen and (max-width: 767px) {
+    &__container {
+      width: 100%;
+      flex-direction: column-reverse;
+      gap: 5px;
+    }
   }
 }
 </style>
