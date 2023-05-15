@@ -27,6 +27,7 @@
       v-model:visible="isDialogOpen"
       :value="currentCategory"
       :categories="categories"
+      :loading="isDialogLoading"
       @create="create"
       @update="update"
       @hide="dialogHideHandler"
@@ -56,6 +57,7 @@ const currentCategory: Ref<CategoryDialogProp> = ref({} as Category);
 const selectedCategories: Ref<Category[]> = ref([]);
 const isCategoriesLoading: Ref<boolean> = ref(true);
 const isDialogOpen: Ref<boolean> = ref(false);
+const isDialogLoading: Ref<boolean> = ref(false);
 const filters: Ref<DataTableFilterMeta> = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
@@ -70,6 +72,7 @@ onMounted(async () => {
 });
 
 const create = async (category: CategoryDialogProp) => {
+  isDialogLoading.value = true;
   const { data } = await useApiCall<Category>("/api/categories", {
     method: "POST",
     body: { ...category },
@@ -84,8 +87,10 @@ const create = async (category: CategoryDialogProp) => {
       life: 3000,
     });
   }
+  isDialogLoading.value = false;
 };
 const update = async (category: Category) => {
+  isDialogLoading.value = true;
   const { data } = await useApiCall<Category>(
     "/api/categories/" + category.id,
     {
@@ -104,6 +109,7 @@ const update = async (category: Category) => {
       life: 3000,
     });
   }
+  isDialogLoading.value = false;
 };
 const deleteOne = async () => {
   const { data } = await useApiCall<Category>(

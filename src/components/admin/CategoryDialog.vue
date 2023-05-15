@@ -3,6 +3,8 @@
     :header="dialogHeader"
     :modal="true"
     :visible="visible"
+    :close-on-escape="!loading"
+    :closable="!loading"
     :style="{ width: '450px' }"
     class="p-fluid"
     @show="showHandler"
@@ -15,6 +17,7 @@
       <InputText
         id="category-dialog-name"
         v-model.trim="category.name"
+        :disabled="loading"
         placeholder="Введите наименование категории"
         :class="{ 'p-invalid': v$.$dirty && v$.name.$errors.length }"
         autofocus
@@ -37,6 +40,7 @@
             id="category-dialog-parent-id"
             v-model="parentId"
             :options="categoriesTree"
+            :disabled="loading"
             selection-mode="single"
             placeholder="Без родительской категории"
             :class="{ 'p-invalid': v$.$dirty && v$.parentId.$errors.length }"
@@ -61,14 +65,16 @@
 
     <template #footer>
       <Button
-        label="Отменить"
         icon="pi pi-times"
+        label="Отменить"
+        :disabled="loading"
         class="p-button-text"
         @click="$emit('hide')"
       />
       <Button
-        :label="submitLabel"
         icon="pi pi-check"
+        :label="submitLabel"
+        :loading="loading"
         class="p-button-text"
         @click="submit"
       />
@@ -90,6 +96,7 @@ const props = defineProps({
   value: { type: Object as PropType<CategoryDialogProp>, required: true },
   categories: { type: Object as PropType<Category[]>, required: true },
   visible: { type: Boolean, required: true },
+  loading: { type: Boolean, default: false },
 });
 const emit = defineEmits(["update:visible", "hide", "create", "update"]);
 
