@@ -129,6 +129,7 @@
     <AdminAttributeDialog
       v-model:visible="isAttributeEditDialogOpen"
       :value="currentAttribute"
+      :loading="isDialogLoading"
       @create="create"
       @edit="update"
       @close="closeHandler"
@@ -156,6 +157,7 @@ const attributes: Ref<Attribute[]> = ref([]);
 const currentAttribute: Ref<AttributeDialogProp> = ref({} as Attribute);
 const selectedAttributes: Ref<Attribute[]> = ref([]);
 const isLoading: Ref<boolean> = ref(true);
+const isDialogLoading: Ref<boolean> = ref(false);
 const isAttributeEditDialogOpen: Ref<boolean> = ref(false);
 const expandedRows: Ref<Attribute[]> = ref([]);
 const filters: Ref<DataTableFilterMeta> = ref({
@@ -174,6 +176,7 @@ onMounted(async () => {
 });
 
 const create = async (attribute: Attribute) => {
+  isDialogLoading.value = true;
   const { data } = await useApiCall<Attribute>("/api/attributes", {
     method: "POST",
     body: attribute,
@@ -188,8 +191,10 @@ const create = async (attribute: Attribute) => {
       life: 3000,
     });
   }
+  isDialogLoading.value = false;
 };
 const update = async (attribute: Attribute) => {
+  isDialogLoading.value = true;
   const { data } = await useApiCall<Attribute>(
     "/api/attributes/" + attribute.id,
     { method: "PATCH", body: attribute }
@@ -205,6 +210,7 @@ const update = async (attribute: Attribute) => {
       life: 3000,
     });
   }
+  isDialogLoading.value = false;
 };
 const removeOne = async () => {
   const attributeLabel = currentAttribute.value.name;

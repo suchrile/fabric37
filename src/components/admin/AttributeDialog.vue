@@ -3,6 +3,8 @@
     :header="dialogHeader"
     :modal="true"
     :visible="visible"
+    :close-on-escape="!loading"
+    :closable="!loading"
     :style="{ width: '450px' }"
     class="p-fluid"
     @update:visible="$emit('update:visible', $event)"
@@ -15,6 +17,7 @@
       <InputText
         id="product-attribute-name"
         v-model.trim="attribute.name"
+        :disabled="loading"
         placeholder="Например: Ширина"
         :class="{ 'p-invalid': v$.$dirty && v$.name.$errors.length }"
         autofocus
@@ -34,6 +37,7 @@
       <InputText
         id="product-attribute-unit"
         v-model.trim="attribute.unit"
+        :disabled="loading"
         placeholder="Например: см, гр, шт"
       />
     </div>
@@ -44,7 +48,7 @@
         id="product-attribute-data-type"
         v-model="attribute.dataType"
         :options="ProductAttributeDataTypes"
-        :disabled="!!attribute.id"
+        :disabled="!!attribute.id || loading"
         option-label="label"
         option-value="value"
         placeholder="Выберите тип данных атрибута"
@@ -71,6 +75,7 @@
         <InputText
           id="product-attribute-unit"
           v-model.trim="optionsInput"
+          :disabled="loading"
           placeholder="Введите название опции и нажмите Enter"
           @keydown.enter.stop="addOption"
         />
@@ -82,7 +87,7 @@
             v-for="option in options"
             :key="option.label"
             :label="option.label"
-            removable
+            :removable="!loading"
             @remove="removeOption(option)"
           />
         </div>
@@ -93,6 +98,7 @@
       <Checkbox
         v-model="attribute.showInCatalog"
         input-id="product-attribute-show-in-catalog"
+        :disabled="loading"
         :binary="true"
         @input="onShowInCatalogChange($event)"
       />
@@ -105,6 +111,7 @@
       <Checkbox
         v-model="attribute.sortable"
         input-id="product-attribute-sortable"
+        :disabled="loading"
         :binary="true"
       />
       <label for="product-attribute-sortable"
@@ -116,6 +123,7 @@
       <Checkbox
         v-model="attribute.filterable"
         input-id="product-attribute-filterable"
+        :disabled="loading"
         :binary="true"
       />
       <label for="product-attribute-filterable"
@@ -127,7 +135,7 @@
       <Checkbox
         v-model="attribute.required"
         input-id="product-attribute-required"
-        :disabled="attribute.showInCatalog"
+        :disabled="attribute.showInCatalog || loading"
         :binary="true"
       />
       <label for="product-attribute-required">Обязательный атрибут</label>
@@ -135,14 +143,16 @@
 
     <template #footer>
       <Button
-        label="Отменить"
         icon="pi pi-times"
+        label="Отменить"
+        :disabled="loading"
         class="p-button-text"
         @click="$emit('update:visible', false)"
       />
       <Button
-        :label="submitLabel"
         icon="pi pi-check"
+        :label="submitLabel"
+        :loading="loading"
         class="p-button-text"
         @click="submit"
       />
@@ -160,7 +170,8 @@ import { ProductAttributeDataTypes } from "@/consts";
 
 const props = defineProps({
   value: { type: Object as PropType<AttributeDialogProp>, required: true },
-  visible: Boolean,
+  visible: { type: Boolean, default: false },
+  loading: { type: Boolean, default: false },
 });
 const emit = defineEmits(["update:visible", "create", "edit", "close"]);
 
