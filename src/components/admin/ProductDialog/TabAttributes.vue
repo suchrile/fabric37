@@ -179,7 +179,7 @@ const getAttributeLabel = (id: number) => {
 };
 
 const fetchAttributes = async () => {
-  const { data } = await useApiCall<Attribute[]>("/api/categories/attributes");
+  const { data } = await useApiCall<Attribute[]>("/api/attributes");
   if (data) {
     attributesList.value = data;
   }
