@@ -18,6 +18,16 @@
         </div>
       </template>
     </ConfirmDialog>
+    <a
+      href="/sitemap"
+      style="
+        position: absolute;
+        top: -100vh;
+        left: -100vw;
+        opacity: 0;
+        visibility: hidden;
+      "
+    />
   </div>
 </template>
 
