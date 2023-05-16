@@ -72,6 +72,13 @@
       </TabPanel>
     </TabView>
 
+    <div
+      v-else-if="isPagesLoading"
+      class="flex align-items-center justify-content-center h-28rem"
+    >
+      <ProgressSpinner class="w-4rem -mt-8" />
+    </div>
+
     <div v-else class="admin-pages__empty">
       <i class="pi pi-search text-4xl" />
       <span>Не найдено ни одной страницы</span>
@@ -103,6 +110,7 @@ const content: Ref<string> = ref("");
 const activePageIndex: Ref<number> = ref(0);
 const isDialogOpen: Ref<boolean> = ref(false);
 const isLoading: Ref<boolean> = ref(false);
+const isPagesLoading: Ref<boolean> = ref(true);
 
 const isSaveButtonDisabled = computed(
   () =>
@@ -225,6 +233,7 @@ const fetchPages = async () => {
     pages.value = data.sort((a, b) => a.title.localeCompare(b.title));
     content.value = pages.value[activePageIndex.value].content;
   }
+  isPagesLoading.value = false;
 };
 
 definePageMeta({
