@@ -125,44 +125,6 @@ filteredProducts.value = await sort();
 
 <style lang="scss">
 .catalog-products {
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    padding: 13px 17px;
-    border-radius: var(--border-radius);
-    background-color: white;
-  }
-  & .layout {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    &__options {
-      display: flex;
-      align-items: center;
-    }
-    &__option {
-      height: 32px;
-      padding: 5px;
-      border-radius: 6px;
-      aspect-ratio: 1 / 1;
-      transition: background-color 0.2s ease;
-      & svg {
-        width: 100%;
-        height: 100%;
-        fill: var(--surface-400);
-        transition: fill 0.2s ease;
-      }
-      &.active svg {
-        fill: var(--primary-color);
-      }
-      &:hover {
-        background-color: var(--surface-ground);
-        cursor: pointer;
-      }
-    }
-  }
   &__list {
     display: grid;
     gap: 15px;
@@ -210,19 +172,34 @@ filteredProducts.value = await sort();
       font-size: 11px;
     }
   }
+
+  @media screen and (max-width: 767px) {
+    &__list {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 10px;
+    }
+    .catalog-products {
+      &__loading,
+      &__empty {
+        height: 100px;
+      }
+    }
+  }
 }
 
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-}
-.list-leave-active {
-  position: absolute;
-  z-index: -1;
+@media screen and (min-width: 768px) {
+  .list-move,
+  .list-enter-active,
+  .list-leave-active {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  .list-enter-from,
+  .list-leave-to {
+    opacity: 0;
+  }
+  .list-leave-active {
+    position: absolute;
+    z-index: -1;
+  }
 }
 </style>

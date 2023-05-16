@@ -27,4 +27,14 @@ export default defineNuxtConfig({
     smtpBotPassword: process.env.SMTP_BOT_PASSWORD,
     smtpInfoPassword: process.env.SMTP_INFO_PASSWORD,
   },
+  app: {
+    head: {
+      meta: [
+        {
+          name: "format-detection",
+          content: "telephone=no, email=no, address=no, date=no",
+        },
+      ],
+    },
+  },
 });

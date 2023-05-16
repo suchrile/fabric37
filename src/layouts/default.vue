@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-full flex flex-column justify-content-between">
+  <div class="layout-default">
     <Header />
     <div class="container overflow-hidden">
       <slot />
@@ -23,4 +23,17 @@ useHead({
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.layout-default {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+  @media screen and (max-width: 767px) {
+    .container {
+      width: 100%;
+      padding: 0 15px;
+    }
+  }
+}
+</style>

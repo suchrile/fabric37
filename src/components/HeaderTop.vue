@@ -1,7 +1,7 @@
 <template>
   <div class="header-top">
     <div class="header-top__container">
-      <div class="header-top__links">
+      <div v-if="links.length" class="header-top__links">
         <a
           v-for="link in links"
           :key="link.id"
@@ -64,7 +64,6 @@ if (data.value) {
 .header-top {
   min-height: 46px;
   background-color: var(--purple-800);
-
   &__container {
     display: flex;
     align-items: center;
@@ -78,7 +77,6 @@ if (data.value) {
       text-decoration: none;
     }
   }
-
   &__links {
     display: flex;
     flex-wrap: wrap;
@@ -93,12 +91,10 @@ if (data.value) {
       }
     }
   }
-
   & .contacts {
     display: flex;
     gap: 12px;
     font-size: 15px;
-
     &__phone-numbers,
     .hidden-phone-numbers__item,
     &__email {
@@ -114,12 +110,10 @@ if (data.value) {
         margin-top: 1px;
       }
     }
-
     &__email a {
       color: white;
       text-decoration: none;
     }
-
     &__phone-numbers {
       position: relative;
       padding: 0 15px;
@@ -133,7 +127,6 @@ if (data.value) {
           visibility: visible;
         }
       }
-
       & .hidden-phone-numbers {
         position: absolute;
         width: 100%;
@@ -157,6 +150,25 @@ if (data.value) {
             margin-bottom: 10px;
           }
         }
+      }
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    &__container {
+      flex-direction: column;
+    }
+    &__links {
+      display: none;
+    }
+    & .contacts {
+      flex-wrap: wrap;
+      justify-content: center;
+      &__phone-numbers {
+        font-size: 15px;
+      }
+      &__email {
+        padding-right: 15px;
       }
     }
   }

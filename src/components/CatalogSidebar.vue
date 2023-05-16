@@ -215,7 +215,7 @@ const initFiltersState = () => {
   const routeQuery = router.currentRoute.value.query;
   const query: RouteQuery = {};
   for (const queryKey in routeQuery) {
-    if (!queryKey.includes("paf")) return;
+    if (!queryKey.includes("paf")) continue;
     const filterKey = queryKey.replace("paf", "");
     query[filterKey] = decodeURIComponent(String(routeQuery[queryKey])).split(
       ","
@@ -403,6 +403,18 @@ const getQuery = (filter: AttributeFiltersState) => {
   }
   &__reset {
     width: 100%;
+  }
+
+  @media screen and (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0;
+    &__loading,
+    &__empty {
+      height: 100%;
+    }
   }
 }
 </style>

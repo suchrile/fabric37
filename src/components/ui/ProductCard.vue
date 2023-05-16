@@ -90,7 +90,7 @@ const getAttributeValue = (attribute: AttributeValue) => {
   }
   &__name {
     display: -webkit-box;
-    height: 35px;
+    min-height: 35px;
     margin: 0;
     font-size: 15px;
     font-weight: 500;
@@ -105,7 +105,12 @@ const getAttributeValue = (attribute: AttributeValue) => {
     }
   }
   &__code {
-    //
+  }
+
+  @media screen and (max-width: 767px) {
+    &__name {
+      -webkit-line-clamp: unset;
+    }
   }
 }
 </style>

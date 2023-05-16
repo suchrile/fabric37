@@ -1,14 +1,13 @@
 <template>
-  <div class="catalog-products__header">
-    <div class="catalog-products__sorting">
+  <div class="products-view-options">
+    <div class="products-view-options__sorting sorting">
       <span class="mr-2">Сортировка:</span>
       <Dropdown
         v-model="field"
         :options="fields"
         option-label="label"
         input-class="py-2"
-        class="mr-2"
-        style="min-width: 180px"
+        class="sorting__by mr-2"
         @change="handleSortChange"
       />
       <Dropdown
@@ -16,11 +15,11 @@
         :options="sortOrders"
         option-label="label"
         input-class="py-2"
-        style="min-width: 160px"
+        class="sorting__order"
         @change="handleSortChange"
       />
     </div>
-    <div class="catalog-products__layout layout">
+    <div class="products-view-options__layout layout">
       <span>Вид:</span>
       <div class="layout__options">
         <i
@@ -90,4 +89,68 @@ const setLayout = (value: ProductsLayout) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.products-view-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding: 13px 17px;
+  border-radius: var(--border-radius);
+  background-color: white;
+  & .sorting {
+    &__by {
+      min-width: 180px;
+    }
+    &__order {
+      min-width: 160px;
+    }
+  }
+  & .layout {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    &__options {
+      display: flex;
+      align-items: center;
+    }
+    &__option {
+      height: 32px;
+      padding: 5px;
+      border-radius: 6px;
+      aspect-ratio: 1 / 1;
+      transition: background-color 0.2s ease;
+      & svg {
+        width: 100%;
+        height: 100%;
+        fill: var(--surface-400);
+        transition: fill 0.2s ease;
+      }
+      &.active svg {
+        fill: var(--primary-color);
+      }
+      &:hover {
+        background-color: var(--surface-ground);
+        cursor: pointer;
+      }
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    padding: 15px 17px 17px;
+    & .sorting {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      &__by,
+      &__order {
+        min-width: 100%;
+      }
+    }
+    & .layout {
+      display: none;
+    }
+  }
+}
+</style>

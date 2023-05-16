@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="search-page w-full">
     <div class="search-page__header">
       <div class="search-page__title">
         <h1>{{ route.params.query }}</h1>
@@ -95,6 +95,7 @@ useHead({
 
 <style scoped lang="scss">
 .search-page {
+  margin-bottom: 30px;
   &__header {
     display: grid;
     grid-template-columns: 280px 1fr;
@@ -153,6 +154,13 @@ useHead({
     &.active,
     &:hover {
       border-color: var(--purple-500);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    &__header {
+      grid-template-columns: 1fr;
+      margin: 20px 0;
     }
   }
 }

@@ -1,25 +1,68 @@
 <template>
   <div class="catalog">
-    <CatalogSidebar :products="products" />
-    <CatalogProducts :products="products" />
+    <CatalogSidebar :products="products" class="catalog__filters" />
+    <Button
+      icon="pi pi-filter"
+      label="Показать фильтры"
+      class="catalog__show-filters"
+      @click="isSidebarVisible = true"
+    />
+    <Sidebar
+      v-model:visible="isSidebarVisible"
+      :block-scroll="true"
+      position="right"
+      class="catalog__sidebar w-full"
+    >
+      <template #header>
+        <div class="flex align-items-center gap-2">
+          <i
+            class="pi pi-filter font-bold text-2xl text-primary"
+            style="margin-top: 1px"
+          />
+          <span class="text-2xl font-bold justify-self-start">Фильтры</span>
+        </div>
+      </template>
+      <CatalogSidebar :products="products" class="catalog__sidebar-filters" />
+    </Sidebar>
+    <CatalogProducts :products="products" class="catalog__products" />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType, Ref } from "vue";
 import type { Product } from "@/interfaces";
 
 defineProps({
   products: { type: Array as PropType<Product[]>, required: true },
 });
+
+const isSidebarVisible: Ref<boolean> = ref(false);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .catalog {
   display: grid;
   grid-template-columns: 280px 1fr;
   align-items: start;
   gap: 20px;
   width: 100%;
+  &__show-filters {
+    display: none;
+  }
+
+  @media screen and (max-width: 767px) {
+    display: block;
+    &__filters {
+      display: none;
+    }
+    &__show-filters {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    &__sidebar {
+      display: unset;
+    }
+  }
 }
 </style>

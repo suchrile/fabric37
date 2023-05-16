@@ -11,7 +11,7 @@
     @hide="hideHandler"
     @keydown.enter="submit"
   >
-    <div v-if="!isSubmitted">
+    <div v-if="!isSubmitted" class="request-price-form">
       <div class="field">
         <label for="request-price-name">
           Ваше имя
@@ -190,4 +190,10 @@ const hideHandler = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@media screen and (max-width: 767px) {
+  .request-price-form {
+    padding-top: 10px;
+  }
+}
+</style>

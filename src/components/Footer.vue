@@ -1,9 +1,9 @@
 <template>
   <footer class="footer">
     <div class="footer__container container">
-      <div class="footer__copyright">© {{ year }} ИП Яровицына Н.В.</div>
-      <div class="inn">ИНН: 373000173354</div>
-      <div class="inn">ОГРНИП: 306370222300071</div>
+      <span class="footer__copyright">© {{ year }} ИП Яровицына Н.В.</span>
+      <span class="footer__inn">ИНН: 373000173354</span>
+      <span class="footer__ogrnip">ОГРНИП: 306370222300071</span>
     </div>
   </footer>
 </template>
@@ -18,13 +18,11 @@ const year = computed(() => new Date().getFullYear());
   padding: 16px 0;
   color: white;
   background-color: var(--purple-800);
-
   &__container {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-
   &__logo {
     margin: 0;
   }

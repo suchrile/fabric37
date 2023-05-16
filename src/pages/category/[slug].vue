@@ -4,7 +4,7 @@
       <h1 class="category-page__title">
         {{ category.name }}
       </h1>
-      <div class="category-page__subcategories">
+      <div v-if="subcategories.length" class="category-page__subcategories">
         <RouterLink
           v-for="subcategory in subcategories"
           :key="subcategory.id"
@@ -107,6 +107,13 @@ useHead({
     }
   }
   &__catalog {
+  }
+
+  @media screen and (max-width: 767px) {
+    &__header {
+      grid-template-columns: 1fr;
+      margin: 20px 0;
+    }
   }
 }
 </style>

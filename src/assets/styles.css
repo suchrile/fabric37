@@ -326,3 +326,16 @@ ol {
 .p-toast-message-icon {
   font-size: 24px !important;
 }
+
+.p-sidebar-header {
+  justify-content: space-between !important;
+}
+.p-sidebar-close {
+  margin-left: auto;
+}
+.p-accordion-header a svg {
+  color: var(--primary-color);
+}
+.p-accordion-header a span {
+  font-size: 15px;
+}

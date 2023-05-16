@@ -8,12 +8,21 @@
 
     <header class="header">
       <div class="header__container">
-        <RouterLink to="/" class="header__logo">{{ info.app.name }}</RouterLink>
+        <div class="flex align-items-center gap-3">
+          <i
+            class="header__burger pi pi-bars"
+            style="margin-top: 1px"
+            @click="isSidebarVisible = true"
+          />
+          <RouterLink to="/" class="header__logo">{{
+            info.app.name
+          }}</RouterLink>
+        </div>
         <div class="header__catalog header-catalog pl-8 pr-4">
           <Button
             label="Каталог"
-            icon="pi pi-align-justify"
-            class="p-button-warning"
+            icon="pi pi-bars"
+            class="header-catalog__toggle p-button-warning"
             @click="toggleCatalog"
           />
           <div ref="catalog" class="catalog" :class="{ active: isCatalogOpen }">
@@ -65,17 +74,19 @@
             />
           </span>
         </div>
-        <div class="header__right">
-          <div class="header__request-price">
-            <Button
-              label="Запросить прайс"
-              class="p-button-warning white-space-nowrap"
-              @click="isRequestPriceDialogVisible = true"
-            />
-          </div>
+        <div class="header__request-price">
+          <Button
+            label="Запросить прайс"
+            class="p-button-warning white-space-nowrap"
+            @click="isRequestPriceDialogVisible = true"
+          />
         </div>
       </div>
     </header>
+    <HeaderCatalogSidebar
+      v-model:visible="isSidebarVisible"
+      :categories="categories"
+    />
     <RequestPriceDialog v-model:visible="isRequestPriceDialogVisible" />
     <BlockUI
       :blocked="isCatalogOpen"
@@ -97,6 +108,7 @@ const catalog = ref();
 
 const info = useInfo();
 const isCatalogOpen: Ref<boolean> = ref(false);
+const isSidebarVisible: Ref<boolean> = ref(false);
 const isRequestPriceDialogVisible: Ref<boolean> = ref(false);
 const links: Ref<Link[]> = ref([]);
 const categories: Ref<(Category & { children: Category[] })[]> = ref([]);
@@ -253,6 +265,10 @@ const fetchCategories = async () => {
   position: relative;
   z-index: 1;
 
+  &__burger {
+    display: none;
+  }
+
   &__container {
     display: flex;
     align-items: center;
@@ -275,12 +291,30 @@ const fetchCategories = async () => {
   &__search {
   }
 
-  &__right {
+  &__request-price {
     display: flex;
     gap: 25px;
   }
 
-  &__request-price {
+  @media screen and (max-width: 767px) {
+    .header {
+      &__burger {
+        display: block;
+        font-size: 24px;
+      }
+      &__logo {
+        font-size: 20px;
+      }
+      &__search {
+        display: none;
+      }
+    }
+    &__container {
+      padding: 0 15px;
+    }
+    .header-catalog {
+      display: none;
+    }
   }
 }
 </style>

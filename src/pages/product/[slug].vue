@@ -4,21 +4,23 @@
       <h1 class="product-page__title">
         {{ product.name }}
       </h1>
-      <div class="product-page__actions">
-        <Button
-          :icon="copyLinkButtonIcon"
-          :label="copyLinkButtonTitle"
-          class="p-button-text w-max"
-          @click="copyLink"
-        />
-      </div>
+      <Button
+        :icon="copyLinkButtonIcon"
+        :label="copyLinkButtonTitle"
+        class="product-page__code"
+        :class="
+          viewportWidth < 768 ? 'p-button-outlined' : 'p-button-text w-max'
+        "
+        @click="copyLink"
+      />
     </div>
     <div class="product-page__content">
       <div class="product-page__gallery gallery">
         <Galleria
+          v-if="isMounted"
           :value="product.images"
           :num-visible="4"
-          thumbnails-position="left"
+          :thumbnails-position="viewportWidth > 768 ? 'left' : 'bottom'"
           vertical-thumbnail-view-port-height="344px"
         >
           <template #item="slotProps">
@@ -102,6 +104,14 @@ const product: Ref<Product | null> = ref(null);
 
 const copyLinkButtonTitle: Ref<string> = ref("");
 const copyLinkButtonIcon: Ref<string> = ref("pi pi-copy");
+
+const viewportWidth: Ref<number> = ref(0);
+const isMounted = ref(false);
+
+onMounted(() => {
+  viewportWidth.value = document.documentElement.clientWidth;
+  isMounted.value = true;
+});
 
 const { data } = await useFetch<Product>("/api/products/" + route.params.slug);
 if (data.value) {
@@ -294,6 +304,57 @@ useSeoMeta({
     .p-galleria-thumbnail-next {
       margin: 5px;
       color: var(--primary-color) !important;
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    margin: 0 -15px;
+    padding: 15px 15px 45px;
+    &__header {
+      flex-direction: column;
+      align-items: start;
+      gap: 15px;
+      margin: 10px 0 10px;
+    }
+    &__title {
+      font-size: 22px;
+    }
+    &__code {
+      margin: 6px 0 10px;
+    }
+    &__content {
+      grid-template-columns: 1fr;
+    }
+    & .details {
+      & .attributes {
+        &__item {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    }
+    & .gallery {
+      max-width: calc(100vw - 30px);
+      .p-galleria-thumbnail-container {
+        padding: 15px 0 0;
+      }
+      .p-galleria-thumbnail-items {
+        gap: unset;
+      }
+      .p-galleria-thumbnail-item {
+        padding: 2px;
+      }
+      &__image {
+        width: 100%;
+      }
+      &__thumbnail {
+        max-height: 70px;
+        max-width: 70px;
+        width: 100%;
+      }
+      .p-galleria-thumbnail-prev,
+      .p-galleria-thumbnail-next {
+        margin: 0 6px 0 3px;
+      }
     }
   }
 }

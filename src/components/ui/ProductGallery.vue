@@ -71,4 +71,10 @@ const sortedImages = computed(() =>
     }
   }
 }
+
+@media screen and (max-width: 767px) {
+  .p-galleria-indicators {
+    display: none !important;
+  }
+}
 </style>
