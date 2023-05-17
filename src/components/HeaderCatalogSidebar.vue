@@ -15,14 +15,16 @@
     </template>
 
     <div class="header-catalog-sidebar__links">
-      <RouterLink
+      <a
         v-for="link in links"
         :key="link.id"
-        :to="link.url"
+        :href="link.url"
+        :target="link.newTab ? '_blank' : '_self'"
         class="header-catalog-sidebar__link"
+        @click="emit('update:visible', false)"
       >
         {{ link.title }}
-      </RouterLink>
+      </a>
     </div>
 
     <span class="p-input-icon-left w-full mt-1 mb-4">
