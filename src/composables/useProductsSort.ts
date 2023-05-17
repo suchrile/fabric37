@@ -75,7 +75,8 @@ export const useProductsSort = (value: Product[]) => {
     });
   };
 
-  const sort = async () => {
+  const sort = async (newProducts: Product[]) => {
+    products.value = newProducts;
     await setSort();
     if (currentSortField.value.attrId) {
       return sortByAttribute();

@@ -30,7 +30,17 @@
       <ProgressSpinner />
     </div>
 
-    <div v-else-if="!filteredProducts.length" class="catalog-products__empty">
+    <div
+      v-else-if="products.length && !filteredProducts.length"
+      class="catalog-products__empty"
+    >
+      <i class="pi pi-filter text-5xl" />
+      <span class="text-lg font-medium">
+        По заданным фильтрам товары не найдены
+      </span>
+    </div>
+
+    <div v-else class="catalog-products__empty">
       <i class="pi pi-search text-5xl" />
       <span class="text-lg font-medium">
         {{
@@ -38,13 +48,6 @@
             ? "По вашему запросу ничего не найдено"
             : "В этой категории пока нет товаров"
         }}
-      </span>
-    </div>
-
-    <div v-else class="catalog-products__empty">
-      <i class="pi pi-filter text-5xl" />
-      <span class="text-lg font-medium">
-        По заданным фильтрам товары не найдены
       </span>
     </div>
   </div>
@@ -73,7 +76,7 @@ onMounted(() => {
   watch(props, async () => {
     init(props.products);
     filterProducts();
-    filteredProducts.value = await sort();
+    filteredProducts.value = await sort(filteredProducts.value);
   });
 
   watch(route, () => {
@@ -82,14 +85,20 @@ onMounted(() => {
 });
 
 const handleSortChange = async () => {
-  filteredProducts.value = await sort();
+  filteredProducts.value = await sort(filteredProducts.value);
 };
 
 const filterProducts = () => {
   const query = getFilterQuery();
   filteredProducts.value = props.products.filter((product) => {
     return Object.keys(query).every((key) => {
-      const value = decodeURIComponent(String(query[key])).split(",");
+      const queryValue = query[key];
+      let value;
+      if (Array.isArray(queryValue)) {
+        value = queryValue.map((el) => decodeURIComponent(String(el)));
+      } else {
+        value = [decodeURIComponent(String(queryValue))];
+      }
       const attribute = product.attributes.find(
         (attr) => attr.id === parseInt(key.replace("paf", ""))
       );
@@ -120,7 +129,7 @@ const getFilterQuery = () => {
 };
 
 filterProducts();
-filteredProducts.value = await sort();
+filteredProducts.value = await sort(filteredProducts.value);
 </script>
 
 <style lang="scss">

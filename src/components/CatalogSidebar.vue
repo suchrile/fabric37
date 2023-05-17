@@ -217,9 +217,16 @@ const initFiltersState = () => {
   for (const queryKey in routeQuery) {
     if (!queryKey.includes("paf")) continue;
     const filterKey = queryKey.replace("paf", "");
-    query[filterKey] = decodeURIComponent(String(routeQuery[queryKey])).split(
-      ","
-    );
+    const filterValue = routeQuery[queryKey];
+    let decodedFilterValue: string[];
+    if (Array.isArray(filterValue)) {
+      decodedFilterValue = filterValue.map((el) =>
+        decodeURIComponent(String(el))
+      );
+    } else {
+      decodedFilterValue = [decodeURIComponent(String(filterValue))];
+    }
+    query[filterKey] = decodedFilterValue;
   }
 
   for (const filterKey in query) {
