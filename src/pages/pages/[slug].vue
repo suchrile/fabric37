@@ -46,6 +46,7 @@ useHead({
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
     margin-top: 20px;
   }
   &__title {
@@ -66,14 +67,22 @@ useHead({
     }
   }
   &__last-update {
+    text-align: right;
     font-weight: 500;
     color: var(--text-color-secondary);
   }
   &__content {
+    min-height: 300px;
     margin-top: 20px;
     padding: 20px 40px 30px;
     border-radius: var(--border-radius);
     background-color: white;
+  }
+
+  @media screen and (max-width: 767px) {
+    &__content {
+      padding: 12px 20px 20px;
+    }
   }
 }
 </style>
