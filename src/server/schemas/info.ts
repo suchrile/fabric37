@@ -7,6 +7,7 @@ export const infoSchema = joi
       name: joi.string().min(0).required(),
       description: joi.string().min(0).required(),
       keywords: joi.string().min(0).required(),
+      defaultCategoryId: joi.number().integer().positive().required(),
     }),
     contacts: joi.object({
       email: joi.string().email().allow("").required(),

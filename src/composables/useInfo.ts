@@ -1,3 +1,4 @@
+import { undeletableCategoryId } from "~/consts";
 import type { Info } from "@/interfaces";
 
 export const useInfo = () =>
@@ -6,6 +7,7 @@ export const useInfo = () =>
       name: "",
       description: "",
       keywords: "",
+      defaultCategoryId: undeletableCategoryId,
     },
     contacts: {
       email: "",

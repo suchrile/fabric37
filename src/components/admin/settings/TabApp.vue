@@ -38,16 +38,62 @@
         "
       />
     </div>
+    <div class="field">
+      <label for="admin-settings-app-keywords">Категория по умолчанию</label>
+      <TreeSelect
+        id="admin-settings-app-keywords"
+        :model-value="findCategoryById(modelValue.defaultCategoryId)"
+        :options="nestedCategories"
+        :disabled="loading"
+        selection-mode="single"
+        placeholder="Выберите категорию"
+        @update:model-value="
+          emit('update:modelValue', {
+            ...modelValue,
+            defaultCategoryId: Number(Object.keys($event)[0]),
+          })
+        "
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
-import type { Info } from "@/interfaces";
+import { PropType, Ref } from "vue";
+import type { TreeNode } from "primevue/tree";
+import type { Category, Info } from "@/interfaces";
+import { mapToNodeTree } from "~/helpers";
 
 defineProps({
   modelValue: { type: Object as PropType<Info["app"]>, required: true },
   loading: { type: Boolean, default: false },
 });
 const emit = defineEmits(["update:modelValue"]);
+
+const categories: Ref<Category[]> = ref([]);
+const nestedCategories: Ref<TreeNode[]> = ref([]);
+
+onMounted(async () => {
+  await nextTick();
+  await fetchCategories();
+});
+
+const findCategoryById = (id: number) => {
+  const category = categories.value.find((cat) => cat.id === id);
+  if (category) {
+    return { [category.id]: true };
+  }
+};
+
+const fetchCategories = async () => {
+  const { data } = await useApiCall<Category[]>("/api/categories");
+  if (data) {
+    categories.value = data;
+    nestedCategories.value = mapToNodeTree(data, {
+      uniqueKey: "id",
+      labelKey: "name",
+      parentKey: "parentId",
+    });
+  }
+};
 </script>

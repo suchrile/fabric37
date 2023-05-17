@@ -26,6 +26,7 @@ export type Info = {
     name: string;
     description: string;
     keywords: string;
+    defaultCategoryId: number;
   };
   contacts: {
     email: string;

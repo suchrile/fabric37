@@ -54,8 +54,8 @@ export const mapToNodeTree = <T>(
     nestedArr,
     "children",
     (item) => ({
-      key: item[uniqueKey] as string,
-      label: item[labelKey] as string,
+      key: String(item[uniqueKey]),
+      label: String(item[labelKey]),
       children: item.children as TreeNode[],
       ...optional,
     })
