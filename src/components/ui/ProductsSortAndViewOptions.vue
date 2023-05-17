@@ -1,13 +1,13 @@
 <template>
   <div class="products-view-options">
     <div class="products-view-options__sorting sorting">
-      <span class="mr-2">Сортировка:</span>
+      <span>Сортировка:</span>
       <Dropdown
         v-model="field"
         :options="fields"
         option-label="label"
         input-class="py-2"
-        class="sorting__by mr-2"
+        class="sorting__by"
         @change="handleSortChange"
       />
       <Dropdown
@@ -99,6 +99,10 @@ const setLayout = (value: ProductsLayout) => {
   border-radius: var(--border-radius);
   background-color: white;
   & .sorting {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
     &__by {
       min-width: 180px;
     }
@@ -139,9 +143,8 @@ const setLayout = (value: ProductsLayout) => {
   @media screen and (max-width: 767px) {
     padding: 15px 17px 17px;
     & .sorting {
-      display: flex;
       flex-direction: column;
-      gap: 10px;
+      align-items: flex-start;
       width: 100%;
       &__by,
       &__order {

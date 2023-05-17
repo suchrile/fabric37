@@ -18,61 +18,67 @@
             info.app.name
           }}</RouterLink>
         </div>
-        <div class="header__catalog header-catalog pl-8 pr-4">
-          <Button
-            label="Каталог"
-            icon="pi pi-bars"
-            class="header-catalog__toggle p-button-warning"
-            @click="toggleCatalog"
-          />
-          <div ref="catalog" class="catalog" :class="{ active: isCatalogOpen }">
-            <div class="py-4" style="width: 1220px; margin: 0 auto">
-              <div class="grid column-gap-7 m-0">
-                <div class="col-fixed col-3 p-0 category__list">
-                  <RouterLink
-                    v-for="category of categories"
-                    :key="category.id"
-                    :to="'/category/' + category.slug"
-                    class="category__item"
-                    :class="{ active: checkIfCurrentCategory(category) }"
-                    @mouseover="setCurrentCategory(category)"
-                    @click="toggleCatalog"
-                  >
-                    <span>{{ category.name }}</span>
-                    <i
-                      v-if="category.children.length"
-                      class="pi pi-chevron-right text-sm"
-                    />
-                  </RouterLink>
-                </div>
-
-                <div class="col p-0">
-                  <div v-if="currentCategory" class="subcategory__list">
+        <div class="flex w-full gap-4">
+          <div class="header__catalog header-catalog">
+            <Button
+              label="Каталог"
+              icon="pi pi-bars"
+              class="header-catalog__toggle p-button-warning"
+              @click="toggleCatalog"
+            />
+            <div
+              ref="catalog"
+              class="catalog"
+              :class="{ active: isCatalogOpen }"
+            >
+              <div class="py-4" style="max-width: 1220px; margin: 0 auto">
+                <div class="grid column-gap-7 m-0">
+                  <div class="col-fixed col-3 p-0 category__list">
                     <RouterLink
-                      v-for="sub in currentCategory.children"
-                      :key="sub.id"
-                      :to="'/category/' + sub.slug"
-                      class="subcategory__item"
+                      v-for="category of categories"
+                      :key="category.id"
+                      :to="'/category/' + category.slug"
+                      class="category__item"
+                      :class="{ active: checkIfCurrentCategory(category) }"
+                      @mouseover="setCurrentCategory(category)"
                       @click="toggleCatalog"
                     >
-                      {{ sub.name }}
+                      <span>{{ category.name }}</span>
+                      <i
+                        v-if="category.children.length"
+                        class="pi pi-chevron-right text-sm"
+                      />
                     </RouterLink>
+                  </div>
+
+                  <div class="col p-0">
+                    <div v-if="currentCategory" class="subcategory__list">
+                      <RouterLink
+                        v-for="sub in currentCategory.children"
+                        :key="sub.id"
+                        :to="'/category/' + sub.slug"
+                        class="subcategory__item"
+                        @click="toggleCatalog"
+                      >
+                        {{ sub.name }}
+                      </RouterLink>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="header__search w-full pr-8">
-          <span class="header__search-input p-input-icon-left w-full">
-            <i class="pi pi-search" />
-            <InputText
-              v-model="searchField"
-              placeholder="Поиск..."
-              class="w-full"
-              @keydown.enter="search"
-            />
-          </span>
+          <div class="header__search w-full">
+            <span class="header__search-input p-input-icon-left w-full">
+              <i class="pi pi-search" />
+              <InputText
+                v-model="searchField"
+                placeholder="Поиск..."
+                class="w-full"
+                @keydown.enter="search"
+              />
+            </span>
+          </div>
         </div>
         <div class="header__request-price">
           <Button
@@ -180,6 +186,7 @@ const fetchCategories = async () => {
   max-height: 0;
   left: 0;
   bottom: 0;
+  padding: 0 15px;
   color: rgba(0, 0, 0, 0.85);
   background-color: white;
   transition: max-height 0.3s ease;
@@ -273,6 +280,7 @@ const fetchCategories = async () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 100px;
     height: 100%;
     max-width: var(--max-container-width);
     margin: 0 auto;
@@ -296,7 +304,20 @@ const fetchCategories = async () => {
     gap: 25px;
   }
 
+  @media screen and (max-width: 1220px) {
+    &__container {
+      gap: 50px;
+      padding: 0 15px;
+    }
+    .subcategory__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
   @media screen and (max-width: 767px) {
+    &__container {
+      gap: 15px;
+    }
     .header {
       &__burger {
         display: block;
@@ -308,9 +329,6 @@ const fetchCategories = async () => {
       &__search {
         display: none;
       }
-    }
-    &__container {
-      padding: 0 15px;
     }
     .header-catalog {
       display: none;

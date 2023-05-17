@@ -154,6 +154,10 @@ if (data.value) {
     }
   }
 
+  @media screen and (max-width: 1220px) {
+    padding: 0 15px;
+  }
+
   @media screen and (max-width: 767px) {
     &__container {
       flex-direction: column;

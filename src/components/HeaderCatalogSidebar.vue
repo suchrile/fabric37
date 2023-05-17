@@ -10,9 +10,20 @@
           class="pi pi-bars text-2xl text-primary font-bold"
           style="margin-top: 1px"
         />
-        <span class="text-2xl font-bold">Каталог</span>
+        <span class="text-2xl font-bold">Меню</span>
       </div>
     </template>
+
+    <div class="header-catalog-sidebar__links">
+      <RouterLink
+        v-for="link in links"
+        :key="link.id"
+        :to="link.url"
+        class="header-catalog-sidebar__link"
+      >
+        {{ link.title }}
+      </RouterLink>
+    </div>
 
     <span class="p-input-icon-left w-full mt-1 mb-4">
       <i class="pi pi-search" />
@@ -50,7 +61,7 @@
 
 <script setup lang="ts">
 import type { PropType, Ref } from "vue";
-import type { Category } from "@/interfaces";
+import type { Category, Link } from "@/interfaces";
 
 const props = defineProps({
   categories: { type: Array as PropType<Category[]>, required: true },
@@ -58,8 +69,14 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:visible"]);
 
+const links: Ref<Link[]> = ref([]);
 const activeIndex: Ref<number | null> = ref(null);
 const searchField: Ref<string> = ref("");
+
+const { data } = await useFetch<Link[]>("/api/links");
+if (data.value) {
+  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder);
+}
 
 const search = () => {
   navigateTo("/search/" + searchField.value);
@@ -96,6 +113,20 @@ const handleTabClick = (index: number) => {
     &:not(:last-child) {
       margin-bottom: 6px;
     }
+  }
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 25px;
+    row-gap: 10px;
+    padding: 10px 0 20px;
+  }
+  &__link {
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-color);
   }
 }
 </style>

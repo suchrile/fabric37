@@ -30,6 +30,14 @@ body {
   margin: 0 auto;
 }
 
+@media screen and (max-width: 1220px) {
+  .container {
+    width: 100%;
+    max-width: 1220px;
+    padding: 0 15px;
+  }
+}
+
 h1,
 h2,
 h3,
