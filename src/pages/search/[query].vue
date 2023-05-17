@@ -6,7 +6,7 @@
         <div v-if="productsCount" class="mt-2">{{ getSearchSummary() }}</div>
       </div>
 
-      <div class="search-page__subcategories">
+      <div v-if="categoriesCount" class="search-page__subcategories">
         <div
           v-for="category in categories"
           :key="category.id"
