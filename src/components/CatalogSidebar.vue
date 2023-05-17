@@ -40,7 +40,7 @@
           @change="setFiltersState"
         />
 
-        <Divider />
+        <Divider class="m-0 py-3" />
       </div>
     </div>
 
@@ -410,17 +410,18 @@ const getQuery = (filter: AttributeFiltersState) => {
   }
   &__reset {
     width: 100%;
+    flex-shrink: 0;
   }
 
   @media screen and (max-width: 767px) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
-    padding: 0;
+    flex-shrink: 0;
+    min-height: 100%;
     &__loading,
     &__empty {
-      height: 100%;
+      flex-grow: 1;
     }
   }
 }

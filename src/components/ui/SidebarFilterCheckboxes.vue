@@ -72,7 +72,7 @@ const getFormattedValue = (value: any) => {
     align-items: center;
   }
   &__value:not(:last-child) {
-    margin-bottom: 7px;
+    padding-bottom: 7px;
   }
 }
 </style>

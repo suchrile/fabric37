@@ -105,11 +105,11 @@ const product: Ref<Product | null> = ref(null);
 const copyLinkButtonTitle: Ref<string> = ref("");
 const copyLinkButtonIcon: Ref<string> = ref("pi pi-copy");
 
-const viewportWidth: Ref<number> = ref(0);
 const isMounted = ref(false);
 
+const { width: viewportWidth } = useViewport();
+
 onMounted(() => {
-  viewportWidth.value = document.documentElement.clientWidth;
   isMounted.value = true;
 });
 

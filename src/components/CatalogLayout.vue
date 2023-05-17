@@ -1,29 +1,37 @@
 <template>
   <div class="catalog">
-    <CatalogSidebar :products="products" class="catalog__filters" />
-    <Button
-      icon="pi pi-filter"
-      label="Показать фильтры"
-      class="catalog__show-filters"
-      @click="isSidebarVisible = true"
+    <CatalogSidebar
+      v-if="!width || width > 767"
+      :products="products"
+      class="catalog__filters"
     />
-    <Sidebar
-      v-model:visible="isSidebarVisible"
-      :block-scroll="true"
-      position="right"
-      class="catalog__sidebar w-full"
-    >
-      <template #header>
-        <div class="flex align-items-center gap-2">
-          <i
-            class="pi pi-filter font-bold text-2xl text-primary"
-            style="margin-top: 1px"
-          />
-          <span class="text-2xl font-bold justify-self-start">Фильтры</span>
-        </div>
-      </template>
-      <CatalogSidebar :products="products" class="catalog__sidebar-filters" />
-    </Sidebar>
+
+    <div v-if="width && width <= 767">
+      <Button
+        icon="pi pi-filter"
+        label="Показать фильтры"
+        class="catalog__show-filters"
+        @click="isSidebarVisible = true"
+      />
+      <Sidebar
+        v-model:visible="isSidebarVisible"
+        :block-scroll="true"
+        position="right"
+        class="catalog__sidebar w-full"
+      >
+        <template #header>
+          <div class="flex align-items-center gap-2">
+            <i
+              class="pi pi-filter font-bold text-2xl text-primary"
+              style="margin-top: 1px"
+            />
+            <span class="text-2xl font-bold justify-self-start">Фильтры</span>
+          </div>
+        </template>
+        <CatalogSidebar :products="products" class="catalog__sidebar-filters" />
+      </Sidebar>
+    </div>
+
     <CatalogProducts :products="products" class="catalog__products" />
   </div>
 </template>
@@ -37,6 +45,8 @@ defineProps({
 });
 
 const isSidebarVisible: Ref<boolean> = ref(false);
+
+const { width } = useViewport();
 </script>
 
 <style scoped lang="scss">
@@ -54,14 +64,12 @@ const isSidebarVisible: Ref<boolean> = ref(false);
     display: block;
     &__filters {
       display: none;
+      visibility: hidden;
     }
     &__show-filters {
       display: block;
       width: 100%;
       margin-bottom: 15px;
-    }
-    &__sidebar {
-      display: unset;
     }
   }
 }
