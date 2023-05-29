@@ -51,6 +51,7 @@ class MailService {
   async sendPriceRequest(dto: RequestPriceMailDto) {
     return await this.send({
       to: this._smtpInfoUser,
+      replyTo: dto.email,
       subject: "Запрос прайс-листа",
       html: `
 <div style="width: 100%">
