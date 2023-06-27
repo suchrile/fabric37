@@ -5,7 +5,7 @@
         {{ category.name }}
       </h1>
       <div v-if="subcategories.length" class="category-page__subcategories">
-        <RouterLink
+        <NuxtLink
           v-for="subcategory in subcategories"
           :key="subcategory.id"
           :to="'/category/' + subcategory.slug"
@@ -13,7 +13,7 @@
         >
           <span>{{ subcategory.name }}</span>
           <i class="pi pi-chevron-right" />
-        </RouterLink>
+        </NuxtLink>
       </div>
     </div>
     <CatalogLayout :products="products" class="category-page__catalog" />
@@ -26,19 +26,18 @@ import type { Category, Product } from "@/interfaces";
 
 const route = useRoute();
 
-const category: Ref<Category | null> = ref(null);
 const products: Ref<Product[]> = ref([]);
 
 const subcategories = computed(() =>
   category.value?.children.sort((a, b) => a.name.localeCompare(b.name))
 );
 
-const { data } = await useFetch<Category>(
-  "/api/categories/" + route.params.slug
+const { data: category } = await useFetch<Category>(
+  "/api/categories/" + route.params.slug,
+  { key: String(route.params.slug) }
 );
-if (data.value) {
-  category.value = data.value;
-  products.value = data.value.products.filter((product) => !product.hidden);
+if (category.value) {
+  products.value = category.value.products.filter((product) => !product.hidden);
 }
 
 useHead({

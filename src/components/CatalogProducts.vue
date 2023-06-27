@@ -14,7 +14,7 @@
       :class="'layout-' + productsLayout"
     >
       <TransitionGroup name="list">
-        <RouterLink
+        <NuxtLink
           v-for="product in filteredProducts"
           :key="product.id"
           :to="'/product/' + product.slug"
@@ -22,7 +22,7 @@
           class="catalog-products__item"
         >
           <UiProductCard :product="product" :layout="productsLayout" />
-        </RouterLink>
+        </NuxtLink>
       </TransitionGroup>
     </div>
 

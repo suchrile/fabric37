@@ -71,7 +71,7 @@
         <div class="details__item">
           <h5 class="details__item-title">Категории</h5>
           <div class="details__categories">
-            <RouterLink
+            <NuxtLink
               v-for="category in product.categories"
               :key="category.id"
               :to="'/category/' + category.slug"
@@ -79,7 +79,7 @@
               <Badge>
                 {{ category.name }}
               </Badge>
-            </RouterLink>
+            </NuxtLink>
           </div>
         </div>
       </div>

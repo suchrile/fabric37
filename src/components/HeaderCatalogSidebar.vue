@@ -46,7 +46,7 @@
         :key="category.id"
         :header="category.name"
       >
-        <RouterLink
+        <NuxtLink
           v-for="sub in category.children"
           :key="sub.id"
           :to="'/category/' + sub.slug"
@@ -55,7 +55,7 @@
         >
           <span>{{ sub.name }}</span>
           <i class="pi pi-chevron-right"></i>
-        </RouterLink>
+        </NuxtLink>
       </AccordionTab>
     </Accordion>
   </Sidebar>

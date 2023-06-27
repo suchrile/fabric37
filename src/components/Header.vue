@@ -14,9 +14,9 @@
             style="margin-top: 1px"
             @click="isSidebarVisible = true"
           />
-          <RouterLink to="/" class="header__logo">{{
+          <NuxtLink to="/" class="header__logo">{{
             info.app.name
-          }}</RouterLink>
+          }}</NuxtLink>
         </div>
         <div class="flex w-full gap-4">
           <div class="header__catalog header-catalog">
@@ -34,7 +34,7 @@
               <div class="py-4" style="max-width: 1220px; margin: 0 auto">
                 <div class="grid column-gap-7 m-0">
                   <div class="col-fixed col-3 p-0 category__list">
-                    <RouterLink
+                    <NuxtLink
                       v-for="category of categories"
                       :key="category.id"
                       :to="'/category/' + category.slug"
@@ -48,12 +48,12 @@
                         v-if="category.children.length"
                         class="pi pi-chevron-right text-sm"
                       />
-                    </RouterLink>
+                    </NuxtLink>
                   </div>
 
                   <div class="col p-0">
                     <div v-if="currentCategory" class="subcategory__list">
-                      <RouterLink
+                      <NuxtLink
                         v-for="sub in currentCategory.children"
                         :key="sub.id"
                         :to="'/category/' + sub.slug"
@@ -61,7 +61,7 @@
                         @click="toggleCatalog"
                       >
                         {{ sub.name }}
-                      </RouterLink>
+                      </NuxtLink>
                     </div>
                   </div>
                 </div>
