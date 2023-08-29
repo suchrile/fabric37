@@ -31,9 +31,7 @@
               >
                 <i class="pi pi-phone" />
                 <NuxtLink :href="`tel:${phoneNumber}`">
-                  {{
-                    phoneNumber
-                  }}
+                  {{ phoneNumber }}
                 </NuxtLink>
               </div>
             </div>
@@ -140,7 +138,7 @@ if (data.value) {
         border-radius: 0 0 var(--border-radius) var(--border-radius);
         background-color: white;
         box-shadow: 0 4px 8px 0 rgba(34, 60, 80, 0.2);
-        z-index: 2;
+        z-index: 3;
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.2s ease-in-out;
