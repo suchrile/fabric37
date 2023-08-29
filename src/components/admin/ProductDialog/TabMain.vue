@@ -10,7 +10,7 @@
         autofocus
         :class="{ 'p-invalid': v$.$dirty && v$.product.name.$errors.length }"
         @update:model-value="
-          emit('update:product', { ...product, name: $event })
+          emit('update:product', { ...product, name: $event.trim() })
         "
       />
       <div v-if="v$.$dirty && v$.product.name.$errors.length" class="errors">
@@ -32,30 +32,9 @@
         class="product-add-dialog__description w-full"
         style="min-height: 90px"
         @update:model-value="
-          emit('update:product', { ...product, description: $event })
+          emit('update:product', { ...product, description: $event.trim() })
         "
       />
-    </div>
-
-    <div class="field">
-      <label for="product-dialog-code">Артикул</label>
-      <InputText
-        id="product-dialog-code"
-        :model-value="product.code"
-        :disabled="loading"
-        placeholder="Введите артикул"
-        :class="{ 'p-invalid': v$.$dirty && v$.product.code.$errors.length }"
-        @update:model-value="
-          emit('update:product', { ...product, code: $event })
-        "
-      />
-      <div v-if="v$.$dirty && v$.product.code.$errors.length" class="errors">
-        <small
-          v-for="error in v$.product.code.$errors"
-          :key="error.$uid"
-          class="p-error"
-        >{{ error.$message }}</small>
-      </div>
     </div>
 
     <div class="field">

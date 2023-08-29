@@ -7,11 +7,11 @@
 </template>
 
 <script setup lang="ts">
-const urls = ref();
+const urls = ref()
 
-const { data } = await useFetch("/api/_sitemap-urls");
+const { data } = await useFetch('/api/_sitemap-urls')
 if (data.value) {
-  urls.value = data.value;
+  urls.value = data.value
 }
 </script>
 

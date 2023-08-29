@@ -4,15 +4,6 @@
       <h1 class="product-page__title">
         {{ product.name }}
       </h1>
-      <Button
-        :icon="copyLinkButtonIcon"
-        :label="copyLinkButtonTitle"
-        class="product-page__code"
-        :class="
-          viewportWidth < 768 ? 'p-button-outlined' : 'p-button-text w-max'
-        "
-        @click="copyLink"
-      />
     </div>
     <div class="product-page__content">
       <div class="product-page__gallery gallery">
@@ -112,9 +103,6 @@ const route = useRoute()
 
 const product: Ref<Product | null> = ref(null)
 
-const copyLinkButtonTitle: Ref<string> = ref('')
-const copyLinkButtonIcon: Ref<string> = ref('pi pi-copy')
-
 const isMounted = ref(false)
 
 const { width: viewportWidth } = useViewport()
@@ -129,7 +117,6 @@ if (data.value) {
   if (!product.value.images.length) {
     product.value.images.push({ url: imagePlaceholderUrl } as ProductImage)
   }
-  copyLinkButtonTitle.value = 'Артикул: ' + product.value?.code
 }
 
 const getAttributeValue = (attribute: AttributeValue) => {
@@ -148,19 +135,6 @@ const getAttributeValue = (attribute: AttributeValue) => {
     value = attribute.value
   }
   return value + (attribute.unit ? ` ${attribute.unit}` : '')
-}
-
-const copyLink = () => {
-  if (!product.value) {
-    return
-  }
-  navigator.clipboard.writeText(product.value.code)
-  copyLinkButtonTitle.value = 'Скопировано!'
-  copyLinkButtonIcon.value = 'pi pi-check'
-  setTimeout(() => {
-    copyLinkButtonTitle.value = 'Артикул: ' + product.value?.code
-    copyLinkButtonIcon.value = 'pi pi-copy'
-  }, 1000)
 }
 
 useSeoMeta({
@@ -328,9 +302,6 @@ useSeoMeta({
     }
     &__title {
       font-size: 22px;
-    }
-    &__code {
-      margin: 6px 0 10px;
     }
     &__content {
       grid-template-columns: 1fr;

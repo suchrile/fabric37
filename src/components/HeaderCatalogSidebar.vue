@@ -62,38 +62,38 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { Category, Link } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import type { Category, Link } from '@/interfaces'
 
 const props = defineProps({
   categories: { type: Array as PropType<Category[]>, required: true },
-  visible: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:visible"]);
+  visible: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:visible'])
 
-const links: Ref<Link[]> = ref([]);
-const activeIndex: Ref<number | null> = ref(null);
-const searchField: Ref<string> = ref("");
+const links: Ref<Link[]> = ref([])
+const activeIndex: Ref<number | null> = ref(null)
+const searchField: Ref<string> = ref('')
 
-const { data } = await useFetch<Link[]>("/api/links");
+const { data } = await useFetch<Link[]>('/api/links')
 if (data.value) {
-  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder);
+  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder)
 }
 
 const search = () => {
-  navigateTo("/search/" + searchField.value);
-  emit("update:visible", false);
-};
+  navigateTo('/search/' + searchField.value)
+  emit('update:visible', false)
+}
 
 const handleTabClick = (index: number) => {
   if (activeIndex.value === index || !props.categories[index].children.length) {
-    const slug = props.categories[index].slug;
-    navigateTo("/category/" + slug);
-    emit("update:visible", false);
+    const slug = props.categories[index].slug
+    navigateTo('/category/' + slug)
+    emit('update:visible', false)
   } else {
-    activeIndex.value = index;
+    activeIndex.value = index
   }
-};
+}
 </script>
 
 <style lang="scss">

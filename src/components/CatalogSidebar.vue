@@ -19,7 +19,6 @@
               attr.dataType === AttributeDataType.FLOAT
           "
           v-model="filtersStateRange[attr.id]"
-          v-model:dragging="isRangeDragging"
           :attribute="attr"
           @change="setFiltersState"
         />
@@ -89,7 +88,6 @@ const attributes: Ref<AttributesFilter> = ref({})
 const filtersStateRange: FilterStateRange = reactive({})
 const filtersStateCheckbox: FilterStateCheckbox = reactive({})
 const filtersStateBoolean: FilterStateBoolean = reactive({})
-const isRangeDragging: Ref<boolean> = ref(false)
 const isLoading: Ref<boolean> = ref(true)
 
 onMounted(() => {
@@ -98,14 +96,23 @@ onMounted(() => {
 
   watch(props, () => {
     isLoading.value = true
-    attributes.value = {}
+    resetState()
     initAttributes()
     isLoading.value = false
   })
 })
 
+const resetState = () => {
+  Object.keys(attributes.value).forEach((aid) => {
+    delete filtersStateRange[aid]
+    delete filtersStateCheckbox[aid]
+    delete filtersStateBoolean[aid]
+  })
+  attributes.value = {}
+}
+
 const isResetButtonDisabled = computed(() => {
-  if (isLoading.value || isRangeDragging.value) {
+  if (isLoading.value) {
     return true
   }
   const checkboxDefaults = Object.values(filtersStateCheckbox).every(val =>
@@ -215,7 +222,9 @@ const initFiltersState = () => {
   const routeQuery = router.currentRoute.value.query
   const query: RouteQuery = {}
   for (const queryKey in routeQuery) {
-    if (!queryKey.includes('paf')) { continue }
+    if (!queryKey.includes('paf')) {
+      continue
+    }
     const filterKey = queryKey.replace('paf', '')
     const filterValue = routeQuery[queryKey]
     let decodedFilterValue: string[]
@@ -298,7 +307,6 @@ const getNoFilterQuery = () => {
 }
 
 const checkIfAttributeDisabled = (attr: AttributeFilter, value: any) => {
-  if (isRangeDragging.value) { return true }
   if (
     attr.dataType !== AttributeDataType.INTEGER &&
     attr.dataType !== AttributeDataType.FLOAT &&

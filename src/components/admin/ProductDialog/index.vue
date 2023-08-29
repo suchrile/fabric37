@@ -14,7 +14,7 @@
     <TabView v-model:active-index="activeTabIndex">
       <TabPanel header="Основное">
         <LazyAdminProductDialogTabMain
-          v-model:product="currentProduct"
+          v-model:product="product"
           v-model:selected-categories="selectedCategories"
           :categories="categories"
           :v$="v$"
@@ -83,7 +83,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:visible', 'hide', 'create', 'update'])
 
-const currentProduct: Ref<ProductDialogProp> = ref({} as ProductDialogProp)
+const product: Ref<ProductDialogProp> = ref({} as ProductDialogProp)
 const attributes: Ref<{ [key: number]: AttributeValue }> = ref({})
 const attributesValues: Ref<{ [key: number]: any }> = ref({})
 const categories: Ref<TreeNode[]> = ref([])
@@ -93,24 +93,23 @@ const activeTabIndex: Ref<number> = ref(0)
 
 const rules = reactive({
   product: {
-    name: { required: helpers.withMessage('Обязательное поле', required) },
-    code: { required: helpers.withMessage('Обязательное поле', required) }
+    name: { required: helpers.withMessage('Обязательное поле', required) }
   },
   categoryIds: { required: helpers.withMessage('Обязательное поле', required) },
   attributes: {} as { [key: number]: ValidationArgs }
 })
 const toValidate = reactive({
-  currentProduct,
+  product,
   categoryIds: selectedCategories,
   attributes: attributesValues
 })
 const v$ = useVuelidate(rules, toValidate)
 
 const dialogHeader = computed(
-  () => (currentProduct.value.id ? 'Редактирование' : 'Добавление') + ' товара'
+  () => (product.value.id ? 'Редактирование' : 'Добавление') + ' товара'
 )
 const submitLabel = computed(() =>
-  currentProduct.value.id ? 'Сохранить' : 'Добавить'
+  product.value.id ? 'Сохранить' : 'Добавить'
 )
 
 onMounted(async () => {
@@ -128,7 +127,7 @@ const deleteAttributeRule = (id: number) => {
 }
 
 const transformImages = () => {
-  images.value = currentProduct.value.images.map(img => ({
+  images.value = product.value.images.map(img => ({
     ...img,
     tempId: uuid()
   }))
@@ -136,13 +135,13 @@ const transformImages = () => {
 const transformCategories = () => {
   selectedCategories.value = mapToTreeSelectionKeys(
     categories.value,
-    currentProduct.value.categories,
+    product.value.categories,
     'id',
     'parentId'
   )
 }
 const transformAttributes = () => {
-  currentProduct.value.attributes.forEach((attr) => {
+  product.value.attributes.forEach((attr) => {
     attributes.value[attr.id] = attr
     attributesValues.value[attr.id] = attr.value
     if (attr.required) {
@@ -162,15 +161,15 @@ const switchToInvalidTab = () => {
 }
 
 const showHandler = () => {
-  currentProduct.value = props.product
-  if (currentProduct.value.id) {
+  product.value = props.product
+  if (product.value.id) {
     transformImages()
     transformCategories()
     transformAttributes()
   }
 }
 const hideHandler = () => {
-  currentProduct.value = {} as Product
+  product.value = {} as Product
   images.value = []
   selectedCategories.value = {}
   attributes.value = {}
@@ -189,7 +188,7 @@ const submit = async () => {
   }
 
   const toEmit = {
-    ...currentProduct.value,
+    ...product.value,
     attributes: Object.keys(attributesValues.value).map(key => ({
       id: +key,
       value: attributesValues.value[+key]
@@ -200,7 +199,7 @@ const submit = async () => {
     )
   }
 
-  if (currentProduct.value.id) {
+  if (product.value.id) {
     emit('update', toEmit)
   } else {
     emit('create', toEmit)

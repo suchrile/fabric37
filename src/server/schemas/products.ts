@@ -48,7 +48,6 @@ const attributesSchema = joi.array().items(
 export const productCreateSchema = joi
   .object<ProductCreateDto>({
     name: joi.string().required(),
-    code: joi.string().required(),
     description: joi.string().min(0).allow(null).optional(),
     hidden: joi.boolean().optional(),
     categoryIds: productCategoryIdsSchema.optional(),
@@ -64,7 +63,6 @@ export const productUpdateSchema = joi
       id: productIdSchema.optional(),
       name: joi.string().optional(),
       slug: joi.string().optional(),
-      code: joi.string().optional(),
       description: joi.string().min(0).allow(null).optional(),
       hidden: joi.boolean().optional(),
       categoryIds: productCategoryIdsSchema.optional(),

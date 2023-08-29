@@ -88,7 +88,6 @@ export type AttributeValue = {
   showInCatalog: boolean;
   sortable: boolean;
   filterable: boolean;
-  required: boolean;
   options: AttributeOption[];
 };
 
@@ -131,7 +130,6 @@ export type ProductImage = {
 
 export interface ProductCreateDto {
   name: string;
-  code: string;
   description?: string;
   hidden?: boolean;
   images?: ProductImageCreateDto[];
@@ -143,7 +141,6 @@ export interface ProductUpdateDto {
   id?: number;
   name?: string;
   slug?: string;
-  code?: string;
   description?: string;
   hidden?: boolean;
   images?: [ProductImageCreateDto, ProductImage];
@@ -156,7 +153,6 @@ export interface ProductDialogProp {
   id?: number;
   name: string;
   slug?: string;
-  code: string;
   description: string | null;
   hidden: boolean;
   images?: ProductImage[];
@@ -167,7 +163,6 @@ export interface ProductDialogProp {
 export interface Product {
   id: number;
   name: string;
-  code: string;
   description: string | null;
   hidden: boolean;
   slug: string;
@@ -183,7 +178,6 @@ export interface AttributeCreateDto {
   showInCatalog?: boolean;
   sortable?: boolean;
   filterable?: boolean;
-  required?: boolean;
   options?: AttributeOptionCreateDto[];
   categoryIds: number[];
 }
@@ -196,7 +190,6 @@ export interface AttributeUpdateDto {
   showInCatalog?: boolean;
   sortable?: boolean;
   filterable?: boolean;
-  required?: boolean;
   options?: (AttributeOption & AttributeOptionCreateDto)[];
   categoryIds?: number[];
   categories?: Category[];
@@ -210,7 +203,6 @@ export interface AttributeDialogProp {
   showInCatalog: boolean;
   sortable: boolean;
   filterable: boolean;
-  required: boolean;
   options: AttributeOption[];
   categories: Category[];
 }
@@ -223,7 +215,6 @@ export interface Attribute {
   showInCatalog: boolean;
   sortable: boolean;
   filterable: boolean;
-  required: boolean;
   options: AttributeOption[];
   categories: Category[];
 }

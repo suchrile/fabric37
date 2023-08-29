@@ -79,6 +79,7 @@ interface TableRowData {
   id: number;
   name: string;
   attributes: { [id: string]: string };
+  dbAttributes: Product['attributes'];
 }
 
 type ProductAttribute = {
@@ -93,7 +94,9 @@ const filteredTableData: Ref<TableRowData[]> = ref([])
 const attributes: Ref<ProductAttribute[]> = ref([])
 
 const getAttributeValue = (attribute?: AttributeValue) => {
-  if (!attribute) { return '—' }
+  if (!attribute) {
+    return '—'
+  }
   let value
   if (attribute.dataType === AttributeDataType.SELECT) {
     value = attribute.value
@@ -135,7 +138,8 @@ const initTableData = () => {
           product.attributes.find(pAttr => pAttr.id === attr.id)
         )
         return acc
-      }, {} as TableRowData['attributes'])
+      }, {} as TableRowData['attributes']),
+      dbAttributes: product.attributes
     }
   })
 }
@@ -151,16 +155,22 @@ const filterDataTable = () => {
       } else {
         value = [decodeURIComponent(String(queryValue))]
       }
-      const attributeValue = product.attributes[key.replace('paf', '')]
-      if (!attributeValue) {
+      const attribute = product.dbAttributes.find(
+        attr => attr.id === parseInt(key.replace('paf', ''))
+      )
+      if (!attribute) {
         return false
       }
       const isRangeValue = value.length === 1 && ~value[0].indexOf('~')
       if (isRangeValue) {
         const minmax = value[0].split('~')
-        return attributeValue >= minmax[0] && attributeValue <= minmax[1]
+        return attribute.value >= minmax[0] && attribute.value <= minmax[1]
       } else {
-        return value.includes(attributeValue)
+        return value.some((value) => {
+          return Array.isArray(attribute.value)
+            ? attribute.value.some(option => option.label === value)
+            : String(attribute.value) === value
+        })
       }
     })
   })
@@ -177,6 +187,11 @@ const getFilterQuery = () => {
 }
 
 onMounted(() => {
+  watch(props, () => {
+    initAttributes()
+    initTableData()
+    filterDataTable()
+  })
   watch(route, () => {
     filterDataTable()
   })

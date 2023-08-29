@@ -30,9 +30,11 @@
                 class="hidden-phone-numbers__item"
               >
                 <i class="pi pi-phone" />
-                <NuxtLink :href="`tel:${phoneNumber}`">{{
-                  phoneNumber
-                }}</NuxtLink>
+                <NuxtLink :href="`tel:${phoneNumber}`">
+                  {{
+                    phoneNumber
+                  }}
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -49,16 +51,16 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from "vue";
-import { Link } from "~/interfaces";
+import { Ref } from 'vue'
+import { Link } from '~/interfaces'
 
-const info = useInfo();
+const info = useInfo()
 
-const links: Ref<Link[]> = ref([]);
+const links: Ref<Link[]> = ref([])
 
-const { data } = await useFetch<Link[]>("/api/links");
+const { data } = await useFetch<Link[]>('/api/links')
 if (data.value) {
-  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder);
+  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder)
 }
 </script>
 

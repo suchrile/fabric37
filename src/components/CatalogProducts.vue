@@ -59,14 +59,18 @@ const props = defineProps({
 
 const route = useRoute()
 
-const { sortableFields, currentSortField, sortOrder, sort } = useProductsSort(
-  props.products
-)
+const { sortableFields, currentSortField, sortOrder, init, sort } =
+  useProductsSort(props.products)
 
 const filteredProducts: Ref<Product[]> = ref(props.products)
 const productsLayout: Ref<ProductsLayout> = ref('grid')
 
 onMounted(() => {
+  watch(props, async () => {
+    init(props.products)
+    filterProducts()
+    filteredProducts.value = await sort(filteredProducts.value)
+  })
   watch(route, () => {
     filterProducts()
   })

@@ -29,11 +29,14 @@ class ProductsService {
     const product = await this._catchErrors(
       this._repository.create({
         name: dto.name,
-        code: dto.code,
         description: dto.description,
         hidden: dto.hidden,
         categories: { connect: categoryIdsToConnect },
-        slug: slugify(dto.name, { locale: 'ru', lower: true, strict: true })
+        slug: slugify(dto.name + ' ' + Date.now(), {
+          locale: 'ru',
+          lower: true,
+          strict: true
+        })
       })
     )
 
@@ -58,13 +61,16 @@ class ProductsService {
     const product = await this._catchErrors(
       this._repository.update(id, {
         name: dto.name,
-        code: dto.code,
         description: dto.description,
         hidden: dto.hidden,
         categories: dto.categoryIds && { set: categoryIdsToConnect },
         slug:
           dto.name &&
-          slugify(dto.name, { locale: 'ru', lower: true, strict: true })
+          slugify(dto.name + ' ' + Date.now(), {
+            locale: 'ru',
+            lower: true,
+            strict: true
+          })
       })
     )
 
@@ -126,24 +132,6 @@ class ProductsService {
     try {
       return await promise
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        if (error.meta && Array.isArray(error.meta.target)) {
-          if (error.meta.target[0] === 'name') {
-            throw createError({
-              statusCode: 400,
-              message: 'Товар с указанным наименованием уже существует.'
-            })
-          } else if (error.meta.target[0] === 'code') {
-            throw createError({
-              statusCode: 400,
-              message: 'Товар с указанным артикулом уже существует.'
-            })
-          }
-        }
-      }
       throw error
     }
   }

@@ -53,12 +53,7 @@ class ProductsRepository {
   findMany ({ categoryId, search }: ProductFindManyArgs) {
     return this._repository.findMany({
       where: {
-        OR: search
-          ? [
-              { name: { contains: search, mode: 'insensitive' } },
-              { code: { contains: search, mode: 'insensitive' } }
-            ]
-          : undefined,
+        name: { contains: search, mode: 'insensitive' },
         categories: { some: { id: categoryId } }
       },
       include: includeOptions

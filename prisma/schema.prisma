@@ -61,7 +61,7 @@ model Page {
 model Category {
   id       Int          @id @default(autoincrement())
   slug     String       @unique
-  name     String       @unique
+  name     String
   parentId Int?         @map("parent_id")
   view     CategoryView @default(cards)
 
@@ -75,8 +75,7 @@ model Category {
 
 model Product {
   id          Int     @id @default(autoincrement())
-  name        String  @unique
-  code        String  @unique
+  name        String
   description String?
   hidden      Boolean @default(false)
   slug        String  @unique
@@ -108,7 +107,6 @@ model ProductAttribute {
   showInCatalog Boolean                  @default(false) @map("show_in_catalog")
   sortable      Boolean                  @default(false)
   filterable    Boolean                  @default(false)
-  required      Boolean                  @default(false)
 
   values  ProductAttributeValue[]
   options ProductAttributeSelectOption[]

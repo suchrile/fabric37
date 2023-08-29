@@ -12,9 +12,6 @@
           {{ getAttributeValue(attr) }}
         </div>
       </div>
-      <div class="product-card__code">
-        Артикул: {{ product.code }}
-      </div>
     </div>
   </div>
 </template>
@@ -105,8 +102,6 @@ const getAttributeValue = (attribute: AttributeValue) => {
     &__item:not(:last-child) {
       margin-bottom: 3px;
     }
-  }
-  &__code {
   }
 
   @media screen and (max-width: 767px) {

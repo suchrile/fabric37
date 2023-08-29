@@ -23,7 +23,6 @@ class AttributesRepository {
         showInCatalog: dto.showInCatalog,
         sortable: dto.sortable,
         filterable: dto.filterable,
-        required: dto.required,
         options: dto.options && { createMany: { data: dto.options } }
       }
     })
@@ -59,7 +58,6 @@ class AttributesRepository {
         showInCatalog: dto.showInCatalog,
         sortable: dto.sortable,
         filterable: dto.filterable,
-        required: dto.required,
         options: dto.options && {
           deleteMany: { id: { notIn: existingOptionIds } },
           createMany: { data: optionsToCreate }

@@ -22,7 +22,6 @@ export const attributeCreateSchema = joi
     showInCatalog: joi.boolean().optional(),
     sortable: joi.boolean().optional(),
     filterable: joi.boolean().optional(),
-    required: joi.boolean().optional(),
     options: attributeOptionsSchema.optional()
   })
   .required()
@@ -38,7 +37,6 @@ export const attributeUpdateSchema = joi
       showInCatalog: joi.boolean().optional(),
       sortable: joi.boolean().optional(),
       filterable: joi.boolean().optional(),
-      required: joi.boolean().optional(),
       options: attributeOptionsSchema.optional(),
       categories: joi.any().strip()
     })

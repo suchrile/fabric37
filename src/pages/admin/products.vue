@@ -21,13 +21,7 @@
       :paginator="true"
       paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       :rows-per-page-options="[10, 20, 30]"
-      :global-filter-fields="[
-        'name',
-        'code',
-        'color',
-        'category.name',
-        'hidden',
-      ]"
+      :global-filter-fields="['name', 'color', 'category.name', 'hidden']"
       :table-class="isProductsLoading ? 'h-15rem' : ''"
       data-key="id"
       removable-sort
@@ -57,13 +51,6 @@
         header="Наименование"
         :sortable="true"
         style="min-width: 250px"
-      />
-
-      <Column
-        field="code"
-        header="Артикул"
-        :sortable="true"
-        style="min-width: 150px"
       />
 
       <Column
@@ -367,7 +354,9 @@ const onDialogHide = () => {
 const fetchProducts = async () => {
   isProductsLoading.value = true
   const { data } = await useApiCall<Product[]>('/api/products')
-  if (data) { products.value = data }
+  if (data) {
+    products.value = data
+  }
   isProductsLoading.value = false
 }
 

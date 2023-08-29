@@ -3,7 +3,7 @@
     v-if="attribute.dataType === AttributeDataType.STRING"
     :id="'product-attribute-' + attribute.id"
     :model-value="modelValue"
-    :disabled="!!loading"
+    :disabled="loading"
     placeholder="Введите строковое значение"
     @update:model-value="emit('update:modelValue', $event)"
   />
@@ -11,7 +11,7 @@
     v-else-if="attribute.dataType === AttributeDataType.INTEGER"
     :id="'product-attribute-' + attribute.id"
     :model-value="modelValue"
-    :disabled="!!loading"
+    :disabled="loading"
     placeholder="Введите целочисленное значение"
     @update:model-value="emit('update:modelValue', $event)"
   />
@@ -20,7 +20,7 @@
     :id="'product-attribute-' + attribute.id"
     :model-value="modelValue"
     :max-fraction-digits="5"
-    :disabled="!!loading"
+    :disabled="loading"
     placeholder="Введите числовое значение с плавающей запятой"
     @update:model-value="emit('update:modelValue', $event)"
   />
@@ -30,7 +30,7 @@
     :options="productAttributeBooleanOptions"
     option-label="label"
     option-value="value"
-    :disabled="!!loading"
+    :disabled="loading"
     @update:model-value="emit('update:modelValue', $event)"
   />
   <Calendar
@@ -38,7 +38,7 @@
     :id="'product-attribute-' + attribute.id"
     :model-value="modelValue && new Date(modelValue)"
     date-format="dd.mm.yy"
-    :disabled="!!loading"
+    :disabled="loading"
     placeholder="Выберите дату"
     @update:model-value="
       emit('update:modelValue', new Date($event).toISOString())
@@ -52,7 +52,7 @@
     option-label="label"
     display="chip"
     :show-toggle-all="false"
-    :disabled="!!loading"
+    :disabled="loading"
     placeholder="Выберите значения из списка"
     @update:model-value="emit('update:modelValue', $event)"
   />

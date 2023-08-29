@@ -98,7 +98,6 @@
         input-id="product-attribute-show-in-catalog"
         :disabled="loading"
         :binary="true"
-        @input="onShowInCatalogChange($event)"
       />
       <label for="product-attribute-show-in-catalog">Показывать в каталоге</label>
     </div>
@@ -113,7 +112,7 @@
       <label for="product-attribute-sortable">Использовать для сортировки</label>
     </div>
 
-    <div class="field-checkbox mb-2">
+    <div class="field-checkbox mb-0">
       <Checkbox
         v-model="attribute.filterable"
         input-id="product-attribute-filterable"
@@ -121,16 +120,6 @@
         :binary="true"
       />
       <label for="product-attribute-filterable">Использовать для фильтрации</label>
-    </div>
-
-    <div class="field-checkbox mb-0">
-      <Checkbox
-        v-model="attribute.required"
-        input-id="product-attribute-required"
-        :disabled="attribute.showInCatalog || loading"
-        :binary="true"
-      />
-      <label for="product-attribute-required">Обязательный атрибут</label>
     </div>
 
     <template #footer>
@@ -196,12 +185,6 @@ const addOption = () => {
 
 const removeOption = (option: AttributeDialogOption) => {
   options.value = options.value.filter(item => item.label !== option.label)
-}
-
-const onShowInCatalogChange = (isShowInCatalogChecked: boolean) => {
-  if (isShowInCatalogChecked) {
-    attribute.value.required = true
-  }
 }
 
 const submit = async () => {

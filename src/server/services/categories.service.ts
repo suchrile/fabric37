@@ -83,7 +83,11 @@ class CategoriesService {
   }
 
   private _getSlug = (value: string) => {
-    return slugify(value, { locale: 'ru', lower: true, strict: true })
+    return slugify(value + ' ' + Date.now(), {
+      locale: 'ru',
+      lower: true,
+      strict: true
+    })
   }
 }
 

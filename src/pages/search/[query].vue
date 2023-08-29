@@ -23,7 +23,10 @@
         </div>
       </div>
     </div>
-    <CatalogLayout :products="currentProducts" />
+    <CatalogLayout
+      v-if="categories[activeCategoryId]"
+      :category="categories[activeCategoryId]"
+    />
   </div>
 </template>
 
@@ -40,13 +43,6 @@ const activeCategoryId: Ref<number | null> = ref(null)
 const categoriesCount: Ref<number> = ref(0)
 const productsCount: Ref<number> = ref(0)
 
-const currentProducts = computed(
-  () =>
-    (activeCategoryId.value &&
-      categories.value[activeCategoryId.value].products) ||
-    []
-)
-
 const setCategories = (products: Product[]) => {
   products.forEach((prod) => {
     const narrowCategories = prod.categories.filter(
@@ -62,7 +58,9 @@ const setCategories = (products: Product[]) => {
   })
   categoriesCount.value = Object.keys(categories.value).length
   productsCount.value = products.length
-  setActiveCategoryId(Number(Object.keys(categories.value)[0]))
+  setActiveCategoryId(
+    Number(route.query.categoryId) || Number(Object.keys(categories.value)[0])
+  )
 }
 
 const getSearchSummary = () => {
@@ -77,10 +75,13 @@ const getSearchSummary = () => {
   return `${productsCount.value} ${productsText} в ${categoriesCount.value} ${categoriesText}`
 }
 
-const setActiveCategoryId = (id: number | undefined) => {
-  if (!id) { return }
+const setActiveCategoryId = async (id: number | undefined) => {
+  if (!id) {
+    return
+  }
   activeCategoryId.value = id
-  router.replace({ query: { ...route.query, categoryId: id } })
+  await nextTick()
+  await router.replace({ query: { ...route.query, categoryId: id } })
 }
 
 const { data } = await useFetch<Product[]>('/api/products', {
