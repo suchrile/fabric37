@@ -50,75 +50,76 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { Product, ProductsLayout } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import type { Product, ProductsLayout } from '@/interfaces'
 
 const props = defineProps({
-  products: { type: Array as PropType<Product[]>, required: true },
-});
+  products: { type: Array as PropType<Product[]>, required: true }
+})
 
-const route = useRoute();
+const route = useRoute()
 
-const { sortableFields, currentSortField, sortOrder, init, sort } =
-  useProductsSort(props.products);
+const { sortableFields, currentSortField, sortOrder, sort } = useProductsSort(
+  props.products
+)
 
-const filteredProducts: Ref<Product[]> = ref(props.products);
-const productsLayout: Ref<ProductsLayout> = ref("grid");
+const filteredProducts: Ref<Product[]> = ref(props.products)
+const productsLayout: Ref<ProductsLayout> = ref('grid')
 
 onMounted(() => {
   watch(route, () => {
-    filterProducts();
-  });
-});
+    filterProducts()
+  })
+})
 
 const handleSortChange = async () => {
-  filteredProducts.value = await sort(filteredProducts.value);
-};
+  filteredProducts.value = await sort(filteredProducts.value)
+}
 
 const filterProducts = () => {
-  const query = getFilterQuery();
+  const query = getFilterQuery()
   filteredProducts.value = props.products.filter((product) => {
     return Object.keys(query).every((key) => {
-      const queryValue = query[key];
-      let value;
+      const queryValue = query[key]
+      let value
       if (Array.isArray(queryValue)) {
-        value = queryValue.map((el) => decodeURIComponent(String(el)));
+        value = queryValue.map(el => decodeURIComponent(String(el)))
       } else {
-        value = [decodeURIComponent(String(queryValue))];
+        value = [decodeURIComponent(String(queryValue))]
       }
       const attribute = product.attributes.find(
-        (attr) => attr.id === parseInt(key.replace("paf", ""))
-      );
+        attr => attr.id === parseInt(key.replace('paf', ''))
+      )
       if (!attribute) {
-        return false;
+        return false
       }
-      const isRangeValue = value.length === 1 && ~value[0].indexOf("~");
+      const isRangeValue = value.length === 1 && ~value[0].indexOf('~')
       if (isRangeValue) {
-        const minmax = value[0].split("~");
-        return attribute.value >= minmax[0] && attribute.value <= minmax[1];
+        const minmax = value[0].split('~')
+        return attribute.value >= minmax[0] && attribute.value <= minmax[1]
       } else {
         return value.some((value) => {
           return Array.isArray(attribute.value)
-            ? attribute.value.some((option) => option.label === value)
-            : String(attribute.value) === value;
-        });
+            ? attribute.value.some(option => option.label === value)
+            : String(attribute.value) === value
+        })
       }
-    });
-  });
-};
+    })
+  })
+}
 
 const getFilterQuery = () => {
-  const query = { ...route.query };
+  const query = { ...route.query }
   Object.keys(query).forEach((key) => {
-    if (!key.includes("paf")) {
-      delete query[key];
+    if (!key.includes('paf')) {
+      delete query[key]
     }
-  });
-  return query;
-};
+  })
+  return query
+}
 
-filterProducts();
-filteredProducts.value = await sort(filteredProducts.value);
+filterProducts()
+filteredProducts.value = await sort(filteredProducts.value)
 </script>
 
 <style lang="scss">

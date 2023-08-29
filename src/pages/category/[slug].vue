@@ -29,31 +29,31 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-import type { Category, Product } from "@/interfaces";
+import type { Ref } from 'vue'
+import type { Category } from '@/interfaces'
 
-const route = useRoute();
+const route = useRoute()
 
-const category: Ref<Category | null> = ref(null);
+const category: Ref<Category | null> = ref(null)
 
 const subcategories = computed(() =>
   category.value?.children.sort((a, b) => a.name.localeCompare(b.name))
-);
+)
 
 const { data } = await useFetch<Category>(
-  "/api/categories/" + route.params.slug,
+  '/api/categories/' + route.params.slug,
   { key: String(route.params.slug) }
-);
+)
 if (data.value) {
   category.value = {
     ...data.value,
-    products: data.value.products.filter((product) => !product.hidden),
-  };
+    products: data.value.products.filter(product => !product.hidden)
+  }
 }
 
 useHead({
-  title: category.value?.name,
-});
+  title: category.value?.name
+})
 </script>
 
 <style scoped lang="scss">

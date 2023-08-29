@@ -1,17 +1,17 @@
 <template>
   <div class="links">
-    <a v-for="url in urls" :key="url.url" :href="url.url" class="link">
+    <NuxtLink v-for="url in urls" :key="url.url" :href="url.url" class="link">
       {{ url.name }}
-    </a>
+    </NuxtLink>
   </div>
 </template>
 
 <script setup lang="ts">
-const urls = ref()
+const urls = ref();
 
-const { data } = await useFetch('/api/_sitemap-urls')
+const { data } = await useFetch("/api/_sitemap-urls");
 if (data.value) {
-  urls.value = data.value
+  urls.value = data.value;
 }
 </script>
 

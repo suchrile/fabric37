@@ -27,8 +27,7 @@
           v-for="error in v$.name.$errors"
           :key="error.$uid"
           class="block p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -58,8 +57,7 @@
           v-for="error in v$.parentId.$errors"
           :key="error.$uid"
           class="block p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -69,7 +67,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="category.view"
-            inputId="category-view-cards"
+            input-id="category-view-cards"
             name="category-view-cards"
             value="cards"
           />
@@ -78,7 +76,7 @@
         <div class="flex align-items-center">
           <RadioButton
             v-model="category.view"
-            inputId="category-view-table"
+            input-id="category-view-table"
             name="category-view-table"
             value="table"
           />
@@ -107,81 +105,81 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, PropType, Ref } from "vue";
-import { helpers, numeric, required } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
-import type { TreeNode } from "primevue/tree";
-import type { Category } from "@/interfaces";
-import { makeNested } from "@/helpers";
-import { undeletableCategoryId } from "@/consts";
-import { CategoryDialogProp } from "@/interfaces";
+import { ComputedRef, PropType, Ref } from 'vue'
+import { helpers, numeric, required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+import type { TreeNode } from 'primevue/tree'
+import type { Category } from '@/interfaces'
+import { makeNested } from '@/helpers'
+import { undeletableCategoryId } from '@/consts'
+import { CategoryDialogProp } from '@/interfaces'
 
 const props = defineProps({
   value: { type: Object as PropType<CategoryDialogProp>, required: true },
   categories: { type: Object as PropType<Category[]>, required: true },
   visible: { type: Boolean, required: true },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:visible", "hide", "create", "update"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:visible', 'hide', 'create', 'update'])
 
-const category: Ref<CategoryDialogProp> = ref({} as CategoryDialogProp);
-const parentId: Ref<{ [id: string]: boolean } | null> = ref(null);
+const category: Ref<CategoryDialogProp> = ref({} as CategoryDialogProp)
+const parentId: Ref<{ [id: string]: boolean } | null> = ref(null)
 
 const submitLabel: ComputedRef<string> = computed(() =>
-  category.value.id ? "Сохранить" : "Добавить"
-);
+  category.value.id ? 'Сохранить' : 'Добавить'
+)
 const dialogHeader: ComputedRef<string> = computed(
-  () => `${category.value.id ? "Редактирование" : "Добавление"} категории`
-);
+  () => `${category.value.id ? 'Редактирование' : 'Добавление'} категории`
+)
 const isCategoryUndeletable = computed(
   () => category.value.id === undeletableCategoryId
-);
+)
 const categoriesTree: ComputedRef<TreeNode[]> = computed(() => {
   const filtered = props.categories.filter(
-    (cat) =>
+    cat =>
       cat.id !== undeletableCategoryId &&
       cat.id !== category.value.id &&
       cat.parentId !== category.value.id
-  );
-  const mapped = filtered.map((cat) => ({
+  )
+  const mapped = filtered.map(cat => ({
     key: String(cat.id),
     label: cat.name,
-    parentId: cat.parentId,
-  }));
-  return makeNested(mapped, "key", "parentId");
-});
+    parentId: cat.parentId
+  }))
+  return makeNested(mapped, 'key', 'parentId')
+})
 
 const rules = computed(() => ({
-  name: { required: helpers.withMessage("Обязательное поле", required) },
-  parentId: { numeric: helpers.withMessage("Некорректное значение", numeric) },
-}));
-const v$ = useVuelidate(rules, category);
+  name: { required: helpers.withMessage('Обязательное поле', required) },
+  parentId: { numeric: helpers.withMessage('Некорректное значение', numeric) }
+}))
+const v$ = useVuelidate(rules, category)
 
 const showHandler = () => {
-  category.value = props.value;
+  category.value = props.value
   parentId.value = category.value.parentId
     ? { [category.value.parentId]: true }
-    : null;
-};
+    : null
+}
 
 const hideHandler = () => {
-  v$.value.$reset();
-  category.value = {} as Category;
-  parentId.value = null;
-};
+  v$.value.$reset()
+  category.value = {} as Category
+  parentId.value = null
+}
 
 const submit = async () => {
-  category.value.parentId = parentId.value && +Object.keys(parentId.value)[0];
-  const isFormValid = await v$.value.$validate();
+  category.value.parentId = parentId.value && +Object.keys(parentId.value)[0]
+  const isFormValid = await v$.value.$validate()
   if (!isFormValid) {
-    return;
+    return
   }
   if (category.value.id) {
-    emit("update", category.value);
+    emit('update', category.value)
   } else {
-    emit("create", category.value);
+    emit('create', category.value)
   }
-};
+}
 </script>
 
 <style scoped></style>

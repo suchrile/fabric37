@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 
-import { TreeNode } from "primevue/tree";
+import { TreeNode } from 'primevue/tree'
 import {
   Product as PrismaProduct,
   ProductImage as PrismaProductImage,
@@ -13,8 +13,8 @@ import {
   ProductAttributeIntegerValue,
   ProductAttributeSelectValue,
   ProductAttributeStringValue,
-  ProductAttributeSelectOption,
-} from "@prisma/client";
+  ProductAttributeSelectOption
+} from '@prisma/client'
 
 export type DatabaseObject<T> = {
   id: number;
@@ -49,7 +49,7 @@ export interface User extends UserCreationAttrs {
 export interface CategoryCreateDto {
   name: string;
   parentId?: number;
-  view?: "cards" | "table";
+  view?: 'cards' | 'table';
 }
 
 export interface CategoryUpdateDto {
@@ -57,14 +57,14 @@ export interface CategoryUpdateDto {
   slug?: string;
   name?: string;
   parentId?: number;
-  view?: "cards" | "table";
+  view?: 'cards' | 'table';
 }
 
 export interface CategoryDialogProp {
   id?: number;
   name: string;
   parentId?: number | null;
-  view?: "cards" | "table";
+  view?: 'cards' | 'table';
 }
 
 export interface Category {
@@ -72,8 +72,8 @@ export interface Category {
   slug: string;
   name: string;
   parentId: number | null;
-  view: "cards" | "table";
-  parent: Pick<Category, "slug" | "name">;
+  view: 'cards' | 'table';
+  parent: Pick<Category, 'slug' | 'name'>;
   children: Category[];
   products: Product[];
   _count: { products: number; children: number };
@@ -93,12 +93,12 @@ export type AttributeValue = {
 };
 
 export enum AttributeDataType {
-  STRING = "string",
-  INTEGER = "integer",
-  FLOAT = "float",
-  BOOLEAN = "boolean",
-  DATE = "date",
-  SELECT = "select",
+  STRING = 'string',
+  INTEGER = 'integer',
+  FLOAT = 'float',
+  BOOLEAN = 'boolean',
+  DATE = 'date',
+  SELECT = 'select',
 }
 
 export type AttributeOption = { id: number; label: string };
@@ -289,30 +289,30 @@ export interface Link {
 
 // =================================
 
-export type TreeNodeConstructorOptions<T> = Omit<TreeNode, "key" | "label"> & {
+export type TreeNodeConstructorOptions<T> = Omit<TreeNode, 'key' | 'label'> & {
   uniqueKey: keyof T;
   parentKey: keyof T;
   labelKey: keyof T;
 };
 
 export enum FilterMatchMode {
-  STARTS_WITH = "startsWith",
-  CONTAINS = "contains",
-  ARRAY_CONTAINS_BY_ID = "arrayContainsById",
-  NOT_CONTAINS = "notContains",
-  ENDS_WITH = "endsWith",
-  EQUALS = "equals",
-  NOT_EQUALS = "notEquals",
-  IN = "in",
-  LESS_THAN = "lt",
-  LESS_THAN_OR_EQUAL_TO = "lte",
-  GREATER_THAN = "gt",
-  GREATER_THAN_OR_EQUAL_TO = "gte",
-  BETWEEN = "between",
-  DATE_IS = "dateIs",
-  DATE_IS_NOT = "dateIsNot",
-  DATE_BEFORE = "dateBefore",
-  DATE_AFTER = "dateAfter",
+  STARTS_WITH = 'startsWith',
+  CONTAINS = 'contains',
+  ARRAY_CONTAINS_BY_ID = 'arrayContainsById',
+  NOT_CONTAINS = 'notContains',
+  ENDS_WITH = 'endsWith',
+  EQUALS = 'equals',
+  NOT_EQUALS = 'notEquals',
+  IN = 'in',
+  LESS_THAN = 'lt',
+  LESS_THAN_OR_EQUAL_TO = 'lte',
+  GREATER_THAN = 'gt',
+  GREATER_THAN_OR_EQUAL_TO = 'gte',
+  BETWEEN = 'between',
+  DATE_IS = 'dateIs',
+  DATE_IS_NOT = 'dateIsNot',
+  DATE_BEFORE = 'dateBefore',
+  DATE_AFTER = 'dateAfter',
 }
 
 export type DataTableFilterMeta = { [key: string]: DataTableFilterMetaData };
@@ -355,11 +355,11 @@ export type ProductSortField = {
 
 export type SortOrder = {
   label: string;
-  name: "asc" | "desc";
+  name: 'asc' | 'desc';
   value: 1 | -1;
 };
 
-export type ProductsLayout = "grid" | "list";
+export type ProductsLayout = 'grid' | 'list';
 
 export type AttributeFilter = {
   id: number;

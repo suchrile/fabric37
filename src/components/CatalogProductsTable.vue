@@ -19,10 +19,10 @@
         <template #filter="{ filterModel, filterCallback }">
           <InputText
             v-model="filterModel.value"
-            @input="filterCallback"
             type="text"
             class="p-column-filter"
             placeholder="Поиск по наименованию"
+            @input="filterCallback"
           />
         </template>
       </Column>
@@ -39,10 +39,10 @@
         <template #filter="{ filterModel, filterCallback }">
           <InputText
             v-model="filterModel.value"
-            @input="filterCallback"
             type="text"
             class="p-column-filter"
             placeholder="Введите значение"
+            @input="filterCallback"
           />
         </template>
       </Column>
@@ -62,18 +62,18 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { Product } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import type { Product } from '@/interfaces'
 import {
   AttributeDataType,
   AttributeOption,
-  AttributeValue,
-} from "@/interfaces";
-import { productAttributeBooleanOptions } from "~/consts";
+  AttributeValue
+} from '@/interfaces'
+import { productAttributeBooleanOptions } from '~/consts'
 
 const props = defineProps({
-  products: { type: Array as PropType<Product[]>, required: true },
-});
+  products: { type: Array as PropType<Product[]>, required: true }
+})
 
 interface TableRowData {
   id: number;
@@ -86,44 +86,44 @@ type ProductAttribute = {
   name: string;
 };
 
-const route = useRoute();
+const route = useRoute()
 
-const tableData: Ref<TableRowData[]> = ref([]);
-const filteredTableData: Ref<TableRowData[]> = ref([]);
-const attributes: Ref<ProductAttribute[]> = ref([]);
+const tableData: Ref<TableRowData[]> = ref([])
+const filteredTableData: Ref<TableRowData[]> = ref([])
+const attributes: Ref<ProductAttribute[]> = ref([])
 
 const getAttributeValue = (attribute?: AttributeValue) => {
-  if (!attribute) return "—";
-  let value;
+  if (!attribute) { return '—' }
+  let value
   if (attribute.dataType === AttributeDataType.SELECT) {
     value = attribute.value
       .map((option: AttributeOption) => option.label)
-      .join(", ");
+      .join(', ')
   } else if (attribute.dataType === AttributeDataType.DATE) {
-    value = new Date(attribute.value).toLocaleDateString();
+    value = new Date(attribute.value).toLocaleDateString()
   } else if (attribute.dataType === AttributeDataType.BOOLEAN) {
     value = productAttributeBooleanOptions.find(
-      (option) => option.value === attribute.value
-    )!.label;
+      option => option.value === attribute.value
+    )!.label
   } else {
-    value = attribute.value;
+    value = attribute.value
   }
-  return String(value);
-};
+  return String(value)
+}
 
 const initAttributes = () => {
   attributes.value = props.products?.reduce((acc, product) => {
     product.attributes.forEach((pAttr) => {
-      !acc.find((attr) => attr.id === pAttr.id) &&
+      !acc.find(attr => attr.id === pAttr.id) &&
         pAttr.showInCatalog &&
         acc.push({
           id: pAttr.id,
-          name: pAttr.name + (pAttr.unit ? `, ${pAttr.unit}` : ""),
-        });
-    });
-    return acc;
-  }, [] as ProductAttribute[]);
-};
+          name: pAttr.name + (pAttr.unit ? `, ${pAttr.unit}` : '')
+        })
+    })
+    return acc
+  }, [] as ProductAttribute[])
+}
 
 const initTableData = () => {
   tableData.value = props.products.map((product) => {
@@ -132,59 +132,59 @@ const initTableData = () => {
       name: product.name,
       attributes: attributes.value.reduce((acc, attr) => {
         acc[attr.id] = getAttributeValue(
-          product.attributes.find((pAttr) => pAttr.id === attr.id)
-        );
-        return acc;
-      }, {} as TableRowData["attributes"]),
-    };
-  });
-};
+          product.attributes.find(pAttr => pAttr.id === attr.id)
+        )
+        return acc
+      }, {} as TableRowData['attributes'])
+    }
+  })
+}
 
 const filterDataTable = () => {
-  const query = getFilterQuery();
+  const query = getFilterQuery()
   filteredTableData.value = tableData.value.filter((product) => {
     return Object.keys(query).every((key) => {
-      const queryValue = query[key];
-      let value;
+      const queryValue = query[key]
+      let value
       if (Array.isArray(queryValue)) {
-        value = queryValue.map((el) => decodeURIComponent(String(el)));
+        value = queryValue.map(el => decodeURIComponent(String(el)))
       } else {
-        value = [decodeURIComponent(String(queryValue))];
+        value = [decodeURIComponent(String(queryValue))]
       }
-      const attributeValue = product.attributes[key.replace("paf", "")];
+      const attributeValue = product.attributes[key.replace('paf', '')]
       if (!attributeValue) {
-        return false;
+        return false
       }
-      const isRangeValue = value.length === 1 && ~value[0].indexOf("~");
+      const isRangeValue = value.length === 1 && ~value[0].indexOf('~')
       if (isRangeValue) {
-        const minmax = value[0].split("~");
-        return attributeValue >= minmax[0] && attributeValue <= minmax[1];
+        const minmax = value[0].split('~')
+        return attributeValue >= minmax[0] && attributeValue <= minmax[1]
       } else {
-        return value.includes(attributeValue);
+        return value.includes(attributeValue)
       }
-    });
-  });
-};
+    })
+  })
+}
 
 const getFilterQuery = () => {
-  const query = { ...route.query };
+  const query = { ...route.query }
   Object.keys(query).forEach((key) => {
-    if (!key.includes("paf")) {
-      delete query[key];
+    if (!key.includes('paf')) {
+      delete query[key]
     }
-  });
-  return query;
-};
+  })
+  return query
+}
 
 onMounted(() => {
   watch(route, () => {
-    filterDataTable();
-  });
-});
+    filterDataTable()
+  })
+})
 
-initAttributes();
-initTableData();
-filterDataTable();
+initAttributes()
+initTableData()
+filterDataTable()
 </script>
 
 <style lang="scss">

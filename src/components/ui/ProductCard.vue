@@ -12,45 +12,47 @@
           {{ getAttributeValue(attr) }}
         </div>
       </div>
-      <div class="product-card__code">Артикул: {{ product.code }}</div>
+      <div class="product-card__code">
+        Артикул: {{ product.code }}
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { AttributeOption, AttributeValue, Product } from "@/interfaces";
-import { AttributeDataType } from "@/interfaces";
-import { productAttributeBooleanOptions } from "@/consts";
+import type { PropType } from 'vue'
+import type { AttributeOption, AttributeValue, Product } from '@/interfaces'
+import { AttributeDataType } from '@/interfaces'
+import { productAttributeBooleanOptions } from '@/consts'
 
 const props = defineProps({
   product: { type: Object as PropType<Product>, required: true },
-  layout: { type: String as PropType<"grid" | "list">, default: "grid" },
-});
+  layout: { type: String as PropType<'grid' | 'list'>, default: 'grid' }
+})
 
 const attributes = computed(() =>
-  props.product.attributes.filter((attr) => attr.showInCatalog)
-);
+  props.product.attributes.filter(attr => attr.showInCatalog)
+)
 
 const getAttributeValue = (attribute: AttributeValue) => {
-  let value;
+  let value
   if (attribute.dataType === AttributeDataType.SELECT) {
     value = attribute.value
       .map((option: AttributeOption) => option.label)
-      .join(", ");
+      .join(', ')
   } else if (attribute.dataType === AttributeDataType.DATE) {
-    value = new Date(attribute.value).toLocaleDateString();
+    value = new Date(attribute.value).toLocaleDateString()
   } else if (attribute.dataType === AttributeDataType.BOOLEAN) {
     value = productAttributeBooleanOptions.find(
-      (option) => option.value === attribute.value
-    )!.label;
+      option => option.value === attribute.value
+    )!.label
   } else {
-    value = attribute.value;
+    value = attribute.value
   }
   return (
-    `${attribute.name}: ${value}` + (attribute.unit ? ` ${attribute.unit}` : "")
-  );
-};
+    `${attribute.name}: ${value}` + (attribute.unit ? ` ${attribute.unit}` : '')
+  )
+}
 </script>
 
 <style lang="scss">

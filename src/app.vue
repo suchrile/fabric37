@@ -18,7 +18,7 @@
         </div>
       </template>
     </ConfirmDialog>
-    <a
+    <NuxtLink
       href="/sitemap"
       style="
         position: absolute;
@@ -32,12 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Info } from '@/interfaces'
+import type { Info } from "@/interfaces";
 
-const info = useInfo()
+const info = useInfo();
 
-const { data } = await useFetch<Info>('/api/info')
+const { data } = await useFetch<Info>("/api/info");
 if (data.value) {
-  info.value = data.value
+  info.value = data.value;
 }
 </script>

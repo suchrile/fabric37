@@ -104,80 +104,82 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import type { Category, Link } from '@/interfaces'
-import { makeNested } from '@/helpers'
-import { undeletableCategoryId } from '@/consts'
-import HeaderTop from '~/components/HeaderTop.vue'
+import type { Ref } from "vue";
+import type { Category, Link } from "@/interfaces";
+import { makeNested } from "@/helpers";
+import { undeletableCategoryId } from "@/consts";
+import HeaderTop from "~/components/HeaderTop.vue";
 
-const catalog = ref()
+const catalog = ref();
 
-const info = useInfo()
-const isCatalogOpen: Ref<boolean> = ref(false)
-const isSidebarVisible: Ref<boolean> = ref(false)
-const isRequestPriceDialogVisible: Ref<boolean> = ref(false)
-const links: Ref<Link[]> = ref([])
-const categories: Ref<(Category & { children: Category[] })[]> = ref([])
-const currentCategory = ref()
-const searchField: Ref<string> = ref('')
+const info = useInfo();
+const isCatalogOpen: Ref<boolean> = ref(false);
+const isSidebarVisible: Ref<boolean> = ref(false);
+const isRequestPriceDialogVisible: Ref<boolean> = ref(false);
+const links: Ref<Link[]> = ref([]);
+const categories: Ref<(Category & { children: Category[] })[]> = ref([]);
+const currentCategory = ref();
+const searchField: Ref<string> = ref("");
 
-const { data } = await useApiCall<Link[]>('/api/links')
+const { data } = await useApiCall<Link[]>("/api/links");
 if (data) {
-  links.value = data
+  links.value = data;
 }
 
 onMounted(async () => {
-  await nextTick()
-  await fetchCategories()
-})
+  await nextTick();
+  await fetchCategories();
+});
 
 const toggleCatalog = async () => {
   if (isCatalogOpen.value) {
-    const blockui = document.querySelector('.p-blockui')
-    blockui?.removeEventListener('click', toggleCatalog)
-    catalog.value.style.maxHeight = 0
-    isCatalogOpen.value = false
+    const blockui = document.querySelector(".p-blockui");
+    blockui?.removeEventListener("click", toggleCatalog);
+    catalog.value.style.maxHeight = 0;
+    isCatalogOpen.value = false;
   } else {
-    isCatalogOpen.value = true
-    catalog.value.style.maxHeight = catalog.value.scrollHeight + 'px'
-    await nextTick()
-    const blockui = document.querySelector('.p-blockui')
-    blockui?.addEventListener('click', toggleCatalog)
+    isCatalogOpen.value = true;
+    catalog.value.style.maxHeight = catalog.value.scrollHeight + "px";
+    await nextTick();
+    const blockui = document.querySelector(".p-blockui");
+    blockui?.addEventListener("click", toggleCatalog);
   }
-}
+};
 
 const setCurrentCategory = (category: Category) => {
-  currentCategory.value = category
-}
+  currentCategory.value = category;
+};
 const checkIfCurrentCategory = (category: Category) => {
   if (!currentCategory.value) {
-    return
+    return;
   }
-  return currentCategory.value.id === category.id
-}
+  return currentCategory.value.id === category.id;
+};
 
 const search = () => {
-  if (!searchField.value) { return }
-  isCatalogOpen.value && toggleCatalog()
-  navigateTo('/search/' + searchField.value)
-}
+  if (!searchField.value) {
+    return;
+  }
+  isCatalogOpen.value && toggleCatalog();
+  navigateTo("/search/" + searchField.value);
+};
 
 const fetchCategories = async () => {
-  const { data } = await useApiCall<Category[]>('/api/categories')
+  const { data } = await useApiCall<Category[]>("/api/categories");
   if (data) {
     const sortedCategories = data.sort((a, b) => {
       if (a.id === undeletableCategoryId) {
-        return 1
+        return 1;
       }
       if (b.id === undeletableCategoryId) {
-        return -1
+        return -1;
       }
-      return a.name.localeCompare(b.name)
-    })
-    categories.value = makeNested(sortedCategories, 'id', 'parentId')
-    currentCategory.value = categories.value[0]
+      return a.name.localeCompare(b.name);
+    });
+    categories.value = makeNested(sortedCategories, "id", "parentId");
+    currentCategory.value = categories.value[0];
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -270,7 +272,7 @@ const fetchCategories = async () => {
   color: white;
   background: linear-gradient(var(--purple-500), var(--purple-600));
   position: relative;
-  z-index: 1;
+  z-index: 2;
 
   &__burger {
     display: none;

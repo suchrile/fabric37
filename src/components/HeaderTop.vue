@@ -2,14 +2,14 @@
   <div class="header-top">
     <div class="header-top__container">
       <div v-if="links.length" class="header-top__links">
-        <a
+        <NuxtLink
           v-for="link in links"
           :key="link.id"
           :href="link.url"
           :target="link.newTab ? '_blank' : '_self'"
         >
           {{ link.title }}
-        </a>
+        </NuxtLink>
       </div>
 
       <div class="header-top__contacts contacts">
@@ -18,9 +18,9 @@
           class="contacts__phone-numbers phone-numbers"
         >
           <i class="pi pi-phone" />
-          <a :href="`tel:${info.contacts.phoneNumbers[0]}`">
+          <NuxtLink :href="`tel:${info.contacts.phoneNumbers[0]}`">
             {{ info.contacts.phoneNumbers[0] }}
-          </a>
+          </NuxtLink>
           <div v-if="info.contacts.phoneNumbers.length > 1">
             <i class="pi pi-chevron-down" />
             <div class="phone-numbers__hidden hidden-phone-numbers">
@@ -30,16 +30,18 @@
                 class="hidden-phone-numbers__item"
               >
                 <i class="pi pi-phone" />
-                <a :href="`tel:${phoneNumber}`">{{ phoneNumber }}</a>
+                <NuxtLink :href="`tel:${phoneNumber}`">{{
+                  phoneNumber
+                }}</NuxtLink>
               </div>
             </div>
           </div>
         </div>
         <div v-if="info.contacts.email" class="contacts__email">
           <i class="pi pi-at" />
-          <a :href="`mailto:${info.contacts.email}`">
+          <NuxtLink :href="`mailto:${info.contacts.email}`">
             {{ info.contacts.email }}
-          </a>
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -47,16 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from 'vue'
-import { Link } from '~/interfaces'
+import { Ref } from "vue";
+import { Link } from "~/interfaces";
 
-const info = useInfo()
+const info = useInfo();
 
-const links: Ref<Link[]> = ref([])
+const links: Ref<Link[]> = ref([]);
 
-const { data } = await useFetch<Link[]>('/api/links')
+const { data } = await useFetch<Link[]>("/api/links");
 if (data.value) {
-  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder)
+  links.value = data.value.sort((a, b) => a.sortOrder - b.sortOrder);
 }
 </script>
 

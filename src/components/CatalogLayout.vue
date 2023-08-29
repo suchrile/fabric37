@@ -49,16 +49,16 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { Category, Product } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import type { Category } from '@/interfaces'
 
 defineProps({
-  category: { type: Object as PropType<Category>, required: true },
-});
+  category: { type: Object as PropType<Category>, required: true }
+})
 
-const isSidebarVisible: Ref<boolean> = ref(false);
+const isSidebarVisible: Ref<boolean> = ref(false)
 
-const { width } = useViewport();
+const { width } = useViewport()
 </script>
 
 <style scoped lang="scss">

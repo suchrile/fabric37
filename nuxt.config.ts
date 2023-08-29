@@ -1,18 +1,17 @@
 // @ts-nocheck
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  srcDir: "src/",
-  modules: ["@nuxtjs/eslint-module"],
-  eslint: { lintOnStart: false },
+  srcDir: 'src/',
+  modules: ['@nuxtjs/eslint-module'],
   css: [
-    "primevue/resources/primevue.min.css",
-    "primeicons/primeicons.css",
-    "primeflex/primeflex.css",
-    "@/assets/theme.css",
-    "@/assets/styles.css",
+    'primevue/resources/primevue.min.css',
+    'primeicons/primeicons.css',
+    'primeflex/primeflex.css',
+    '@/assets/theme.css',
+    '@/assets/styles.css'
   ],
   build: {
-    transpile: ["primevue"],
+    transpile: ['primevue']
   },
   runtimeConfig: {
     jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
@@ -26,43 +25,43 @@ export default defineNuxtConfig({
     smtpInfoUser: process.env.SMTP_INFO_USER,
     smtpUserName: process.env.SMTP_USER_NAME,
     smtpBotPassword: process.env.SMTP_BOT_PASSWORD,
-    smtpInfoPassword: process.env.SMTP_INFO_PASSWORD,
+    smtpInfoPassword: process.env.SMTP_INFO_PASSWORD
   },
   app: {
     head: {
       link: [
         {
-          rel: "apple-touch-icon",
-          sizes: "180x180",
-          href: "/favicon/apple-touch-icon.png",
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/favicon/apple-touch-icon.png'
         },
         {
-          rel: "icon",
-          type: "image/png",
-          sizes: "32x32",
-          href: "/favicon/favicon-32x32.png",
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '32x32',
+          href: '/favicon/favicon-32x32.png'
         },
         {
-          rel: "icon",
-          type: "image/png",
-          sizes: "16x16",
-          href: "/favicon/favicon-16x16.png",
+          rel: 'icon',
+          type: 'image/png',
+          sizes: '16x16',
+          href: '/favicon/favicon-16x16.png'
         },
-        { rel: "manifest", href: "/favicon/site.webmanifest" },
+        { rel: 'manifest', href: '/favicon/site.webmanifest' },
         {
-          rel: "mask-icon",
-          href: "/favicon/safari-pinned-tab.svg",
-          color: "#a855f7",
-        },
+          rel: 'mask-icon',
+          href: '/favicon/safari-pinned-tab.svg',
+          color: '#a855f7'
+        }
       ],
       meta: [
         {
-          name: "format-detection",
-          content: "telephone=no, email=no, address=no, date=no",
+          name: 'format-detection',
+          content: 'telephone=no, email=no, address=no, date=no'
         },
-        { name: "msapplication-TileColor", content: "#a855f7" },
-        { name: "theme-color", content: "#ffffff" },
-      ],
-    },
-  },
-});
+        { name: 'msapplication-TileColor', content: '#a855f7' },
+        { name: 'theme-color', content: '#ffffff' }
+      ]
+    }
+  }
+})

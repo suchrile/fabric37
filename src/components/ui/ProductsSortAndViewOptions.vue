@@ -25,7 +25,7 @@
         <i
           v-tooltip.bottom="'Сеткой'"
           class="layout__option"
-          :class="{ active: layout === 'grid' }"
+          :class="{ active: currentLayout === 'grid' }"
           @click="setLayout('grid')"
         ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <path
@@ -34,7 +34,7 @@
         <i
           v-tooltip.bottom="'Списком'"
           class="layout__option"
-          :class="{ active: layout === 'list' }"
+          :class="{ active: currentLayout === 'list' }"
           @click="setLayout('list')"
         ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
           <path
@@ -67,13 +67,13 @@ onMounted(() => {
   watch(props, () => {
     field.value = props.field
     order.value = props.order
-    layout.value = props.layout
+    currentLayout.value = props.layout
   })
 })
 
 const field: Ref<ProductSortField> = ref(props.field)
 const order: Ref<SortOrder> = ref(props.order)
-const layout: Ref<ProductsLayout> = ref('grid')
+const currentLayout: Ref<ProductsLayout> = ref('grid')
 
 const handleSortChange = () => {
   emit('update:field', field.value)
@@ -82,8 +82,8 @@ const handleSortChange = () => {
 }
 
 const setLayout = (value: ProductsLayout) => {
-  layout.value = value
-  emit('update:layout', layout.value)
+  currentLayout.value = value
+  emit('update:layout', currentLayout.value)
 }
 </script>
 

@@ -29,36 +29,36 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType } from 'vue'
 import type {
   AttributeFilter,
-  AttributeFilterCheckboxValue,
-} from "@/interfaces";
-import { AttributeDataType } from "@/interfaces";
-import { productAttributeBooleanOptions } from "@/consts";
+  AttributeFilterCheckboxValue
+} from '@/interfaces'
+import { AttributeDataType } from '@/interfaces'
+import { productAttributeBooleanOptions } from '@/consts'
 
 const props = defineProps({
   modelValue: {
     type: Object as PropType<AttributeFilterCheckboxValue>,
-    required: true,
+    required: true
   },
   attribute: { type: Object as PropType<AttributeFilter>, required: true },
-  checkIfAttributeDisabled: { type: Function, required: true },
-});
-const emit = defineEmits(["update:modelValue", "change"]);
+  checkIfAttributeDisabled: { type: Function, required: true }
+})
+const emit = defineEmits(['update:modelValue', 'change'])
 
 const getFormattedValue = (value: any) => {
-  const attribute = props.attribute;
+  const attribute = props.attribute
   if (attribute.dataType === AttributeDataType.DATE) {
-    return new Date(value).toLocaleDateString();
+    return new Date(value).toLocaleDateString()
   } else if (attribute.dataType === AttributeDataType.BOOLEAN) {
     return productAttributeBooleanOptions.find(
-      (option) => option.value === value
-    )!.label;
+      option => option.value === value
+    )!.label
   } else {
-    return value;
+    return value
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
