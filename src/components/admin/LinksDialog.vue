@@ -27,8 +27,7 @@
           v-for="error in v$.title.$errors"
           :key="error.$uid"
           class="block p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -46,8 +45,7 @@
           v-for="error in v$.url.$errors"
           :key="error.$uid"
           class="block p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -83,53 +81,53 @@
 </template>
 
 <script setup lang="ts">
-import { useVuelidate } from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
-import type { ComputedRef, PropType, Ref } from "vue";
-import type { LinkDialogProp } from "@/interfaces";
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { LinkDialogProp } from '@/interfaces'
 
 const props = defineProps({
   value: { type: Object as PropType<LinkDialogProp>, required: true },
   visible: { type: Boolean, default: false },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:visible", "create", "edit", "hide"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:visible', 'create', 'edit', 'hide'])
 
-const link: Ref<LinkDialogProp> = ref({} as LinkDialogProp);
+const link: Ref<LinkDialogProp> = ref({} as LinkDialogProp)
 
 const submitLabel: ComputedRef<string> = computed(() =>
-  props.value.id ? "Сохранить" : "Добавить"
-);
+  props.value.id ? 'Сохранить' : 'Добавить'
+)
 const dialogHeader: ComputedRef<string> = computed(
-  () => (props.value.id ? "Редактирование" : "Добавление") + " ссылки"
-);
+  () => (props.value.id ? 'Редактирование' : 'Добавление') + ' ссылки'
+)
 
 const rules = reactive({
-  title: { required: helpers.withMessage("Обязательное поле", required) },
-  url: { required: helpers.withMessage("Обязательное поле", required) },
-});
-const v$ = useVuelidate(rules, link);
+  title: { required: helpers.withMessage('Обязательное поле', required) },
+  url: { required: helpers.withMessage('Обязательное поле', required) }
+})
+const v$ = useVuelidate(rules, link)
 
 const submit = async () => {
-  const isFormValid = await v$.value.$validate();
+  const isFormValid = await v$.value.$validate()
   if (!isFormValid) {
-    return;
+    return
   }
   if (props.value.id) {
-    emit("edit", link.value);
+    emit('edit', link.value)
   } else {
-    emit("create", link.value);
+    emit('create', link.value)
   }
-};
+}
 
 const handleShow = () => {
-  link.value = props.value;
-};
+  link.value = props.value
+}
 const handleHide = () => {
-  v$.value.$reset();
-  link.value = {} as LinkDialogProp;
-  emit("hide");
-};
+  v$.value.$reset()
+  link.value = {} as LinkDialogProp
+  emit('hide')
+}
 </script>
 
 <style lang="scss" scoped></style>

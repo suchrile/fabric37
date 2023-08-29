@@ -1,89 +1,89 @@
-import { Prisma } from "@prisma/client";
-import { prisma } from "@/server/repositories/index";
-import { includeOptions } from "@/consts";
-import type { ProductFindManyArgs } from "@/server/types";
+import { Prisma } from '@prisma/client'
+import { prisma } from '@/server/repositories/index'
+import { includeOptions } from '@/consts'
+import type { ProductFindManyArgs } from '@/server/types'
 
 class ProductsRepository {
-  private readonly _repository;
+  private readonly _repository
 
-  constructor() {
-    this._repository = prisma.product;
+  constructor () {
+    this._repository = prisma.product
   }
 
-  create(dto: Prisma.ProductCreateInput) {
+  create (dto: Prisma.ProductCreateInput) {
     return this._repository.create({
       data: dto,
-      include: includeOptions,
-    });
+      include: includeOptions
+    })
   }
 
-  update(id: number, dto: Prisma.ProductUpdateInput) {
+  update (id: number, dto: Prisma.ProductUpdateInput) {
     return this._repository.update({
       where: { id },
       data: dto,
-      include: includeOptions,
-    });
+      include: includeOptions
+    })
   }
 
-  findOneById(id: number) {
+  findOneById (id: number) {
     return this._repository.findUnique({
       where: { id },
-      include: includeOptions,
-    });
+      include: includeOptions
+    })
   }
 
-  findOneBySlug(slug: string) {
+  findOneBySlug (slug: string) {
     return this._repository.findUnique({
       where: { slug },
-      include: includeOptions,
-    });
+      include: includeOptions
+    })
   }
 
-  findManyWhereCertainCategories(categoryIds: number[]) {
+  findManyWhereCertainCategories (categoryIds: number[]) {
     return this._repository.findMany({
       where: {
         categories: {
           every: { id: { in: categoryIds } },
-          none: { id: { notIn: categoryIds } },
-        },
-      },
-    });
+          none: { id: { notIn: categoryIds } }
+        }
+      }
+    })
   }
 
-  findMany({ categoryId, search }: ProductFindManyArgs) {
+  findMany ({ categoryId, search }: ProductFindManyArgs) {
     return this._repository.findMany({
       where: {
         OR: search
           ? [
-              { name: { contains: search, mode: "insensitive" } },
-              { code: { contains: search, mode: "insensitive" } },
+              { name: { contains: search, mode: 'insensitive' } },
+              { code: { contains: search, mode: 'insensitive' } }
             ]
           : undefined,
-        categories: { some: { id: categoryId } },
+        categories: { some: { id: categoryId } }
       },
-      include: includeOptions,
-    });
+      include: includeOptions
+    })
   }
 
-  deleteOne(id: number) {
-    return this._repository.delete({ where: { id } });
+  deleteOne (id: number) {
+    return this._repository.delete({ where: { id } })
   }
 
-  deleteMany(ids: number[]) {
-    return this._repository.deleteMany({ where: { id: { in: ids } } });
+  deleteMany (ids: number[]) {
+    return this._repository.deleteMany({ where: { id: { in: ids } } })
   }
 
-  connectCategories(id: number, categoryIds: number[]) {
-    const categoryIdsConnectArray = categoryIds.map((id) => ({ id }));
+  connectCategories (id: number, categoryIds: number[]) {
+    const categoryIdsConnectArray = categoryIds.map(id => ({ id }))
     return this._repository.update({
       where: { id },
       data: {
         categories: {
-          connect: categoryIdsConnectArray,
-        },
-      },
-    });
+          connect: categoryIdsConnectArray
+        }
+      }
+    })
   }
 }
 
-export default new ProductsRepository();
+export default new ProductsRepository()

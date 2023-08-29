@@ -1,46 +1,46 @@
-import { prisma } from "@/server/repositories/index";
+import { prisma } from '@/server/repositories/index'
 
 class ObjectsRepository {
-  private readonly _repository;
+  private readonly _repository
 
-  constructor() {
-    this._repository = prisma.object;
+  constructor () {
+    this._repository = prisma.object
   }
 
-  create<T extends object>(dto: T) {
-    return this._repository.create({ data: { data: dto } });
+  create<T extends object> (dto: T) {
+    return this._repository.create({ data: { data: dto } })
   }
 
-  update<T extends object>(id: number, dto: T) {
+  update<T extends object> (id: number, dto: T) {
     return this._repository.update({
       where: { id },
-      data: { data: dto },
-    });
+      data: { data: dto }
+    })
   }
 
-  upsert<T extends object>(id: number, dto: T) {
+  upsert<T extends object> (id: number, dto: T) {
     return this._repository.upsert({
       where: { id },
       create: { data: dto },
-      update: { data: dto },
-    });
+      update: { data: dto }
+    })
   }
 
-  findOne(id: number) {
-    return this._repository.findUnique({ where: { id } });
+  findOne (id: number) {
+    return this._repository.findUnique({ where: { id } })
   }
 
-  findMany(ids?: number[]) {
-    return this._repository.findMany({ where: { id: { in: ids } } });
+  findMany (ids?: number[]) {
+    return this._repository.findMany({ where: { id: { in: ids } } })
   }
 
-  deleteOne(id: number) {
-    return this._repository.delete({ where: { id } });
+  deleteOne (id: number) {
+    return this._repository.delete({ where: { id } })
   }
 
-  deleteMany(ids: number[]) {
-    return this._repository.deleteMany({ where: { id: { in: ids } } });
+  deleteMany (ids: number[]) {
+    return this._repository.deleteMany({ where: { id: { in: ids } } })
   }
 }
 
-export default new ObjectsRepository();
+export default new ObjectsRepository()

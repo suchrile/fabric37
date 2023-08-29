@@ -33,7 +33,7 @@
     </div>
 
     <div v-if="!isCategoryUndeletable" class="flex align-items-end gap-2">
-      <div class="field mb-0 w-full">
+      <div class="field w-full">
         <label for="category-dialog-parent-id">Родительская категория</label>
         <div class="relative">
           <TreeSelect
@@ -60,6 +60,30 @@
           class="block p-error"
           >{{ error.$message }}</small
         >
+      </div>
+    </div>
+
+    <div class="field mb-0">
+      <label for="category-dialog-name">Отображать товары</label>
+      <div class="flex flex-wrap gap-3 mt-1">
+        <div class="flex align-items-center">
+          <RadioButton
+            v-model="category.view"
+            inputId="category-view-cards"
+            name="category-view-cards"
+            value="cards"
+          />
+          <label for="category-view-cards" class="ml-2">Карточками</label>
+        </div>
+        <div class="flex align-items-center">
+          <RadioButton
+            v-model="category.view"
+            inputId="category-view-table"
+            name="category-view-table"
+            value="table"
+          />
+          <label for="category-view-table" class="ml-2">Таблицей</label>
+        </div>
       </div>
     </div>
 

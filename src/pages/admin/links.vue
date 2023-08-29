@@ -1,6 +1,8 @@
 <template>
   <div class="admin-links-page">
-    <h3 class="admin-links-page__title">Список ссылок</h3>
+    <h3 class="admin-links-page__title">
+      Список ссылок
+    </h3>
 
     <ui-tip target="links" />
 
@@ -81,166 +83,166 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
-import type { DataTableRowReorderEvent } from "primevue/datatable";
-import type { DeleteManyResponse, Link, LinkDialogProp } from "@/interfaces";
-import { DataTableFilterMeta, FilterMatchMode } from "@/interfaces";
+import type { Ref } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
+import type { DataTableRowReorderEvent } from 'primevue/datatable'
+import type { DeleteManyResponse, Link, LinkDialogProp } from '@/interfaces'
+import { DataTableFilterMeta, FilterMatchMode } from '@/interfaces'
 
-const toast = useToast();
-const confirm = useConfirm();
+const toast = useToast()
+const confirm = useConfirm()
 
-const links: Ref<Link[]> = ref([]);
-const selected: Ref<Link[]> = ref([]);
-const current: Ref<LinkDialogProp> = ref({} as LinkDialogProp);
-const isDialogOpen: Ref<boolean> = ref(false);
-const isLoading: Ref<boolean> = ref(true);
-const isDialogLoading: Ref<boolean> = ref(false);
+const links: Ref<Link[]> = ref([])
+const selected: Ref<Link[]> = ref([])
+const current: Ref<LinkDialogProp> = ref({} as LinkDialogProp)
+const isDialogOpen: Ref<boolean> = ref(false)
+const isLoading: Ref<boolean> = ref(true)
+const isDialogLoading: Ref<boolean> = ref(false)
 const filters: Ref<DataTableFilterMeta> = ref({
-  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-});
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+})
 
 onMounted(async () => {
-  await nextTick();
-  await fetchLinks();
-});
+  await nextTick()
+  await fetchLinks()
+})
 
 const onRowReorder = async (event: DataTableRowReorderEvent) => {
   await updateMany(
     event.value.map((link, index) => ({ ...link, sortOrder: index }))
-  );
-};
+  )
+}
 
 const create = async (link: LinkDialogProp) => {
-  isDialogLoading.value = true;
-  const { data } = await useApiCall<Link>("/api/links", {
-    method: "POST",
-    body: { ...link, sortOrder: links.value.length + 1 },
-  });
+  isDialogLoading.value = true
+  const { data } = await useApiCall<Link>('/api/links', {
+    method: 'POST',
+    body: { ...link, sortOrder: links.value.length + 1 }
+  })
   if (data) {
-    links.value.push(data);
+    links.value.push(data)
     toast.add({
-      severity: "success",
-      summary: "Ссылка создана",
+      severity: 'success',
+      summary: 'Ссылка создана',
       detail: `Ссылка «${link.title}» успешно создана.`,
-      life: 3000,
-    });
-    isDialogOpen.value = false;
+      life: 3000
+    })
+    isDialogOpen.value = false
   }
-  isDialogLoading.value = false;
-};
+  isDialogLoading.value = false
+}
 const update = async (link: Link) => {
-  isDialogLoading.value = true;
-  const { data } = await useApiCall<Link>("/api/links/" + link.id, {
-    method: "PATCH",
-    body: link,
-  });
+  isDialogLoading.value = true
+  const { data } = await useApiCall<Link>('/api/links/' + link.id, {
+    method: 'PATCH',
+    body: link
+  })
   if (data) {
-    const index = links.value.findIndex((el) => el.id === link.id);
-    links.value[index] = data;
+    const index = links.value.findIndex(el => el.id === link.id)
+    links.value[index] = data
     toast.add({
-      severity: "info",
-      summary: "Ссылка обновлена",
+      severity: 'info',
+      summary: 'Ссылка обновлена',
       detail: `Ссылка «${link.title}» успешно обновлена.`,
-      life: 3000,
-    });
-    isDialogOpen.value = false;
+      life: 3000
+    })
+    isDialogOpen.value = false
   }
-  isDialogLoading.value = false;
-};
+  isDialogLoading.value = false
+}
 const updateMany = async (toUpdate: Link[]) => {
-  isLoading.value = true;
-  const { data } = await useApiCall<Link[]>("/api/links", {
-    method: "PATCH",
-    body: toUpdate,
-  });
+  isLoading.value = true
+  const { data } = await useApiCall<Link[]>('/api/links', {
+    method: 'PATCH',
+    body: toUpdate
+  })
   if (data) {
-    links.value = data;
+    links.value = data
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 const deleteOne = async () => {
-  isLoading.value = true;
-  const title = current.value.title;
-  const { data } = await useApiCall<Link>("/api/links/" + current.value.id, {
-    method: "DELETE",
-  });
+  isLoading.value = true
+  const title = current.value.title
+  const { data } = await useApiCall<Link>('/api/links/' + current.value.id, {
+    method: 'DELETE'
+  })
   if (data) {
-    links.value = links.value.filter((el) => el.id !== data.id);
+    links.value = links.value.filter(el => el.id !== data.id)
     toast.add({
-      severity: "warn",
-      summary: "Ссылка удалена",
+      severity: 'warn',
+      summary: 'Ссылка удалена',
       detail: `Ссылка «${title}» успешно удалена.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 const deleteMany = async () => {
-  isLoading.value = true;
-  const selectedIds = selected.value.map((link) => link.id);
-  const { data } = await useApiCall<DeleteManyResponse>("/api/links", {
-    method: "DELETE",
-    body: selectedIds,
-  });
+  isLoading.value = true
+  const selectedIds = selected.value.map(link => link.id)
+  const { data } = await useApiCall<DeleteManyResponse>('/api/links', {
+    method: 'DELETE',
+    body: selectedIds
+  })
   if (data) {
-    links.value = links.value.filter((el) => !selectedIds.includes(el.id));
+    links.value = links.value.filter(el => !selectedIds.includes(el.id))
     toast.add({
-      severity: "warn",
-      summary: "Ссылки удалены",
+      severity: 'warn',
+      summary: 'Ссылки удалены',
       detail: `Выбранные ссылки (${selectedIds.length}) успешно удалены.`,
-      life: 3000,
-    });
-    selected.value = [];
+      life: 3000
+    })
+    selected.value = []
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 
 const confirmDeleteOne = (link: Link) => {
-  current.value = link;
+  current.value = link
   confirm.require({
-    header: "Удаление ссылки",
+    header: 'Удаление ссылки',
     message:
       `<p class="mb-2">Вы уверены, что хотите <b>удалить</b> ссылку <b>«${current.value.title}»</b>?</p>` +
-      "Это действие <b>невозможно отменить</b>.",
-    icon: "pi pi-trash",
-    acceptClass: "p-button-danger",
-    accept: () => deleteOne(),
-  });
-};
+      'Это действие <b>невозможно отменить</b>.',
+    icon: 'pi pi-trash',
+    acceptClass: 'p-button-danger',
+    accept: () => deleteOne()
+  })
+}
 const confirmDeleteMany = () => {
   confirm.require({
-    header: "Удаление ссылок",
+    header: 'Удаление ссылок',
     message: `<p class="mb-2">Вы уверены, что хотите <b>удалить</b> выбранные <b>(${selected.value.length}) ссылки</b>?</p></p> Это действие <b>невозможно отменить</b>.`,
-    icon: "pi pi-trash",
-    acceptClass: "p-button-danger",
-    accept: () => deleteMany(),
-  });
-};
+    icon: 'pi pi-trash',
+    acceptClass: 'p-button-danger',
+    accept: () => deleteMany()
+  })
+}
 
 const openDialog = (link: LinkDialogProp) => {
-  current.value = { ...link };
-  isDialogOpen.value = true;
-};
+  current.value = { ...link }
+  isDialogOpen.value = true
+}
 const handleDialogHide = () => {
-  current.value = {} as Link;
-};
+  current.value = {} as Link
+}
 
 const fetchLinks = async () => {
-  const { data } = await useApiCall<Link[]>("/api/links");
+  const { data } = await useApiCall<Link[]>('/api/links')
   if (data) {
-    links.value = data.sort((a, b) => a.sortOrder - b.sortOrder);
+    links.value = data.sort((a, b) => a.sortOrder - b.sortOrder)
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 
 definePageMeta({
-  layout: "admin",
-});
+  layout: 'admin'
+})
 useHead({
-  title: "Ссылки",
-});
+  title: 'Ссылки'
+})
 </script>
 
 <style lang="scss">

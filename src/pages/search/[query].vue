@@ -3,7 +3,9 @@
     <div class="search-page__header">
       <div class="search-page__title">
         <h1>{{ route.params.query }}</h1>
-        <div v-if="productsCount" class="mt-2">{{ getSearchSummary() }}</div>
+        <div v-if="productsCount" class="mt-2">
+          {{ getSearchSummary() }}
+        </div>
       </div>
 
       <div v-if="categoriesCount" class="search-page__subcategories">
@@ -26,71 +28,71 @@
 </template>
 
 <script setup lang="ts">
-import { Ref } from "vue";
-import type { Category, Product } from "@/interfaces";
+import { Ref } from 'vue'
+import type { Category, Product } from '@/interfaces'
 
-const router = useRouter();
-const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 
 const categories: Ref<{ [key: number]: Category & { products: Product[] } }> =
-  ref({});
-const activeCategoryId: Ref<number | null> = ref(null);
-const categoriesCount: Ref<number> = ref(0);
-const productsCount: Ref<number> = ref(0);
+  ref({})
+const activeCategoryId: Ref<number | null> = ref(null)
+const categoriesCount: Ref<number> = ref(0)
+const productsCount: Ref<number> = ref(0)
 
 const currentProducts = computed(
   () =>
     (activeCategoryId.value &&
       categories.value[activeCategoryId.value].products) ||
     []
-);
+)
 
 const setCategories = (products: Product[]) => {
   products.forEach((prod) => {
     const narrowCategories = prod.categories.filter(
-      (cat) => !prod.categories.some((c) => c.parentId === cat.id)
-    );
+      cat => !prod.categories.some(c => c.parentId === cat.id)
+    )
     narrowCategories.forEach((cat) => {
       if (!categories.value[cat.id]) {
-        categories.value[cat.id] = { ...cat, products: [prod] };
+        categories.value[cat.id] = { ...cat, products: [prod] }
       } else {
-        categories.value[cat.id].products.push(prod);
+        categories.value[cat.id].products.push(prod)
       }
-    });
-  });
-  categoriesCount.value = Object.keys(categories.value).length;
-  productsCount.value = products.length;
-  setActiveCategoryId(Number(Object.keys(categories.value)[0]));
-};
+    })
+  })
+  categoriesCount.value = Object.keys(categories.value).length
+  productsCount.value = products.length
+  setActiveCategoryId(Number(Object.keys(categories.value)[0]))
+}
 
 const getSearchSummary = () => {
   const productsText =
     productsCount.value === 1
-      ? "товар"
+      ? 'товар'
       : productsCount.value > 1 && productsCount.value <= 4
-      ? "товара"
-      : "товаров";
+        ? 'товара'
+        : 'товаров'
   const categoriesText =
-    categoriesCount.value === 1 ? "категории" : "категориях";
-  return `${productsCount.value} ${productsText} в ${categoriesCount.value} ${categoriesText}`;
-};
+    categoriesCount.value === 1 ? 'категории' : 'категориях'
+  return `${productsCount.value} ${productsText} в ${categoriesCount.value} ${categoriesText}`
+}
 
 const setActiveCategoryId = (id: number | undefined) => {
-  if (!id) return;
-  activeCategoryId.value = id;
-  router.replace({ query: { ...route.query, categoryId: id } });
-};
+  if (!id) { return }
+  activeCategoryId.value = id
+  router.replace({ query: { ...route.query, categoryId: id } })
+}
 
-const { data } = await useFetch<Product[]>("/api/products", {
-  query: { search: route.params.query },
-});
+const { data } = await useFetch<Product[]>('/api/products', {
+  query: { search: route.params.query }
+})
 if (data.value) {
-  setCategories(data.value);
+  setCategories(data.value)
 }
 
 useHead({
-  title: String(route.params.query),
-});
+  title: String(route.params.query)
+})
 </script>
 
 <style scoped lang="scss">

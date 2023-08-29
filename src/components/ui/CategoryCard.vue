@@ -8,12 +8,12 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { Category } from "@/interfaces";
+import type { PropType } from 'vue'
+import type { Category } from '@/interfaces'
 
 defineProps({
-  value: { type: Object as PropType<Category>, required: true },
-});
+  value: { type: Object as PropType<Category>, required: true }
+})
 </script>
 
 <style lang="scss">

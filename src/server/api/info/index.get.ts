@@ -1,5 +1,5 @@
-import InfoService from "@/server/services/info.service";
+import InfoService from '@/server/services/info.service'
 
 export default defineEventHandler(() => {
-  return InfoService.get();
-});
+  return InfoService.get()
+})

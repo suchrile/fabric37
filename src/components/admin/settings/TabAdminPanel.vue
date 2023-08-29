@@ -6,6 +6,6 @@
 </template>
 
 <script setup lang="ts">
-const { useShowTips, setShowTips } = useTips();
-const showTips = useShowTips();
+const { useShowTips, setShowTips } = useTips()
+const showTips = useShowTips()
 </script>

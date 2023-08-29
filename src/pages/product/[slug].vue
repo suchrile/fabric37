@@ -28,27 +28,33 @@
               :src="slotProps.item.url"
               :alt="slotProps.item.alt"
               class="gallery__image"
-            />
+            >
           </template>
           <template #thumbnail="slotProps">
             <img
               :src="slotProps.item.url"
               :alt="slotProps.item.alt"
               class="gallery__thumbnail"
-            />
+            >
           </template>
         </Galleria>
       </div>
       <div class="product-page__details details">
         <div class="details__item">
-          <h5 class="details__item-title">Описание</h5>
+          <h5 class="details__item-title">
+            Описание
+          </h5>
           <div v-if="product.description" class="details__description">
             {{ product.description }}
           </div>
-          <div v-else class="details__empty">У этого товара нет описания</div>
+          <div v-else class="details__empty">
+            У этого товара нет описания
+          </div>
         </div>
         <div class="details__item">
-          <h5 class="details__item-title">Характеристики</h5>
+          <h5 class="details__item-title">
+            Характеристики
+          </h5>
           <div
             v-if="product.attributes.length"
             class="details__attributes attributes"
@@ -65,11 +71,15 @@
             </div>
           </div>
           <div v-else>
-            <div class="details__empty">У этого товара нет характеристик</div>
+            <div class="details__empty">
+              У этого товара нет характеристик
+            </div>
           </div>
         </div>
         <div class="details__item">
-          <h5 class="details__item-title">Категории</h5>
+          <h5 class="details__item-title">
+            Категории
+          </h5>
           <div class="details__categories">
             <NuxtLink
               v-for="category in product.categories"
@@ -88,77 +98,77 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
+import type { Ref } from 'vue'
 import type {
   AttributeOption,
   AttributeValue,
   Product,
-  ProductImage,
-} from "@/interfaces";
-import { AttributeDataType } from "@/interfaces";
-import { imagePlaceholderUrl, productAttributeBooleanOptions } from "@/consts";
+  ProductImage
+} from '@/interfaces'
+import { AttributeDataType } from '@/interfaces'
+import { imagePlaceholderUrl, productAttributeBooleanOptions } from '@/consts'
 
-const route = useRoute();
+const route = useRoute()
 
-const product: Ref<Product | null> = ref(null);
+const product: Ref<Product | null> = ref(null)
 
-const copyLinkButtonTitle: Ref<string> = ref("");
-const copyLinkButtonIcon: Ref<string> = ref("pi pi-copy");
+const copyLinkButtonTitle: Ref<string> = ref('')
+const copyLinkButtonIcon: Ref<string> = ref('pi pi-copy')
 
-const isMounted = ref(false);
+const isMounted = ref(false)
 
-const { width: viewportWidth } = useViewport();
+const { width: viewportWidth } = useViewport()
 
 onMounted(() => {
-  isMounted.value = true;
-});
+  isMounted.value = true
+})
 
-const { data } = await useFetch<Product>("/api/products/" + route.params.slug);
+const { data } = await useFetch<Product>('/api/products/' + route.params.slug)
 if (data.value) {
-  product.value = data.value;
+  product.value = data.value
   if (!product.value.images.length) {
-    product.value.images.push({ url: imagePlaceholderUrl } as ProductImage);
+    product.value.images.push({ url: imagePlaceholderUrl } as ProductImage)
   }
-  copyLinkButtonTitle.value = "Артикул: " + product.value?.code;
+  copyLinkButtonTitle.value = 'Артикул: ' + product.value?.code
 }
 
 const getAttributeValue = (attribute: AttributeValue) => {
-  let value;
+  let value
   if (attribute.dataType === AttributeDataType.DATE) {
-    value = new Date(attribute.value).toLocaleDateString();
+    value = new Date(attribute.value).toLocaleDateString()
   } else if (attribute.dataType === AttributeDataType.BOOLEAN) {
     value = productAttributeBooleanOptions.find(
-      (option) => option.value === attribute.value
-    )!.label;
+      option => option.value === attribute.value
+    )!.label
   } else if (attribute.dataType === AttributeDataType.SELECT) {
     value = attribute.value
       .map((option: AttributeOption) => option.label)
-      .join(", ");
+      .join(', ')
   } else {
-    value = attribute.value;
+    value = attribute.value
   }
-  return value + (attribute.unit ? ` ${attribute.unit}` : "");
-};
+  return value + (attribute.unit ? ` ${attribute.unit}` : '')
+}
 
 const copyLink = () => {
   if (!product.value) {
-    return;
+    return
   }
-  navigator.clipboard.writeText(product.value.code);
-  copyLinkButtonTitle.value = "Скопировано!";
-  copyLinkButtonIcon.value = "pi pi-check";
+  navigator.clipboard.writeText(product.value.code)
+  copyLinkButtonTitle.value = 'Скопировано!'
+  copyLinkButtonIcon.value = 'pi pi-check'
   setTimeout(() => {
-    copyLinkButtonTitle.value = "Артикул: " + product.value?.code;
-    copyLinkButtonIcon.value = "pi pi-copy";
-  }, 1000);
-};
+    copyLinkButtonTitle.value = 'Артикул: ' + product.value?.code
+    copyLinkButtonIcon.value = 'pi pi-copy'
+  }, 1000)
+}
 
 useSeoMeta({
   title: product.value?.name,
   ogTitle: product.value?.name,
   description: product.value?.description,
-  ogDescription: product.value?.description,
-});
+  ogDescription: product.value?.description
+})
 </script>
 
 <style lang="scss">

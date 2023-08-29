@@ -49,17 +49,15 @@ const emit = defineEmits(["update:modelValue", "change"]);
 
 const getFormattedValue = (value: any) => {
   const attribute = props.attribute;
-  let formattedValue;
   if (attribute.dataType === AttributeDataType.DATE) {
-    formattedValue = new Date(value).toLocaleDateString();
+    return new Date(value).toLocaleDateString();
   } else if (attribute.dataType === AttributeDataType.BOOLEAN) {
-    formattedValue = productAttributeBooleanOptions.find(
+    return productAttributeBooleanOptions.find(
       (option) => option.value === value
     )!.label;
   } else {
-    formattedValue = value;
+    return value;
   }
-  return formattedValue + (attribute.unit ? ` ${attribute.unit}` : "");
 };
 </script>
 

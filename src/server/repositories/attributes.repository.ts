@@ -1,20 +1,20 @@
-import { prisma } from "@/server/repositories";
+import { prisma } from '@/server/repositories'
 import type {
   AttributeCreateDto,
   AttributeOptionCreateDto,
-  AttributeUpdateDto,
-} from "@/interfaces";
+  AttributeUpdateDto
+} from '@/interfaces'
 
 class AttributesRepository {
-  private readonly _repository;
-  private readonly _selectRepository;
+  private readonly _repository
+  private readonly _selectRepository
 
-  constructor() {
-    this._repository = prisma.productAttribute;
-    this._selectRepository = prisma.productAttributeSelectOption;
+  constructor () {
+    this._repository = prisma.productAttribute
+    this._selectRepository = prisma.productAttributeSelectOption
   }
 
-  async create(dto: AttributeCreateDto) {
+  async create (dto: AttributeCreateDto) {
     return await this._repository.create({
       data: {
         name: dto.name,
@@ -24,32 +24,32 @@ class AttributesRepository {
         sortable: dto.sortable,
         filterable: dto.filterable,
         required: dto.required,
-        options: dto.options && { createMany: { data: dto.options } },
-      },
-    });
+        options: dto.options && { createMany: { data: dto.options } }
+      }
+    })
   }
 
-  findOne(id: number) {
+  findOne (id: number) {
     return this._repository.findUnique({
       where: { id },
-      include: { options: true },
-    });
+      include: { options: true }
+    })
   }
 
-  findMany(ids?: number[]) {
+  findMany (ids?: number[]) {
     return this._repository.findMany({
       where: { id: { in: ids } },
-      include: { options: true },
-    });
+      include: { options: true }
+    })
   }
 
-  async update(id: number, dto: AttributeUpdateDto) {
+  async update (id: number, dto: AttributeUpdateDto) {
     const existingOptionIds = dto.options
-      ?.filter((option) => option.id)
-      .map((option) => option.id);
+      ?.filter(option => option.id)
+      .map(option => option.id)
     const optionsToCreate = dto.options?.filter(
-      (option) => !option.id
-    ) as AttributeOptionCreateDto[];
+      option => !option.id
+    ) as AttributeOptionCreateDto[]
 
     await this._repository.update({
       where: { id },
@@ -62,21 +62,21 @@ class AttributesRepository {
         required: dto.required,
         options: dto.options && {
           deleteMany: { id: { notIn: existingOptionIds } },
-          createMany: { data: optionsToCreate },
-        },
-      },
-    });
+          createMany: { data: optionsToCreate }
+        }
+      }
+    })
 
-    return this.findOne(id);
+    return this.findOne(id)
   }
 
-  deleteOne(id: number) {
-    return this._repository.delete({ where: { id } });
+  deleteOne (id: number) {
+    return this._repository.delete({ where: { id } })
   }
 
-  deleteMany(ids: number[]) {
-    return this._repository.deleteMany({ where: { id: { in: ids } } });
+  deleteMany (ids: number[]) {
+    return this._repository.deleteMany({ where: { id: { in: ids } } })
   }
 }
 
-export default new AttributesRepository();
+export default new AttributesRepository()

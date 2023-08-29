@@ -47,28 +47,33 @@ export interface User extends UserCreationAttrs {
 }
 
 export interface CategoryCreateDto {
-  parentId?: number;
   name: string;
+  parentId?: number;
+  view?: "cards" | "table";
 }
 
 export interface CategoryUpdateDto {
   id: number;
   slug?: string;
-  parentId?: number;
   name?: string;
+  parentId?: number;
+  view?: "cards" | "table";
 }
 
 export interface CategoryDialogProp {
   id?: number;
   name: string;
-  parentId: number | null;
+  parentId?: number | null;
+  view?: "cards" | "table";
 }
 
 export interface Category {
   id: number;
+  slug: string;
   name: string;
   parentId: number | null;
-  slug: string;
+  view: "cards" | "table";
+  parent: Pick<Category, "slug" | "name">;
   children: Category[];
   products: Product[];
   _count: { products: number; children: number };

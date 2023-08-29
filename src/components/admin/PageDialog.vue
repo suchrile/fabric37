@@ -25,8 +25,7 @@
             v-for="error in v$.title.$errors"
             :key="error.$uid"
             class="block p-error"
-            >{{ error.$message }}</small
-          >
+          >{{ error.$message }}</small>
         </div>
       </div>
     </div>
@@ -50,55 +49,55 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import { helpers, required } from "@vuelidate/validators";
-import { useVuelidate } from "@vuelidate/core";
-import type { PageDialogProp } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import { helpers, required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+import type { PageDialogProp } from '@/interfaces'
 
 const props = defineProps({
   value: { type: Object as PropType<PageDialogProp>, required: true },
   visible: { type: Boolean, default: false },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:visible", "create", "edit", "hide"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:visible', 'create', 'edit', 'hide'])
 
-const page: Ref<PageDialogProp> = ref({} as PageDialogProp);
+const page: Ref<PageDialogProp> = ref({} as PageDialogProp)
 
-const dialogHeader: Ref<string> = ref("");
-const submitLabel: Ref<string> = ref("");
+const dialogHeader: Ref<string> = ref('')
+const submitLabel: Ref<string> = ref('')
 
 const rules = reactive({
-  title: { required: helpers.withMessage("Обязательное поле", required) },
-});
-const v$ = useVuelidate(rules, page);
+  title: { required: helpers.withMessage('Обязательное поле', required) }
+})
+const v$ = useVuelidate(rules, page)
 
 const submit = async () => {
-  const isFormValid = await v$.value.$validate();
+  const isFormValid = await v$.value.$validate()
   if (!isFormValid) {
-    return;
+    return
   }
   if (props.value.slug) {
-    emit("edit", page.value);
+    emit('edit', page.value)
   } else {
-    emit("create", page.value);
+    emit('create', page.value)
   }
-};
+}
 
 const handleHide = () => {
-  v$.value.$reset();
-  emit("hide");
-};
+  v$.value.$reset()
+  emit('hide')
+}
 
 const handleShow = () => {
-  page.value = props.value;
+  page.value = props.value
   if (page.value.slug) {
-    dialogHeader.value = "Редактирование страницы";
-    submitLabel.value = "Сохранить";
+    dialogHeader.value = 'Редактирование страницы'
+    submitLabel.value = 'Сохранить'
   } else {
-    dialogHeader.value = "Добавление страницы";
-    submitLabel.value = "Добавить";
+    dialogHeader.value = 'Добавление страницы'
+    submitLabel.value = 'Добавить'
   }
-};
+}
 </script>
 
 <style scoped></style>

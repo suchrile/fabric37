@@ -41,26 +41,26 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { AttributeFilter, AttributeFilterRangeValue } from "@/interfaces";
+import type { PropType } from 'vue'
+import type { AttributeFilter, AttributeFilterRangeValue } from '@/interfaces'
 
 defineProps({
   modelValue: {
     type: Object as PropType<AttributeFilterRangeValue>,
-    required: true,
+    required: true
   },
   attribute: { type: Object as PropType<AttributeFilter>, required: true },
-  dragging: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:modelValue", "update:dragging", "change"]);
+  dragging: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:modelValue', 'update:dragging', 'change'])
 
 const handleSlideStart = () => {
-  emit("update:dragging", true);
-};
+  emit('update:dragging', true)
+}
 const handleSlideEnd = () => {
-  emit("update:dragging", false);
-  emit("change");
-};
+  emit('update:dragging', false)
+  emit('change')
+}
 </script>
 
 <style scoped lang="scss">

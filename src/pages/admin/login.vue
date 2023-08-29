@@ -14,7 +14,9 @@
         class="border-1 surface-border surface-card border-round py-6 px-4 md:px-6 z-1"
       >
         <div class="mb-5">
-          <div class="text-900 text-xl font-bold mb-2">Авторизация</div>
+          <div class="text-900 text-xl font-bold mb-2">
+            Авторизация
+          </div>
           <span class="text-600 font-medium">Введите данные для входа</span>
         </div>
 
@@ -60,52 +62,52 @@
 </template>
 
 <script setup lang="ts">
-const { initAuth, useAuthLoading, useAccessToken, login } = useAuth();
-const isLoading = useAuthLoading();
-const isAuthChecked = ref(false);
+const { initAuth, useAuthLoading, useAccessToken, login } = useAuth()
+const isLoading = useAuthLoading()
+const isAuthChecked = ref(false)
 
-const route = useRoute();
-const info = useInfo();
+const route = useRoute()
+const info = useInfo()
 
 onMounted(async () => {
-  await nextTick();
+  await nextTick()
   if (!route.query.redirected) {
     try {
-      await initAuth();
+      await initAuth()
     } catch {}
     if (useAccessToken().value) {
-      await navigateTo("/admin");
+      await navigateTo('/admin')
     }
   }
-  isLoading.value = false;
-  isAuthChecked.value = true;
-});
+  isLoading.value = false
+  isAuthChecked.value = true
+})
 
 const formData = reactive({
-  username: "",
-  password: "",
-});
+  username: '',
+  password: ''
+})
 
 const isDataFullfilled = computed(
   () => !!(formData.username && formData.password)
-);
+)
 
 const submit = async () => {
   if (!isDataFullfilled.value) {
-    return;
+    return
   }
   try {
-    await login(formData);
-    await navigateTo("/admin");
+    await login(formData)
+    await navigateTo('/admin')
   } catch (error) {
-    formData.password = "";
+    formData.password = ''
   }
-};
+}
 
 definePageMeta({
-  layout: false,
-});
+  layout: false
+})
 useHead({
-  title: `Вход – Панель управления ${info.value.app.name}`,
-});
+  title: `Вход – Панель управления ${info.value.app.name}`
+})
 </script>

@@ -1,74 +1,74 @@
 export default () => {
-  const useAccessToken = () => useState<string | null>("access_token");
-  const useAuthLoading = () => useState<boolean>("auth_loading", () => true);
+  const useAccessToken = () => useState<string | null>('access_token')
+  const useAuthLoading = () => useState<boolean>('auth_loading', () => true)
 
   const setToken = (newToken: string | null) => {
-    const authToken = useAccessToken();
-    authToken.value = newToken;
-  };
+    const authToken = useAccessToken()
+    authToken.value = newToken
+  }
 
   const setIsAuthLoading = (value: boolean) => {
-    const authLoading = useAuthLoading();
-    authLoading.value = value;
-  };
+    const authLoading = useAuthLoading()
+    authLoading.value = value
+  }
 
   const login = async ({
     username,
-    password,
+    password
   }: {
     username: string;
     password: string;
   }) => {
-    setIsAuthLoading(true);
+    setIsAuthLoading(true)
     const { data, error } = await useApiCall<{ accessToken: string }>(
-      "/api/auth/login",
+      '/api/auth/login',
       {
-        method: "POST",
+        method: 'POST',
         body: {
           username,
-          password,
-        },
+          password
+        }
       }
-    );
+    )
     if (data && data.accessToken) {
-      setToken(data.accessToken);
-      setIsAuthLoading(false);
+      setToken(data.accessToken)
+      setIsAuthLoading(false)
     } else {
-      setIsAuthLoading(false);
-      throw error;
+      setIsAuthLoading(false)
+      throw error
     }
-  };
+  }
 
   const logout = async () => {
-    await useApiCall("/api/auth/logout");
-    setToken(null);
-    await navigateTo("/admin/login");
-  };
+    await useApiCall('/api/auth/logout')
+    setToken(null)
+    await navigateTo('/admin/login')
+  }
 
   const refreshToken = async () => {
     try {
-      const { accessToken } = await $fetch("/api/auth/refresh");
-      setToken(accessToken);
+      const { accessToken } = await $fetch('/api/auth/refresh')
+      setToken(accessToken)
     } catch (error) {
-      const path = useRouter().currentRoute.value.path;
-      if (path.includes("admin") && !path.includes("login")) {
+      const path = useRouter().currentRoute.value.path
+      if (path.includes('admin') && !path.includes('login')) {
         await navigateTo({
-          path: "/admin/login",
-          query: { redirected: "true" },
-        });
+          path: '/admin/login',
+          query: { redirected: 'true' }
+        })
       }
-      throw error;
+      throw error
     }
-  };
+  }
 
   const initAuth = async () => {
-    setIsAuthLoading(true);
+    setIsAuthLoading(true)
     try {
-      await refreshToken();
+      await refreshToken()
     } finally {
-      setIsAuthLoading(false);
+      setIsAuthLoading(false)
     }
-  };
+  }
 
   return {
     login,
@@ -76,6 +76,6 @@ export default () => {
     refreshToken,
     initAuth,
     useAuthLoading,
-    logout,
-  };
-};
+    logout
+  }
+}

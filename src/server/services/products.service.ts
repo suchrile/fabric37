@@ -1,30 +1,30 @@
-import slugify from "slugify";
-import { Prisma, PrismaPromise } from "@prisma/client";
-import ProductsRepository from "@/server/repositories/products.repository";
-import ImagesService from "@/server/services/images.service";
-import AttributesService from "@/server/services/attributes.service";
-import { undeletableCategoryId } from "@/consts";
-import { transformProduct } from "@/server/transformers/product";
+import slugify from 'slugify'
+import { Prisma, PrismaPromise } from '@prisma/client'
+import ProductsRepository from '@/server/repositories/products.repository'
+import ImagesService from '@/server/services/images.service'
+import AttributesService from '@/server/services/attributes.service'
+import { undeletableCategoryId } from '@/consts'
+import { transformProduct } from '@/server/transformers/product'
 import type {
   PrismaProductWithIncludes,
   ProductCreateDto,
-  ProductUpdateDto,
-} from "@/interfaces";
-import type { ProductFindManyArgs } from "@/server/types";
+  ProductUpdateDto
+} from '@/interfaces'
+import type { ProductFindManyArgs } from '@/server/types'
 
 class ProductsService {
-  private readonly _repository;
-  private readonly _imageService;
-  private readonly _attributesService;
+  private readonly _repository
+  private readonly _imageService
+  private readonly _attributesService
 
-  constructor() {
-    this._repository = ProductsRepository;
-    this._imageService = ImagesService;
-    this._attributesService = AttributesService;
+  constructor () {
+    this._repository = ProductsRepository
+    this._imageService = ImagesService
+    this._attributesService = AttributesService
   }
 
-  async create(dto: ProductCreateDto) {
-    const categoryIdsToConnect = dto.categoryIds.map((id) => ({ id }));
+  async create (dto: ProductCreateDto) {
+    const categoryIdsToConnect = dto.categoryIds.map(id => ({ id }))
 
     const product = await this._catchErrors(
       this._repository.create({
@@ -33,27 +33,27 @@ class ProductsService {
         description: dto.description,
         hidden: dto.hidden,
         categories: { connect: categoryIdsToConnect },
-        slug: slugify(dto.name, { locale: "ru", lower: true, strict: true }),
+        slug: slugify(dto.name, { locale: 'ru', lower: true, strict: true })
       })
-    );
+    )
 
     if (dto.images) {
       await this._imageService.updateImages(
         product.id,
         product.images,
         dto.images
-      );
+      )
     }
 
     if (dto.attributes) {
-      await this._attributesService.setAttributes(product.id, dto.attributes);
+      await this._attributesService.setAttributes(product.id, dto.attributes)
     }
 
-    return this.findOneById(product.id);
+    return this.findOneById(product.id)
   }
 
-  async update(id: number, dto: ProductUpdateDto) {
-    const categoryIdsToConnect = dto.categoryIds?.map((cid) => ({ id: cid }));
+  async update (id: number, dto: ProductUpdateDto) {
+    const categoryIdsToConnect = dto.categoryIds?.map(cid => ({ id: cid }))
 
     const product = await this._catchErrors(
       this._repository.update(id, {
@@ -64,89 +64,89 @@ class ProductsService {
         categories: dto.categoryIds && { set: categoryIdsToConnect },
         slug:
           dto.name &&
-          slugify(dto.name, { locale: "ru", lower: true, strict: true }),
+          slugify(dto.name, { locale: 'ru', lower: true, strict: true })
       })
-    );
+    )
 
     if (product && dto.images) {
       await this._imageService.updateImages(
         product.id,
         product.images,
         dto.images
-      );
+      )
     }
 
     if (product && dto.attributes) {
-      await this._attributesService.setAttributes(product.id, dto.attributes);
+      await this._attributesService.setAttributes(product.id, dto.attributes)
     }
 
-    return this.findOneById(id);
+    return this.findOneById(id)
   }
 
-  setDefaultCategory(id: number) {
-    return this._repository.connectCategories(id, [undeletableCategoryId]);
+  setDefaultCategory (id: number) {
+    return this._repository.connectCategories(id, [undeletableCategoryId])
   }
 
-  async findOneById(id: number) {
-    const product = await this._repository.findOneById(id);
+  async findOneById (id: number) {
+    const product = await this._repository.findOneById(id)
     if (product) {
-      return transformProduct(product);
+      return transformProduct(product)
     }
-    return null;
+    return null
   }
 
-  async findOneBySlug(slug: string) {
-    const product = await this._repository.findOneBySlug(slug);
+  async findOneBySlug (slug: string) {
+    const product = await this._repository.findOneBySlug(slug)
     if (product) {
-      return transformProduct(product);
+      return transformProduct(product)
     }
-    return null;
+    return null
   }
 
-  findManyWhereCertainCategories(categoryIds: number[]) {
-    return this._repository.findManyWhereCertainCategories(categoryIds);
+  findManyWhereCertainCategories (categoryIds: number[]) {
+    return this._repository.findManyWhereCertainCategories(categoryIds)
   }
 
-  async findMany(query: ProductFindManyArgs) {
-    const products = await this._repository.findMany(query);
-    return products.map((prod) => transformProduct(prod));
+  async findMany (query: ProductFindManyArgs) {
+    const products = await this._repository.findMany(query)
+    return products.map(prod => transformProduct(prod))
   }
 
-  deleteOne(id: number) {
-    return this._repository.deleteOne(id);
+  deleteOne (id: number) {
+    return this._repository.deleteOne(id)
   }
 
-  deleteMany(ids: number[]) {
-    return this._repository.deleteMany(ids);
+  deleteMany (ids: number[]) {
+    return this._repository.deleteMany(ids)
   }
 
-  private async _catchErrors(
+  private async _catchErrors (
     promise: PrismaPromise<PrismaProductWithIncludes>
   ) {
     try {
-      return await promise;
+      return await promise
     } catch (error) {
       if (
         error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2002"
+        error.code === 'P2002'
       ) {
         if (error.meta && Array.isArray(error.meta.target)) {
-          if (error.meta.target[0] === "name") {
+          if (error.meta.target[0] === 'name') {
             throw createError({
               statusCode: 400,
-              message: "Товар с указанным наименованием уже существует.",
-            });
-          } else if (error.meta.target[0] === "code") {
+              message: 'Товар с указанным наименованием уже существует.'
+            })
+          } else if (error.meta.target[0] === 'code') {
             throw createError({
               statusCode: 400,
-              message: "Товар с указанным артикулом уже существует.",
-            });
+              message: 'Товар с указанным артикулом уже существует.'
+            })
           }
         }
       }
-      throw error;
+      throw error
     }
   }
 }
 
-export default new ProductsService();
+export default new ProductsService()

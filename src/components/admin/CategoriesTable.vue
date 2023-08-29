@@ -120,65 +120,65 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import { DataTableFilterMeta } from "primevue/datatable";
-import { undeletableCategoryId } from "@/consts";
-import type { Category } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import { DataTableFilterMeta } from 'primevue/datatable'
+import { undeletableCategoryId } from '@/consts'
+import type { Category } from '@/interfaces'
 
 const props = defineProps({
   value: { type: Array as PropType<Category[]>, default: () => [] },
   selected: { type: Array as PropType<Category[]>, default: () => [] },
   filters: { type: Object as PropType<DataTableFilterMeta>, required: true },
   loading: { type: Boolean, default: true },
-  paginator: { type: Boolean, default: false },
-});
+  paginator: { type: Boolean, default: false }
+})
 const emit = defineEmits([
-  "update:selected",
-  "update:filters",
-  "duplicate",
-  "edit",
-  "delete",
-]);
+  'update:selected',
+  'update:filters',
+  'duplicate',
+  'edit',
+  'delete'
+])
 
-const expanded: Ref<Category[]> = ref([]);
+const expanded: Ref<Category[]> = ref([])
 
 const countProducts = (category: Category) => {
-  const count = category._count.products;
+  const count = category._count.products
   const countChildren = category.children.reduce(
     (acc, value) => acc + value._count.products,
     0
-  );
-  const countUnspecified = category._count.products - countChildren;
+  )
+  const countUnspecified = category._count.products - countChildren
   if (category.children.length && count > countChildren) {
-    return `${count} (${countUnspecified} не распределено)`;
+    return `${count} (${countUnspecified} не распределено)`
   } else {
-    return count;
+    return count
   }
-};
+}
 
 const computeExpandIconName = (row: Category) => {
-  return expanded.value.find((el) => el.id === row.id)
-    ? "pi pi-chevron-down"
-    : "pi pi-chevron-right";
-};
+  return expanded.value.find(el => el.id === row.id)
+    ? 'pi pi-chevron-down'
+    : 'pi pi-chevron-right'
+}
 const toggleExpansion = (row: Category) => {
-  if (expanded.value.find((cat) => cat.id === row.id)) {
-    expanded.value = expanded.value.filter((el) => el.id !== row.id);
+  if (expanded.value.find(cat => cat.id === row.id)) {
+    expanded.value = expanded.value.filter(el => el.id !== row.id)
   } else {
-    expanded.value = [...expanded.value, row];
+    expanded.value = [...expanded.value, row]
   }
-};
+}
 
 const checkIfCategorySelected = (id: number) =>
-  !!props.selected.find((cat) => cat.id === id);
+  !!props.selected.find(cat => cat.id === id)
 const toggleSelection = (category: Category, isNotSelected: boolean) => {
   if (isNotSelected) {
-    emit("update:selected", [...props.selected, category]);
+    emit('update:selected', [...props.selected, category])
   } else {
     emit(
-      "update:selected",
-      props.selected.filter((cat) => cat.id !== category.id)
-    );
+      'update:selected',
+      props.selected.filter(cat => cat.id !== category.id)
+    )
   }
-};
+}
 </script>

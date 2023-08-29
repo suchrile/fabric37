@@ -30,8 +30,7 @@
             v-for="error in v$.name.$errors"
             :key="error.$uid"
             class="block p-error"
-            >{{ error.$message }}</small
-          >
+          >{{ error.$message }}</small>
         </div>
       </div>
 
@@ -63,8 +62,7 @@
             v-for="error in v$.email.$errors"
             :key="error.$uid"
             class="block p-error"
-            >{{ error.$message }}</small
-          >
+          >{{ error.$message }}</small>
         </div>
       </div>
 
@@ -104,11 +102,9 @@
       v-else
       class="flex flex-column align-items-center gap-4 my-8 text-center"
     >
-      <i class="pi pi-send text-6xl text-primary"></i>
-      <span class="text-xl font-medium line-height-3"
-        >Запрос отправлен. <br />
-        Ответим Вам как можно скорее.</span
-      >
+      <i class="pi pi-send text-6xl text-primary" />
+      <span class="text-xl font-medium line-height-3">Запрос отправлен. <br>
+        Ответим Вам как можно скорее.</span>
     </div>
     <template #footer>
       <Button
@@ -132,14 +128,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import { helpers, required, email } from "@vuelidate/validators";
+import type { Ref } from 'vue'
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required, email } from '@vuelidate/validators'
 
 defineProps({
-  visible: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:visible"]);
+  visible: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:visible'])
 
 type RequestPriceForm = {
   name: string;
@@ -151,43 +147,43 @@ type RequestPriceForm = {
 };
 
 const formData: RequestPriceForm = reactive({
-  name: "",
-  company: "",
-  city: "",
-  email: "",
-  phone: "",
-  comment: "",
-});
-const isLoading: Ref<boolean> = ref(false);
-const isSubmitted: Ref<boolean> = ref(false);
+  name: '',
+  company: '',
+  city: '',
+  email: '',
+  phone: '',
+  comment: ''
+})
+const isLoading: Ref<boolean> = ref(false)
+const isSubmitted: Ref<boolean> = ref(false)
 
 const rules = reactive({
-  name: { required: helpers.withMessage("Обязательное поле", required) },
+  name: { required: helpers.withMessage('Обязательное поле', required) },
   email: {
-    email: helpers.withMessage("Некорректный формат Email", email),
-    required: helpers.withMessage("Обязательное поле", required),
-  },
-});
-const v$ = useVuelidate(rules, formData);
+    email: helpers.withMessage('Некорректный формат Email', email),
+    required: helpers.withMessage('Обязательное поле', required)
+  }
+})
+const v$ = useVuelidate(rules, formData)
 
 const submit = async () => {
-  const isFormValid = await v$.value.$validate();
-  if (!isFormValid) return;
-  isLoading.value = true;
-  const { data } = await useApiCall("/api/mailer", {
-    method: "POST",
-    body: formData,
-  });
+  const isFormValid = await v$.value.$validate()
+  if (!isFormValid) { return }
+  isLoading.value = true
+  const { data } = await useApiCall('/api/mailer', {
+    method: 'POST',
+    body: formData
+  })
   if (data) {
-    isSubmitted.value = true;
-    setTimeout(() => emit("update:visible", false), 5000);
+    isSubmitted.value = true
+    setTimeout(() => emit('update:visible', false), 5000)
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 
 const hideHandler = () => {
-  v$.value.$reset();
-};
+  v$.value.$reset()
+}
 </script>
 
 <style lang="scss" scoped>

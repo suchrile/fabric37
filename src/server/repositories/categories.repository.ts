@@ -30,6 +30,7 @@ class CategoriesRepository {
     return this._repository.findUnique({
       where: { slug },
       include: {
+        parent: { select: { slug: true, name: true } },
         children: true,
         products: { include: includeOptions },
       },

@@ -1,16 +1,16 @@
-import joi from "joi";
-import type { ProductCreateDto, ProductUpdateDto } from "@/interfaces";
-import type { ProductFindManyArgs } from "@/server/types";
+import joi from 'joi'
+import type { ProductCreateDto, ProductUpdateDto } from '@/interfaces'
+import type { ProductFindManyArgs } from '@/server/types'
 
-export const productIdSchema = joi.number().integer().positive();
-export const productIdsSchema = joi.array().items(productIdSchema);
+export const productIdSchema = joi.number().integer().positive()
+export const productIdsSchema = joi.array().items(productIdSchema)
 
-const productCategoryIdsSchema = joi.array().items(productIdSchema);
+const productCategoryIdsSchema = joi.array().items(productIdSchema)
 
 export const productQuerySchema = joi.object<ProductFindManyArgs>({
   search: joi.string().optional(),
-  categoryId: joi.number().integer().positive().optional(),
-});
+  categoryId: joi.number().integer().positive().optional()
+})
 
 const imagesSchema = joi.array().items(
   joi.object({
@@ -19,9 +19,9 @@ const imagesSchema = joi.array().items(
     id: productIdSchema.optional(),
     productId: productIdSchema.optional(),
     publicId: joi.string().optional(),
-    tempId: joi.any().optional(),
+    tempId: joi.any().optional()
   })
-);
+)
 
 const attributesSchema = joi.array().items(
   joi.object({
@@ -33,7 +33,7 @@ const attributesSchema = joi.array().items(
           joi.object({
             id: productIdSchema.required(),
             attributeId: productIdSchema.required(),
-            label: joi.string().optional(),
+            label: joi.string().optional()
           })
         ),
         joi.date().iso(),
@@ -41,9 +41,9 @@ const attributesSchema = joi.array().items(
         joi.string(),
         joi.boolean()
       )
-      .required(),
+      .required()
   })
-);
+)
 
 export const productCreateSchema = joi
   .object<ProductCreateDto>({
@@ -53,9 +53,9 @@ export const productCreateSchema = joi
     hidden: joi.boolean().optional(),
     categoryIds: productCategoryIdsSchema.optional(),
     images: imagesSchema.optional(),
-    attributes: attributesSchema.optional(),
+    attributes: attributesSchema.optional()
   })
-  .required();
+  .required()
 
 export const productUpdateSchema = joi
   .object({
@@ -70,7 +70,7 @@ export const productUpdateSchema = joi
       categoryIds: productCategoryIdsSchema.optional(),
       categories: joi.any().optional(),
       images: imagesSchema.optional(),
-      attributes: attributesSchema.optional(),
-    }),
+      attributes: attributesSchema.optional()
+    })
   })
-  .required();
+  .required()

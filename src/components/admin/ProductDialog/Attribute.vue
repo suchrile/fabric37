@@ -59,17 +59,17 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { AttributeValue } from "@/interfaces";
-import { AttributeDataType } from "@/interfaces";
-import { productAttributeBooleanOptions } from "@/consts";
+import type { PropType } from 'vue'
+import type { AttributeValue } from '@/interfaces'
+import { AttributeDataType } from '@/interfaces'
+import { productAttributeBooleanOptions } from '@/consts'
 
 defineProps({
   modelValue: { type: undefined, required: true },
   attribute: { type: Object as PropType<AttributeValue>, required: true },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:modelValue"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:modelValue'])
 </script>
 
 <style scoped></style>

@@ -1,17 +1,17 @@
-import { undeletableCategoryId } from "~/consts";
-import type { Info } from "@/interfaces";
+import { undeletableCategoryId } from '~/consts'
+import type { Info } from '@/interfaces'
 
 export const useInfo = () =>
-  useState<Info>("info", () => ({
+  useState<Info>('info', () => ({
     app: {
-      name: "",
-      description: "",
-      keywords: "",
-      defaultCategoryId: undeletableCategoryId,
+      name: '',
+      description: '',
+      keywords: '',
+      defaultCategoryId: undeletableCategoryId
     },
     contacts: {
-      email: "",
+      email: '',
       phoneNumbers: [],
-      address: "",
-    },
-  }));
+      address: ''
+    }
+  }))

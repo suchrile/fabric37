@@ -1,18 +1,18 @@
-import { createTransport } from "nodemailer";
-import Mail from "nodemailer/lib/mailer";
-import type { RequestPriceMailDto } from "@/server/types/mail";
+import { createTransport } from 'nodemailer'
+import Mail from 'nodemailer/lib/mailer'
+import type { RequestPriceMailDto } from '@/server/types/mail'
 
 class MailService {
-  private readonly _smtpBotUser;
-  private readonly _smtpInfoUser;
-  private readonly _smtpUserName;
-  private readonly _transporter;
+  private readonly _smtpBotUser
+  private readonly _smtpInfoUser
+  private readonly _smtpUserName
+  private readonly _transporter
 
-  constructor() {
-    const config = useRuntimeConfig();
-    this._smtpBotUser = config.smtpBotUser;
-    this._smtpInfoUser = config.smtpInfoUser;
-    this._smtpUserName = config.smtpUserName;
+  constructor () {
+    const config = useRuntimeConfig()
+    this._smtpBotUser = config.smtpBotUser
+    this._smtpInfoUser = config.smtpInfoUser
+    this._smtpUserName = config.smtpUserName
     this._transporter = createTransport(
       {
         host: config.smtpHost,
@@ -20,39 +20,39 @@ class MailService {
         secure: Number(config.smtpPort) === 465,
         auth: {
           user: this._smtpBotUser,
-          pass: config.smtpBotPassword,
-        },
+          pass: config.smtpBotPassword
+        }
       },
       {
         from: {
           name: this._smtpUserName,
-          address: this._smtpBotUser,
+          address: this._smtpBotUser
         },
         replyTo: {
           name: this._smtpUserName,
-          address: this._smtpInfoUser,
-        },
+          address: this._smtpInfoUser
+        }
       }
-    );
+    )
   }
 
-  private async send(mailOptions: Mail.Options) {
+  private async send (mailOptions: Mail.Options) {
     try {
-      await this._transporter.sendMail(mailOptions);
-      return { message: "OK" };
+      await this._transporter.sendMail(mailOptions)
+      return { message: 'OK' }
     } catch (e) {
       throw createError({
         statusCode: 500,
-        message: "Произошла неизвестная ошибка",
-      });
+        message: 'Произошла неизвестная ошибка'
+      })
     }
   }
 
-  async sendPriceRequest(dto: RequestPriceMailDto) {
+  async sendPriceRequest (dto: RequestPriceMailDto) {
     return await this.send({
       to: this._smtpInfoUser,
       replyTo: dto.email,
-      subject: "Запрос прайс-листа",
+      subject: 'Запрос прайс-листа',
       html: `
 <div style="width: 100%">
   <div style="padding: 15px 25px; color: white; text-align: center; background-color: #a855f7;">
@@ -77,9 +77,9 @@ class MailService {
     </div>
   </div>
 </div>
-        `,
-    });
+        `
+    })
   }
 }
 
-export default new MailService();
+export default new MailService()

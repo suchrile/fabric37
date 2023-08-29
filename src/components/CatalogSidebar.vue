@@ -16,7 +16,7 @@
         <UiSidebarFilterRange
           v-if="
             attr.dataType === AttributeDataType.INTEGER ||
-            attr.dataType === AttributeDataType.FLOAT
+              attr.dataType === AttributeDataType.FLOAT
           "
           v-model="filtersStateRange[attr.id]"
           v-model:dragging="isRangeDragging"
@@ -62,9 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { LocationQuery } from "vue-router";
-import { AttributeDataType } from "@/interfaces";
+import type { PropType, Ref } from 'vue'
+import type { LocationQuery } from 'vue-router'
+import { AttributeDataType } from '@/interfaces'
 import type {
   AttributeOption,
   AttributeValue,
@@ -76,305 +76,305 @@ import type {
   FilterStateRange,
   AttributeFiltersState,
   RouteQuery,
-  AttributesFilter,
-} from "@/interfaces";
+  AttributesFilter
+} from '@/interfaces'
 
 const props = defineProps({
-  products: { type: Array as PropType<Product[]>, required: true },
-});
+  products: { type: Array as PropType<Product[]>, required: true }
+})
 
-const router = useRouter();
+const router = useRouter()
 
-const attributes: Ref<AttributesFilter> = ref({});
-const filtersStateRange: FilterStateRange = reactive({});
-const filtersStateCheckbox: FilterStateCheckbox = reactive({});
-const filtersStateBoolean: FilterStateBoolean = reactive({});
-const isRangeDragging: Ref<boolean> = ref(false);
-const isLoading: Ref<boolean> = ref(true);
+const attributes: Ref<AttributesFilter> = ref({})
+const filtersStateRange: FilterStateRange = reactive({})
+const filtersStateCheckbox: FilterStateCheckbox = reactive({})
+const filtersStateBoolean: FilterStateBoolean = reactive({})
+const isRangeDragging: Ref<boolean> = ref(false)
+const isLoading: Ref<boolean> = ref(true)
 
 onMounted(() => {
-  initAttributes();
-  isLoading.value = false;
+  initAttributes()
+  isLoading.value = false
 
   watch(props, () => {
-    isLoading.value = true;
-    attributes.value = {};
-    initAttributes();
-    isLoading.value = false;
-  });
-});
+    isLoading.value = true
+    attributes.value = {}
+    initAttributes()
+    isLoading.value = false
+  })
+})
 
 const isResetButtonDisabled = computed(() => {
   if (isLoading.value || isRangeDragging.value) {
-    return true;
+    return true
   }
-  const checkboxDefaults = Object.values(filtersStateCheckbox).every((val) =>
-    Object.values(val).every((val) => !val)
-  );
+  const checkboxDefaults = Object.values(filtersStateCheckbox).every(val =>
+    Object.values(val).every(val => !val)
+  )
   const rangeDefaults = Object.keys(filtersStateRange).every((key) => {
     return (
       filtersStateRange[key][0] === attributes.value[key].min &&
       filtersStateRange[key][1] === attributes.value[key].max
-    );
-  });
+    )
+  })
   const booleanDefaults = Object.values(filtersStateBoolean).every(
-    (val) => val === null
-  );
-  return checkboxDefaults && rangeDefaults && booleanDefaults;
-});
+    val => val === null
+  )
+  return checkboxDefaults && rangeDefaults && booleanDefaults
+})
 
 const initAttributes = () => {
   for (const product of props.products) {
     product.attributes.forEach((attr) => {
       if (!attr.filterable) {
-        return;
+        return
       }
       if (attributes.value[attr.id]) {
-        return;
+        return
       }
       attributes.value[attr.id] = {
         id: attr.id,
         name: attr.name,
         unit: attr.unit,
         dataType: attr.dataType,
-        values: [],
-      };
-      filtersStateCheckbox[attr.id] = {};
-    });
-    const selectAttributes = [];
-    const checkboxAttributes = [];
-    const booleanAttributes = [];
-    const rangeAttributes = [];
+        values: []
+      }
+      filtersStateCheckbox[attr.id] = {}
+    })
+    const selectAttributes = []
+    const checkboxAttributes = []
+    const booleanAttributes = []
+    const rangeAttributes = []
     for (const attr of product.attributes) {
       if (!attr.filterable) {
-        continue;
+        continue
       }
       if (
         attr.dataType === AttributeDataType.INTEGER ||
         attr.dataType === AttributeDataType.FLOAT
       ) {
-        rangeAttributes.push(attr);
+        rangeAttributes.push(attr)
       } else if (attr.dataType === AttributeDataType.SELECT) {
-        selectAttributes.push(attr);
+        selectAttributes.push(attr)
       } else if (attr.dataType === AttributeDataType.BOOLEAN) {
-        booleanAttributes.push(attr);
+        booleanAttributes.push(attr)
       } else {
-        checkboxAttributes.push(attr);
+        checkboxAttributes.push(attr)
       }
     }
-    initSelectAttributes(selectAttributes);
-    initCheckboxAttributes(checkboxAttributes);
-    initRangeAttributes(rangeAttributes);
-    initBooleanAttributes(booleanAttributes);
+    initSelectAttributes(selectAttributes)
+    initCheckboxAttributes(checkboxAttributes)
+    initRangeAttributes(rangeAttributes)
+    initBooleanAttributes(booleanAttributes)
   }
-  initFiltersState();
-};
+  initFiltersState()
+}
 
 const initSelectAttributes = (attrs: AttributeValue[]) => {
   attrs.forEach((attr) => {
     attr.value.forEach((option: AttributeOption) => {
-      const value = option.label;
+      const value = option.label
       if (!attributes.value[attr.id].values.includes(value)) {
-        attributes.value[attr.id].values.push(value);
-        filtersStateCheckbox[attr.id][value] = false;
+        attributes.value[attr.id].values.push(value)
+        filtersStateCheckbox[attr.id][value] = false
       }
-    });
-  });
-};
+    })
+  })
+}
 
 const initCheckboxAttributes = (attrs: AttributeValue[]) => {
   attrs.forEach((attr) => {
-    const value = attr.value;
+    const value = attr.value
     if (!attributes.value[attr.id].values.includes(value)) {
-      attributes.value[attr.id].values.push(value);
-      filtersStateCheckbox[attr.id][value] = false;
+      attributes.value[attr.id].values.push(value)
+      filtersStateCheckbox[attr.id][value] = false
     }
-  });
-};
+  })
+}
 
 const initBooleanAttributes = (attrs: AttributeValue[]) => {
   attrs.forEach((attr) => {
-    filtersStateBoolean[attr.id] = null;
-  });
-};
+    filtersStateBoolean[attr.id] = null
+  })
+}
 
 const initRangeAttributes = (attrs: AttributeValue[]) => {
   attrs.forEach((attr) => {
-    attributes.value[attr.id].values.push(attr.value);
-  });
+    attributes.value[attr.id].values.push(attr.value)
+  })
   attrs.forEach((attr) => {
-    const min = Math.min(...attributes.value[attr.id].values);
-    const max = Math.max(...attributes.value[attr.id].values);
-    attributes.value[attr.id].min = min;
-    attributes.value[attr.id].max = max;
-    filtersStateRange[attr.id] = [min, max];
-  });
-};
+    const min = Math.min(...attributes.value[attr.id].values)
+    const max = Math.max(...attributes.value[attr.id].values)
+    attributes.value[attr.id].min = min
+    attributes.value[attr.id].max = max
+    filtersStateRange[attr.id] = [min, max]
+  })
+}
 
 const initFiltersState = () => {
-  const routeQuery = router.currentRoute.value.query;
-  const query: RouteQuery = {};
+  const routeQuery = router.currentRoute.value.query
+  const query: RouteQuery = {}
   for (const queryKey in routeQuery) {
-    if (!queryKey.includes("paf")) continue;
-    const filterKey = queryKey.replace("paf", "");
-    const filterValue = routeQuery[queryKey];
-    let decodedFilterValue: string[];
+    if (!queryKey.includes('paf')) { continue }
+    const filterKey = queryKey.replace('paf', '')
+    const filterValue = routeQuery[queryKey]
+    let decodedFilterValue: string[]
     if (Array.isArray(filterValue)) {
-      decodedFilterValue = filterValue.map((el) =>
+      decodedFilterValue = filterValue.map(el =>
         decodeURIComponent(String(el))
-      );
+      )
     } else {
-      decodedFilterValue = [decodeURIComponent(String(filterValue))];
+      decodedFilterValue = [decodeURIComponent(String(filterValue))]
     }
-    query[filterKey] = decodedFilterValue;
+    query[filterKey] = decodedFilterValue
   }
 
   for (const filterKey in query) {
-    const filterValue = query[filterKey];
+    const filterValue = query[filterKey]
     const isRangeValue =
-      filterValue.length === 1 && ~filterValue[0].indexOf("~");
+      filterValue.length === 1 && ~filterValue[0].indexOf('~')
     if (isRangeValue) {
-      const values = filterValue[0].split("~").map((val) => +val);
-      filtersStateRange[filterKey] = [values[0], values[1]];
-    } else if (attributes.value[filterKey].dataType === "boolean") {
-      filtersStateBoolean[filterKey] = Boolean(filterValue[0]);
+      const values = filterValue[0].split('~').map(val => +val)
+      filtersStateRange[filterKey] = [values[0], values[1]]
+    } else if (attributes.value[filterKey].dataType === 'boolean') {
+      filtersStateBoolean[filterKey] = Boolean(filterValue[0])
     } else {
       filtersStateCheckbox[filterKey] = filterValue.reduce((attr, value) => {
-        attr[value] = true;
-        return attr;
-      }, {} as { [key: string]: boolean });
+        attr[value] = true
+        return attr
+      }, {} as { [key: string]: boolean })
     }
   }
-};
+}
 
 const setFiltersState = () => {
-  const query: LocationQuery = {};
+  const query: LocationQuery = {}
   for (const filterKey in filtersStateCheckbox) {
-    const filterValue = filtersStateCheckbox[filterKey];
+    const filterValue = filtersStateCheckbox[filterKey]
     const values = Object.keys(filterValue)
-      .filter((value) => filterValue[value])
-      .map((el) => encodeURIComponent(el));
+      .filter(value => filterValue[value])
+      .map(el => encodeURIComponent(el))
     if (values.length > 0) {
-      query["paf" + filterKey] = values;
+      query['paf' + filterKey] = values
     }
   }
   for (const filterKey in filtersStateRange) {
-    const filterValue = filtersStateRange[filterKey];
-    const attr = attributes.value[filterKey];
+    const filterValue = filtersStateRange[filterKey]
+    const attr = attributes.value[filterKey]
     if (attr.min !== filterValue[0] || attr.max !== filterValue[1]) {
-      query["paf" + filterKey] = filterValue.join("~");
+      query['paf' + filterKey] = filterValue.join('~')
     }
   }
   for (const filterKey in filtersStateBoolean) {
     if (filtersStateBoolean[filterKey] !== null) {
-      query["paf" + filterKey] = String(filtersStateBoolean[filterKey]);
+      query['paf' + filterKey] = String(filtersStateBoolean[filterKey])
     }
   }
-  router.replace({ query: { ...getNoFilterQuery(), ...query } });
-};
+  router.replace({ query: { ...getNoFilterQuery(), ...query } })
+}
 
 const clearFiltersState = () => {
   for (const filterKey in filtersStateCheckbox) {
-    filtersStateCheckbox[filterKey] = {} as AttributeFilterCheckboxValue;
+    filtersStateCheckbox[filterKey] = {} as AttributeFilterCheckboxValue
   }
   for (const filterKey in filtersStateRange) {
-    const attr = attributes.value[filterKey];
-    filtersStateRange[filterKey] = [attr.min!, attr.max!];
+    const attr = attributes.value[filterKey]
+    filtersStateRange[filterKey] = [attr.min!, attr.max!]
   }
   for (const filterKey in filtersStateBoolean) {
-    filtersStateBoolean[filterKey] = null;
+    filtersStateBoolean[filterKey] = null
   }
-  router.replace({ query: getNoFilterQuery() });
-};
+  router.replace({ query: getNoFilterQuery() })
+}
 
 const getNoFilterQuery = () => {
-  const query = { ...router.currentRoute.value.query };
+  const query = { ...router.currentRoute.value.query }
   Object.keys(query).forEach((key) => {
-    if (key.includes("paf")) {
-      delete query[key];
+    if (key.includes('paf')) {
+      delete query[key]
     }
-  });
-  return query;
-};
+  })
+  return query
+}
 
 const checkIfAttributeDisabled = (attr: AttributeFilter, value: any) => {
-  if (isRangeDragging.value) return true;
+  if (isRangeDragging.value) { return true }
   if (
     attr.dataType !== AttributeDataType.INTEGER &&
     attr.dataType !== AttributeDataType.FLOAT &&
     filtersStateCheckbox[attr.id][value]
   ) {
-    return false;
+    return false
   }
-  let currentFilter;
+  let currentFilter
   if (attr.dataType === AttributeDataType.BOOLEAN) {
-    currentFilter = { [attr.id]: value };
+    currentFilter = { [attr.id]: value }
   } else {
     currentFilter = {
-      [attr.id]: { ...filtersStateCheckbox[attr.id], [String(value)]: true },
-    };
+      [attr.id]: { ...filtersStateCheckbox[attr.id], [String(value)]: true }
+    }
   }
   const filter: AttributeFiltersState = {
     ...filtersStateCheckbox,
     ...filtersStateBoolean,
     ...filtersStateRange,
-    ...currentFilter,
-  };
-  const query = getQuery(filter);
-  return !filterProducts(query);
-};
+    ...currentFilter
+  }
+  const query = getQuery(filter)
+  return !filterProducts(query)
+}
 
 const filterProducts = (query: RouteQuery) => {
   return props.products.some((product) => {
     return Object.keys(query).every((key) => {
-      const filterValue = query[key];
-      const attribute = product.attributes.find((attr) => attr.id === +key);
+      const filterValue = query[key]
+      const attribute = product.attributes.find(attr => attr.id === +key)
       if (!attribute) {
-        return false;
+        return false
       }
       const isRangeValue =
-        filterValue.length === 1 && ~filterValue[0].indexOf("~");
+        filterValue.length === 1 && ~filterValue[0].indexOf('~')
       if (isRangeValue) {
-        const minmax = filterValue[0].split("~");
-        return attribute.value >= minmax[0] && attribute.value <= minmax[1];
+        const minmax = filterValue[0].split('~')
+        return attribute.value >= minmax[0] && attribute.value <= minmax[1]
       } else {
         return filterValue.some((value) => {
           return Array.isArray(attribute.value)
-            ? attribute.value.some((option) => option.label === value)
-            : String(attribute.value) === value;
-        });
+            ? attribute.value.some(option => option.label === value)
+            : String(attribute.value) === value
+        })
       }
-    });
-  });
-};
+    })
+  })
+}
 
 const getQuery = (filter: AttributeFiltersState) => {
-  const query: { [key: string]: string[] } = {};
+  const query: { [key: string]: string[] } = {}
   for (const filterKey in filter) {
-    const filterValue = filter[filterKey];
-    const isRangeAttribute = Array.isArray(filterValue);
+    const filterValue = filter[filterKey]
+    const isRangeAttribute = Array.isArray(filterValue)
     if (isRangeAttribute) {
-      const attr = attributes.value[filterKey];
+      const attr = attributes.value[filterKey]
       if (attr.min !== filterValue[0] || attr.max !== filterValue[1]) {
-        query[filterKey] = [filterValue.join("~")];
+        query[filterKey] = [filterValue.join('~')]
       }
     } else if (
       attributes.value[filterKey].dataType === AttributeDataType.BOOLEAN
     ) {
       if (filterValue !== null) {
-        query[filterKey] = [String(filterValue)];
+        query[filterKey] = [String(filterValue)]
       }
     } else {
       const values = Object.keys(filterValue).filter(
-        (value) => filterValue[value]
-      );
+        value => filterValue[value]
+      )
       if (values.length > 0) {
-        query[filterKey] = values;
+        query[filterKey] = values
       }
     }
   }
-  return query;
-};
+  return query
+}
 </script>
 
 <style scoped lang="scss">

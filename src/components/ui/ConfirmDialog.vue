@@ -30,15 +30,15 @@
 <script setup lang="ts">
 defineProps({
   visible: Boolean,
-  header: { type: String, default: "Подтверждение" },
-  icon: { type: String, default: "pi-exclamation-circle" },
+  header: { type: String, default: 'Подтверждение' },
+  icon: { type: String, default: 'pi-exclamation-circle' },
   text: { type: String, required: true },
-  cancelButtonLabel: { type: String, default: "Отменить" },
-  confirmButtonLabel: { type: String, default: "Подтвердить" },
-  cancelButtonClass: { type: String, default: "p-button-text" },
-  confirmButtonClass: { type: String, default: "p-button-text" },
-});
-defineEmits(["update:visible", "confirm"]);
+  cancelButtonLabel: { type: String, default: 'Отменить' },
+  confirmButtonLabel: { type: String, default: 'Подтвердить' },
+  cancelButtonClass: { type: String, default: 'p-button-text' },
+  confirmButtonClass: { type: String, default: 'p-button-text' }
+})
+defineEmits(['update:visible', 'confirm'])
 </script>
 
 <style scoped></style>

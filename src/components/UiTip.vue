@@ -7,18 +7,18 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType, Ref } from "vue";
-import type { TipTarget } from "@/composables/useTips";
+import type { PropType, Ref } from 'vue'
+import type { TipTarget } from '@/composables/useTips'
 
 const props = defineProps({
   target: { type: String as PropType<TipTarget>, required: true },
-  size: { type: String as PropType<"large" | "small">, default: "large" },
-});
+  size: { type: String as PropType<'large' | 'small'>, default: 'large' }
+})
 
-const { useShowTips, generateTip } = useTips();
-const showTips: Ref<boolean> = useShowTips();
+const { useShowTips, generateTip } = useTips()
+const showTips: Ref<boolean> = useShowTips()
 
-const tip = computed(() => generateTip(props.target));
+const tip = computed(() => generateTip(props.target))
 </script>
 
 <style lang="scss">

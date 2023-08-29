@@ -1,7 +1,9 @@
 <template>
   <div class="admin-settings-page">
     <div class="flex align-items-center justify-content-between">
-      <h3 class="admin-settings-page__title">Настройки</h3>
+      <h3 class="admin-settings-page__title">
+        Настройки
+      </h3>
       <Button
         icon="pi pi-save"
         label="Сохранить"
@@ -34,54 +36,54 @@
 </template>
 
 <script setup lang="ts">
-import { useToast } from "primevue/usetoast";
-import type { Ref } from "vue";
-import type { Info } from "@/interfaces";
+import { useToast } from 'primevue/usetoast'
+import type { Ref } from 'vue'
+import type { Info } from '@/interfaces'
 
-const router = useRouter();
-const toast = useToast();
-const info = useInfo();
+const router = useRouter()
+const toast = useToast()
+const info = useInfo()
 
-const activeTabIndex: Ref<number> = ref(0);
-const isLoading: Ref<boolean> = ref(false);
+const activeTabIndex: Ref<number> = ref(0)
+const isLoading: Ref<boolean> = ref(false)
 
 onMounted(() => {
-  initCurrentTab();
-});
+  initCurrentTab()
+})
 
 const submit = async () => {
-  isLoading.value = true;
-  const { data } = await useApiCall<Info>("/api/info", {
-    method: "PATCH",
-    body: info.value,
-  });
+  isLoading.value = true
+  const { data } = await useApiCall<Info>('/api/info', {
+    method: 'PATCH',
+    body: info.value
+  })
   if (data) {
-    info.value = data;
+    info.value = data
     toast.add({
-      severity: "success",
-      summary: "Информация обновлена",
-      detail: "Информация успешно обновлена.",
-      life: 3000,
-    });
+      severity: 'success',
+      summary: 'Информация обновлена',
+      detail: 'Информация успешно обновлена.',
+      life: 3000
+    })
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 
 const initCurrentTab = () => {
-  const queryTab = router.currentRoute.value.query.tab;
+  const queryTab = router.currentRoute.value.query.tab
   if (queryTab) {
-    activeTabIndex.value = +queryTab;
+    activeTabIndex.value = +queryTab
   }
-};
+}
 
 const handleTabChange = () => {
-  router.replace({ query: { tab: activeTabIndex.value } });
-};
+  router.replace({ query: { tab: activeTabIndex.value } })
+}
 
 definePageMeta({
-  layout: "admin",
-});
+  layout: 'admin'
+})
 useHead({
-  title: "Настройки",
-});
+  title: 'Настройки'
+})
 </script>

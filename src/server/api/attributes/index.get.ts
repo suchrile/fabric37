@@ -1,5 +1,5 @@
-import attributesService from "@/server/services/attributes.service";
+import attributesService from '@/server/services/attributes.service'
 
 export default defineEventHandler(() => {
-  return attributesService.findMany();
-});
+  return attributesService.findMany()
+})

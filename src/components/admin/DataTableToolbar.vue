@@ -31,10 +31,10 @@
 
 <script setup lang="ts">
 defineProps({
-  search: { type: String, default: "" },
-  deleteDisabled: { type: Boolean, default: true },
-});
-const emit = defineEmits(["update:search", "add", "remove"]);
+  search: { type: String, default: '' },
+  deleteDisabled: { type: Boolean, default: true }
+})
+const emit = defineEmits(['update:search', 'add', 'remove'])
 </script>
 
 <style scoped></style>

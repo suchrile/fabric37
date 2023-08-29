@@ -6,9 +6,9 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "admin",
-});
+  layout: 'admin'
+})
 onBeforeMount(() => {
-  navigateTo("/admin/products");
-});
+  navigateTo('/admin/products')
+})
 </script>

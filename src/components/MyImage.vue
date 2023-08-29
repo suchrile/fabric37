@@ -44,30 +44,30 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import { imagePlaceholderUrl } from "@/consts";
+import type { PropType } from 'vue'
+import { imagePlaceholderUrl } from '@/consts'
 
 defineProps({
   src: {
     type: String as PropType<string | null | undefined>,
-    default: imagePlaceholderUrl,
+    default: imagePlaceholderUrl
   },
   preview: { type: Boolean, default: false },
   upload: { type: Boolean, default: false },
   remove: { type: Boolean, default: false },
   showLabels: { type: Boolean, default: false },
-  tinted: { type: Boolean, default: true },
-});
-const emit = defineEmits(["upload", "remove"]);
+  tinted: { type: Boolean, default: true }
+})
+const emit = defineEmits(['upload', 'remove'])
 
-const image = ref();
+const image = ref()
 
 const triggerPreview = () => {
   const trigger = image.value.$el.querySelector(
-    ".p-image-preview-indicator"
-  ) as HTMLButtonElement;
-  trigger.click();
-};
+    '.p-image-preview-indicator'
+  ) as HTMLButtonElement
+  trigger.click()
+}
 </script>
 
 <style scoped lang="scss">

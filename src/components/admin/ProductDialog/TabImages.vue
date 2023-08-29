@@ -1,9 +1,10 @@
 <template>
   <div class="product-dialog-images-tab images">
     <div class="field mb-4">
-      <label for="product-dialog-images-tab-images-main" class="mb-3"
-        >Основное изображение</label
-      >
+      <label
+        for="product-dialog-images-tab-images-main"
+        class="mb-3"
+      >Основное изображение</label>
       <ImageUpload
         id="product-dialog-images-tab-images-main"
         :src="primary?.url"
@@ -15,9 +16,10 @@
     </div>
 
     <div class="field mb-0">
-      <label for="images-additional" class="mb-3"
-        >Дополнительные изображения</label
-      >
+      <label
+        for="images-additional"
+        class="mb-3"
+      >Дополнительные изображения</label>
       <ScrollView :max-height="205" vertical>
         <div id="images-additional" class="images__additional">
           <div
@@ -33,7 +35,7 @@
             multiple
             hidden
             @change="handleAdditionalUpload"
-          />
+          >
           <TransitionGroup name="list">
             <MyImage
               v-for="image in additional"
@@ -54,58 +56,58 @@
 </template>
 
 <script setup lang="ts">
-import type { ComputedRef, PropType } from "vue";
-import { v4 as uuid } from "uuid";
-import type { ProductDialogImageTabProp } from "@/interfaces";
+import type { ComputedRef, PropType } from 'vue'
+import { v4 as uuid } from 'uuid'
+import type { ProductDialogImageTabProp } from '@/interfaces'
 
 const props = defineProps({
   images: {
     type: Array as PropType<ProductDialogImageTabProp[]>,
     default: () => [],
-    required: true,
+    required: true
   },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:images"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:images'])
 
-const additionalImagesInput = ref();
+const additionalImagesInput = ref()
 
 const primary: ComputedRef<ProductDialogImageTabProp | undefined> = computed(
-  () => props.images.find((img) => img.isPrimary)
-);
+  () => props.images.find(img => img.isPrimary)
+)
 const additional: ComputedRef<ProductDialogImageTabProp[]> = computed(() =>
-  props.images.filter((img) => !img.isPrimary)
-);
+  props.images.filter(img => !img.isPrimary)
+)
 
 const deleteImage = (tempId: string) => {
   emit(
-    "update:images",
-    props.images.filter((img) => img.tempId !== tempId)
-  );
-};
+    'update:images',
+    props.images.filter(img => img.tempId !== tempId)
+  )
+}
 
 const handlePrimaryUpload = (url: string) => {
   const toEmit = props.images.filter(
-    (img) => !img.isPrimary && img.url !== url
-  );
-  emit("update:images", [...toEmit, { tempId: uuid(), url, isPrimary: true }]);
-};
+    img => !img.isPrimary && img.url !== url
+  )
+  emit('update:images', [...toEmit, { tempId: uuid(), url, isPrimary: true }])
+}
 
 const handleAdditionalUpload = (event: InputEvent) => {
-  const target = event.target as HTMLInputElement;
-  const files = target.files as FileList;
+  const target = event.target as HTMLInputElement
+  const files = target.files as FileList
   for (const file of files) {
-    const reader = new FileReader();
+    const reader = new FileReader()
     reader.onload = (event) => {
-      const url = event.target!.result;
-      if (!props.images.find((img) => img.url === url)) {
-        emit("update:images", [...props.images, { tempId: uuid(), url }]);
+      const url = event.target!.result
+      if (!props.images.find(img => img.url === url)) {
+        emit('update:images', [...props.images, { tempId: uuid(), url }])
       }
-    };
-    reader.readAsDataURL(file);
+    }
+    reader.readAsDataURL(file)
   }
-  additionalImagesInput.value.value = null;
-};
+  additionalImagesInput.value.value = null
+}
 </script>
 
 <style scoped lang="scss">

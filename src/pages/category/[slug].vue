@@ -4,7 +4,15 @@
       <h1 class="category-page__title">
         {{ category.name }}
       </h1>
-      <div v-if="subcategories.length" class="category-page__subcategories">
+      <div class="category-page__categories">
+        <NuxtLink
+          v-if="category.parentId"
+          :to="'/category/' + category.parent.slug"
+          class="category-page__parent-category"
+        >
+          <i class="pi pi-chevron-left" />
+          <span>{{ category.parent.name }}</span>
+        </NuxtLink>
         <NuxtLink
           v-for="subcategory in subcategories"
           :key="subcategory.id"
@@ -16,7 +24,7 @@
         </NuxtLink>
       </div>
     </div>
-    <CatalogLayout :products="products" class="category-page__catalog" />
+    <CatalogLayout :category="category" class="category-page__catalog" />
   </div>
 </template>
 
@@ -26,18 +34,21 @@ import type { Category, Product } from "@/interfaces";
 
 const route = useRoute();
 
-const products: Ref<Product[]> = ref([]);
+const category: Ref<Category | null> = ref(null);
 
 const subcategories = computed(() =>
   category.value?.children.sort((a, b) => a.name.localeCompare(b.name))
 );
 
-const { data: category } = await useFetch<Category>(
+const { data } = await useFetch<Category>(
   "/api/categories/" + route.params.slug,
   { key: String(route.params.slug) }
 );
-if (category.value) {
-  products.value = category.value.products.filter((product) => !product.hidden);
+if (data.value) {
+  category.value = {
+    ...data.value,
+    products: data.value.products.filter((product) => !product.hidden),
+  };
 }
 
 useHead({
@@ -74,16 +85,17 @@ useHead({
       position: absolute;
     }
   }
-  &__subcategories {
+  &__categories {
     display: flex;
     flex-wrap: wrap;
-    justify-self: end;
+    align-items: flex-end;
     column-gap: 6px;
     row-gap: 6px;
     width: 100%;
     height: 100%;
   }
-  &__subcategory {
+  &__subcategory,
+  &__parent-category {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -105,7 +117,8 @@ useHead({
       border-color: var(--purple-500);
     }
   }
-  &__catalog {
+  &__parent-category {
+    margin-right: 8px;
   }
 
   @media screen and (max-width: 767px) {

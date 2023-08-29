@@ -2,7 +2,7 @@
   <div class="catalog">
     <CatalogSidebar
       v-if="!width || width > 767"
-      :products="products"
+      :products="category.products"
       class="catalog__filters"
     />
 
@@ -28,20 +28,32 @@
             <span class="text-2xl font-bold justify-self-start">Фильтры</span>
           </div>
         </template>
-        <CatalogSidebar :products="products" class="catalog__sidebar-filters" />
+        <CatalogSidebar
+          :products="category.products"
+          class="catalog__sidebar-filters"
+        />
       </Sidebar>
     </div>
 
-    <CatalogProducts :products="products" class="catalog__products" />
+    <CatalogProducts
+      v-if="category.view === 'cards'"
+      :products="category.products"
+      class="catalog__products"
+    />
+    <CatalogProductsTable
+      v-else-if="category.view === 'table'"
+      :products="category.products"
+      class="catalog__products"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { PropType, Ref } from "vue";
-import type { Product } from "@/interfaces";
+import type { Category, Product } from "@/interfaces";
 
 defineProps({
-  products: { type: Array as PropType<Product[]>, required: true },
+  category: { type: Object as PropType<Category>, required: true },
 });
 
 const isSidebarVisible: Ref<boolean> = ref(false);

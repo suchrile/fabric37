@@ -58,33 +58,33 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref } from "vue";
-import type { Info } from "@/interfaces";
+import { PropType, Ref } from 'vue'
+import type { Info } from '@/interfaces'
 
 const props = defineProps({
-  modelValue: { type: Object as PropType<Info["contacts"]>, required: true },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:modelValue"]);
+  modelValue: { type: Object as PropType<Info['contacts']>, required: true },
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:modelValue'])
 
-const addPhoneNumberField: Ref<string> = ref("");
+const addPhoneNumberField: Ref<string> = ref('')
 
 const addPhoneNumber = () => {
-  if (!addPhoneNumberField.value) return;
-  emit("update:modelValue", {
+  if (!addPhoneNumberField.value) { return }
+  emit('update:modelValue', {
     ...props.modelValue,
-    phoneNumbers: [...props.modelValue.phoneNumbers, addPhoneNumberField.value],
-  });
-  addPhoneNumberField.value = "";
-};
+    phoneNumbers: [...props.modelValue.phoneNumbers, addPhoneNumberField.value]
+  })
+  addPhoneNumberField.value = ''
+}
 const removePhoneNumber = (phoneNumber: string) => {
-  emit("update:modelValue", {
+  emit('update:modelValue', {
     ...props.modelValue,
     phoneNumbers: props.modelValue.phoneNumbers.filter(
-      (p) => p !== phoneNumber
-    ),
-  });
-};
+      p => p !== phoneNumber
+    )
+  })
+}
 </script>
 
 <style scoped></style>

@@ -16,25 +16,25 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-import type { Page } from "@/interfaces";
+import type { Ref } from 'vue'
+import type { Page } from '@/interfaces'
 
-const route = useRoute();
+const route = useRoute()
 
-const page: Ref<Page | null> = ref(null);
+const page: Ref<Page | null> = ref(null)
 
-const { data } = await useFetch<Page>("/api/pages/" + route.params.slug);
+const { data } = await useFetch<Page>('/api/pages/' + route.params.slug)
 if (data.value) {
-  page.value = data.value;
+  page.value = data.value
 }
 
 const getDate = (date: string) => {
-  return new Date(date).toLocaleDateString("ru-RU");
-};
+  return new Date(date).toLocaleDateString('ru-RU')
+}
 
 useHead({
-  title: page.value?.title,
-});
+  title: page.value?.title
+})
 </script>
 
 <style lang="scss">

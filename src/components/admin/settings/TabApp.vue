@@ -59,41 +59,41 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref } from "vue";
-import type { TreeNode } from "primevue/tree";
-import type { Category, Info } from "@/interfaces";
-import { mapToNodeTree } from "~/helpers";
+import { PropType, Ref } from 'vue'
+import type { TreeNode } from 'primevue/tree'
+import type { Category, Info } from '@/interfaces'
+import { mapToNodeTree } from '~/helpers'
 
 defineProps({
-  modelValue: { type: Object as PropType<Info["app"]>, required: true },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:modelValue"]);
+  modelValue: { type: Object as PropType<Info['app']>, required: true },
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:modelValue'])
 
-const categories: Ref<Category[]> = ref([]);
-const nestedCategories: Ref<TreeNode[]> = ref([]);
+const categories: Ref<Category[]> = ref([])
+const nestedCategories: Ref<TreeNode[]> = ref([])
 
 onMounted(async () => {
-  await nextTick();
-  await fetchCategories();
-});
+  await nextTick()
+  await fetchCategories()
+})
 
 const findCategoryById = (id: number) => {
-  const category = categories.value.find((cat) => cat.id === id);
+  const category = categories.value.find(cat => cat.id === id)
   if (category) {
-    return { [category.id]: true };
+    return { [category.id]: true }
   }
-};
+}
 
 const fetchCategories = async () => {
-  const { data } = await useApiCall<Category[]>("/api/categories");
+  const { data } = await useApiCall<Category[]>('/api/categories')
   if (data) {
-    categories.value = data;
+    categories.value = data
     nestedCategories.value = mapToNodeTree(data, {
-      uniqueKey: "id",
-      labelKey: "name",
-      parentKey: "parentId",
-    });
+      uniqueKey: 'id',
+      labelKey: 'name',
+      parentKey: 'parentId'
+    })
   }
-};
+}
 </script>

@@ -13,7 +13,7 @@
         :src="slotProps.item.url"
         :alt="productName"
         class="galleria__image"
-      />
+      >
     </template>
     <template #indicator>
       <div class="galleria__indicator" />
@@ -23,17 +23,17 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { ProductImage } from "@/interfaces";
+import type { PropType } from 'vue'
+import type { ProductImage } from '@/interfaces'
 
 const props = defineProps({
   productName: { type: String, required: true },
-  images: { type: Array as PropType<ProductImage[]>, required: true },
-});
+  images: { type: Array as PropType<ProductImage[]>, required: true }
+})
 
 const sortedImages = computed(() =>
   [...props.images].sort((a, b) => +b.isPrimary - +a.isPrimary)
-);
+)
 </script>
 
 <style lang="scss">

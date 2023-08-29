@@ -3,6 +3,7 @@
 export default defineNuxtConfig({
   srcDir: "src/",
   modules: ["@nuxtjs/eslint-module"],
+  eslint: { lintOnStart: false },
   css: [
     "primevue/resources/primevue.min.css",
     "primeicons/primeicons.css",
@@ -29,11 +30,38 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      link: [
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/favicon/apple-touch-icon.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon/favicon-16x16.png",
+        },
+        { rel: "manifest", href: "/favicon/site.webmanifest" },
+        {
+          rel: "mask-icon",
+          href: "/favicon/safari-pinned-tab.svg",
+          color: "#a855f7",
+        },
+      ],
       meta: [
         {
           name: "format-detection",
           content: "telephone=no, email=no, address=no, date=no",
         },
+        { name: "msapplication-TileColor", content: "#a855f7" },
+        { name: "theme-color", content: "#ffffff" },
       ],
     },
   },

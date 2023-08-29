@@ -15,5 +15,5 @@
 </template>
 
 <script setup lang="ts">
-const { logout } = useAuth();
+const { logout } = useAuth()
 </script>

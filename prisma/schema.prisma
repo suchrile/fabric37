@@ -59,10 +59,11 @@ model Page {
 }
 
 model Category {
-  id       Int    @id @default(autoincrement())
-  name     String @unique
-  parentId Int?   @map("parent_id")
-  slug     String @unique
+  id       Int          @id @default(autoincrement())
+  slug     String       @unique
+  name     String       @unique
+  parentId Int?         @map("parent_id")
+  view     CategoryView @default(cards)
 
   products Product[]
   parent   Category?  @relation(name: "CategoryChildren", fields: [parentId], references: [id], onDelete: Cascade)
@@ -214,4 +215,9 @@ enum ProductAttributeDataType {
   boolean
   date
   select
+}
+
+enum CategoryView {
+  cards
+  table
 }

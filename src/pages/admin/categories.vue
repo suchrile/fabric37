@@ -95,7 +95,11 @@ const update = async (category: Category) => {
     "/api/categories/" + category.id,
     {
       method: "PATCH",
-      body: { name: category.name, parentId: category.parentId },
+      body: {
+        name: category.name,
+        parentId: category.parentId,
+        view: category.view,
+      },
     }
   );
   if (data) {
@@ -147,6 +151,7 @@ const duplicate = (category: Category) => {
   openDialog({
     name: category.name + " копия",
     parentId: category.parentId,
+    view: category.view,
   });
 };
 
@@ -177,7 +182,7 @@ const confirmDeleteCategories = () => {
 };
 
 const openDialog = (category: CategoryDialogProp) => {
-  currentCategory.value = { ...category };
+  currentCategory.value = { ...category, view: category?.view || "cards" };
   isDialogOpen.value = true;
 };
 const dialogHideHandler = () => {

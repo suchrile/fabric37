@@ -26,10 +26,6 @@
       </TransitionGroup>
     </div>
 
-    <div v-else-if="isLoading" class="catalog-products__loading">
-      <ProgressSpinner />
-    </div>
-
     <div
       v-else-if="products.length && !filteredProducts.length"
       class="catalog-products__empty"
@@ -68,17 +64,8 @@ const { sortableFields, currentSortField, sortOrder, init, sort } =
 
 const filteredProducts: Ref<Product[]> = ref(props.products);
 const productsLayout: Ref<ProductsLayout> = ref("grid");
-const isLoading: Ref<boolean> = ref(true);
 
 onMounted(() => {
-  isLoading.value = false;
-
-  watch(props, async () => {
-    init(props.products);
-    filterProducts();
-    filteredProducts.value = await sort(filteredProducts.value);
-  });
-
   watch(route, () => {
     filterProducts();
   });
@@ -102,7 +89,9 @@ const filterProducts = () => {
       const attribute = product.attributes.find(
         (attr) => attr.id === parseInt(key.replace("paf", ""))
       );
-      if (!attribute) return false;
+      if (!attribute) {
+        return false;
+      }
       const isRangeValue = value.length === 1 && ~value[0].indexOf("~");
       if (isRangeValue) {
         const minmax = value[0].split("~");
@@ -154,18 +143,11 @@ filteredProducts.value = await sort(filteredProducts.value);
   &__item {
     text-decoration: none;
   }
-  &__loading,
   &__empty {
     height: 430px;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  &__loading {
-    & .p-progress-spinner {
-      width: 60px;
-      height: 60px;
-    }
   }
   &__empty {
     flex-direction: column;
@@ -188,7 +170,6 @@ filteredProducts.value = await sort(filteredProducts.value);
       gap: 10px;
     }
     .catalog-products {
-      &__loading,
       &__empty {
         height: 100px;
       }

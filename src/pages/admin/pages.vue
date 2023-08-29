@@ -1,7 +1,9 @@
 <template>
   <div class="admin-pages">
     <div class="admin-pages__header header">
-      <h3 class="header__title">Страницы</h3>
+      <h3 class="header__title">
+        Страницы
+      </h3>
       <div class="flex gap-3">
         <div class="flex gap-2">
           <Button
@@ -96,152 +98,152 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
-import type { Page } from "@/interfaces";
+import type { Ref } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
+import type { Page } from '@/interfaces'
 
-const toast = useToast();
-const confirm = useConfirm();
+const toast = useToast()
+const confirm = useConfirm()
 
-const pages: Ref<Page[]> = ref([]);
-const currentPage: Ref<Page> = ref({} as Page);
-const content: Ref<string> = ref("");
-const activePageIndex: Ref<number> = ref(0);
-const isDialogOpen: Ref<boolean> = ref(false);
-const isLoading: Ref<boolean> = ref(false);
-const isPagesLoading: Ref<boolean> = ref(true);
+const pages: Ref<Page[]> = ref([])
+const currentPage: Ref<Page> = ref({} as Page)
+const content: Ref<string> = ref('')
+const activePageIndex: Ref<number> = ref(0)
+const isDialogOpen: Ref<boolean> = ref(false)
+const isLoading: Ref<boolean> = ref(false)
+const isPagesLoading: Ref<boolean> = ref(true)
 
 const isSaveButtonDisabled = computed(
   () =>
     !pages.value.length ||
     pages.value[activePageIndex.value]?.content === content.value
-);
+)
 
 onMounted(async () => {
-  await nextTick();
-  await fetchPages();
-});
+  await nextTick()
+  await fetchPages()
+})
 
 const create = async (page: Page) => {
-  isLoading.value = true;
-  const { data } = await useApiCall<Page>("/api/pages", {
-    method: "POST",
-    body: page,
-  });
+  isLoading.value = true
+  const { data } = await useApiCall<Page>('/api/pages', {
+    method: 'POST',
+    body: page
+  })
   if (data) {
-    pages.value.push(data);
-    activePageIndex.value = pages.value.length - 1;
-    content.value = pages.value[activePageIndex.value].content;
+    pages.value.push(data)
+    activePageIndex.value = pages.value.length - 1
+    content.value = pages.value[activePageIndex.value].content
     toast.add({
-      severity: "success",
-      summary: "Страница создана",
+      severity: 'success',
+      summary: 'Страница создана',
       detail: `Страница «${page.title}» успешно создана.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isDialogOpen.value = false;
-  isLoading.value = false;
-};
+  isDialogOpen.value = false
+  isLoading.value = false
+}
 const update = async (page: Page) => {
-  isLoading.value = true;
-  const { data } = await useApiCall<Page>("/api/pages/" + page.id, {
-    method: "PATCH",
-    body: { title: page.title },
-  });
+  isLoading.value = true
+  const { data } = await useApiCall<Page>('/api/pages/' + page.id, {
+    method: 'PATCH',
+    body: { title: page.title }
+  })
   if (data) {
-    pages.value[activePageIndex.value] = data;
+    pages.value[activePageIndex.value] = data
     toast.add({
-      severity: "info",
-      summary: "Страница обновлена",
+      severity: 'info',
+      summary: 'Страница обновлена',
       detail: `Страница «${data.title}» успешно обновлена.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isDialogOpen.value = false;
-  isLoading.value = false;
-};
+  isDialogOpen.value = false
+  isLoading.value = false
+}
 const updateContent = async () => {
-  isLoading.value = true;
+  isLoading.value = true
   const { data } = await useApiCall<Page>(
-    "/api/pages/" + pages.value[activePageIndex.value].id,
-    { method: "PATCH", body: { content: content.value } }
-  );
+    '/api/pages/' + pages.value[activePageIndex.value].id,
+    { method: 'PATCH', body: { content: content.value } }
+  )
   if (data) {
-    pages.value[activePageIndex.value] = data;
+    pages.value[activePageIndex.value] = data
     toast.add({
-      severity: "info",
-      summary: "Страница обновлена",
+      severity: 'info',
+      summary: 'Страница обновлена',
       detail: `Страница «${data.title}» успешно обновлена.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 const deletePage = async () => {
-  isLoading.value = true;
+  isLoading.value = true
   const { data } = await useApiCall<Page>(
-    "/api/pages/" + pages.value[activePageIndex.value].id,
-    { method: "DELETE" }
-  );
+    '/api/pages/' + pages.value[activePageIndex.value].id,
+    { method: 'DELETE' }
+  )
   if (data) {
-    pages.value = pages.value.filter((page) => page.slug !== data.slug);
-    activePageIndex.value = pages.value.length - 1;
-    content.value = pages.value[activePageIndex.value]?.content || "";
+    pages.value = pages.value.filter(page => page.slug !== data.slug)
+    activePageIndex.value = pages.value.length - 1
+    content.value = pages.value[activePageIndex.value]?.content || ''
     toast.add({
-      severity: "warn",
-      summary: "Страница удалена",
+      severity: 'warn',
+      summary: 'Страница удалена',
       detail: `Страница «${data.title}» успешно удалена.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isLoading.value = false;
-};
+  isLoading.value = false
+}
 
 const confirmDelete = () => {
   confirm.require({
-    header: "Удаление страницы",
+    header: 'Удаление страницы',
     message: `<p class="mb-2">Вы уверены, что хотите <b>удалить</b> страницу <b>«${
       pages.value[activePageIndex.value].title
     }»</b>?</p>Это действие <b>невозможно отменить</b>.`,
-    icon: "pi pi-trash",
-    acceptClass: "p-button-danger",
-    accept: () => deletePage(),
-  });
-};
+    icon: 'pi pi-trash',
+    acceptClass: 'p-button-danger',
+    accept: () => deletePage()
+  })
+}
 
 const openDialog = () => {
-  currentPage.value = { ...pages.value[activePageIndex.value] };
-  isDialogOpen.value = true;
-};
+  currentPage.value = { ...pages.value[activePageIndex.value] }
+  isDialogOpen.value = true
+}
 
 const openPage = () => {
-  window.open("/pages/" + pages.value[activePageIndex.value].slug, "_blank");
-};
+  window.open('/pages/' + pages.value[activePageIndex.value].slug, '_blank')
+}
 
 const handleDialogClose = () => {
-  currentPage.value = {} as Page;
-};
+  currentPage.value = {} as Page
+}
 
 const handleTabChange = () => {
-  content.value = pages.value[activePageIndex.value].content;
-};
+  content.value = pages.value[activePageIndex.value].content
+}
 
 const fetchPages = async () => {
-  const { data } = await useApiCall<Page[]>("/api/pages");
+  const { data } = await useApiCall<Page[]>('/api/pages')
   if (data && data.length) {
-    pages.value = data.sort((a, b) => a.title.localeCompare(b.title));
-    content.value = pages.value[activePageIndex.value].content;
+    pages.value = data.sort((a, b) => a.title.localeCompare(b.title))
+    content.value = pages.value[activePageIndex.value].content
   }
-  isPagesLoading.value = false;
-};
+  isPagesLoading.value = false
+}
 
 definePageMeta({
-  layout: "admin",
-});
+  layout: 'admin'
+})
 useHead({
-  title: "Страницы",
-});
+  title: 'Страницы'
+})
 </script>
 
 <style lang="scss">

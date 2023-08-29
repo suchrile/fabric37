@@ -1,18 +1,18 @@
-import joi from "joi";
-import type { ProductAttributeSelectOption } from "@prisma/client";
-import type { AttributeCreateDto, AttributeUpdateDto } from "@/interfaces";
+import joi from 'joi'
+import type { ProductAttributeSelectOption } from '@prisma/client'
+import type { AttributeCreateDto, AttributeUpdateDto } from '@/interfaces'
 
-export const attributeIdSchema = joi.number().integer().positive();
+export const attributeIdSchema = joi.number().integer().positive()
 export const attributeIdsSchema = joi
   .array<number[]>()
-  .items(attributeIdSchema);
+  .items(attributeIdSchema)
 const attributeOptionsSchema = joi.array<ProductAttributeSelectOption>().items(
   joi.object({
     id: joi.number().integer().positive().optional(),
     attributeId: joi.number().strip(),
-    label: joi.string().required(),
+    label: joi.string().required()
   })
-);
+)
 
 export const attributeCreateSchema = joi
   .object<AttributeCreateDto>({
@@ -23,9 +23,9 @@ export const attributeCreateSchema = joi
     sortable: joi.boolean().optional(),
     filterable: joi.boolean().optional(),
     required: joi.boolean().optional(),
-    options: attributeOptionsSchema.optional(),
+    options: attributeOptionsSchema.optional()
   })
-  .required();
+  .required()
 
 export const attributeUpdateSchema = joi
   .object({
@@ -40,7 +40,7 @@ export const attributeUpdateSchema = joi
       filterable: joi.boolean().optional(),
       required: joi.boolean().optional(),
       options: attributeOptionsSchema.optional(),
-      categories: joi.any().strip(),
-    }),
+      categories: joi.any().strip()
+    })
   })
-  .required();
+  .required()

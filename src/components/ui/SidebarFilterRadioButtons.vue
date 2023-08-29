@@ -48,18 +48,18 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { AttributeFilter } from "@/interfaces";
+import type { PropType } from 'vue'
+import type { AttributeFilter } from '@/interfaces'
 
 defineProps({
   modelValue: {
     type: [Boolean, null] as PropType<boolean | null>,
-    required: true,
+    required: true
   },
   attribute: { type: Object as PropType<AttributeFilter>, required: true },
-  checkIfAttributeDisabled: { type: Function, required: true },
-});
-const emit = defineEmits(["update:modelValue", "change"]);
+  checkIfAttributeDisabled: { type: Function, required: true }
+})
+const emit = defineEmits(['update:modelValue', 'change'])
 </script>
 
 <style scoped lang="scss">

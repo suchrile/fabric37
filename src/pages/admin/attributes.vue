@@ -138,167 +138,167 @@
 </template>
 
 <script setup lang="ts">
-import type { ComputedRef, Ref } from "vue";
-import { useToast } from "primevue/usetoast";
-import { useConfirm } from "primevue/useconfirm";
-import { ProductAttributeDataTypes } from "@/consts";
-import { FilterMatchMode } from "@/interfaces";
+import type { ComputedRef, Ref } from 'vue'
+import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
+import { ProductAttributeDataTypes } from '@/consts'
+import { FilterMatchMode } from '@/interfaces'
 import type {
   Attribute,
   AttributeDialogProp,
   DeleteManyResponse,
-  DataTableFilterMeta,
-} from "@/interfaces";
+  DataTableFilterMeta
+} from '@/interfaces'
 
-const toast = useToast();
-const confirm = useConfirm();
+const toast = useToast()
+const confirm = useConfirm()
 
-const attributes: Ref<Attribute[]> = ref([]);
-const currentAttribute: Ref<AttributeDialogProp> = ref({} as Attribute);
-const selectedAttributes: Ref<Attribute[]> = ref([]);
-const isLoading: Ref<boolean> = ref(true);
-const isDialogLoading: Ref<boolean> = ref(false);
-const isAttributeEditDialogOpen: Ref<boolean> = ref(false);
-const expandedRows: Ref<Attribute[]> = ref([]);
+const attributes: Ref<Attribute[]> = ref([])
+const currentAttribute: Ref<AttributeDialogProp> = ref({} as Attribute)
+const selectedAttributes: Ref<Attribute[]> = ref([])
+const isLoading: Ref<boolean> = ref(true)
+const isDialogLoading: Ref<boolean> = ref(false)
+const isAttributeEditDialogOpen: Ref<boolean> = ref(false)
+const expandedRows: Ref<Attribute[]> = ref([])
 const filters: Ref<DataTableFilterMeta> = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   dataType: { value: null, matchMode: FilterMatchMode.EQUALS },
-  unit: { value: null, matchMode: FilterMatchMode.EQUALS },
-});
+  unit: { value: null, matchMode: FilterMatchMode.EQUALS }
+})
 
 const units: ComputedRef<(string | null)[]> = computed(() => [
-  ...new Set(attributes.value.map((attr) => attr.unit)),
-]);
+  ...new Set(attributes.value.map(attr => attr.unit))
+])
 
 onMounted(async () => {
-  await nextTick();
-  await loadAttributes();
-});
+  await nextTick()
+  await loadAttributes()
+})
 
 const create = async (attribute: Attribute) => {
-  isDialogLoading.value = true;
-  const { data } = await useApiCall<Attribute>("/api/attributes", {
-    method: "POST",
-    body: attribute,
-  });
+  isDialogLoading.value = true
+  const { data } = await useApiCall<Attribute>('/api/attributes', {
+    method: 'POST',
+    body: attribute
+  })
   if (data) {
-    attributes.value.push(data);
-    isAttributeEditDialogOpen.value = false;
+    attributes.value.push(data)
+    isAttributeEditDialogOpen.value = false
     toast.add({
-      severity: "success",
-      summary: "Атрибут создан",
+      severity: 'success',
+      summary: 'Атрибут создан',
       detail: `Атрибут «${attribute.name}» успешно создан.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isDialogLoading.value = false;
-};
+  isDialogLoading.value = false
+}
 const update = async (attribute: Attribute) => {
-  isDialogLoading.value = true;
+  isDialogLoading.value = true
   const { data } = await useApiCall<Attribute>(
-    "/api/attributes/" + attribute.id,
-    { method: "PATCH", body: attribute }
-  );
+    '/api/attributes/' + attribute.id,
+    { method: 'PATCH', body: attribute }
+  )
   if (data) {
-    const index = attributes.value.findIndex((attr) => attr.id === data.id);
-    attributes.value[index] = data;
-    isAttributeEditDialogOpen.value = false;
+    const index = attributes.value.findIndex(attr => attr.id === data.id)
+    attributes.value[index] = data
+    isAttributeEditDialogOpen.value = false
     toast.add({
-      severity: "info",
-      summary: "Атрибут обновлен",
+      severity: 'info',
+      summary: 'Атрибут обновлен',
       detail: `Атрибут «${attribute.name}» успешно обновлен.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-  isDialogLoading.value = false;
-};
+  isDialogLoading.value = false
+}
 const removeOne = async () => {
-  const attributeLabel = currentAttribute.value.name;
+  const attributeLabel = currentAttribute.value.name
   const { data } = await useApiCall<Attribute>(
-    "/api/attributes/" + currentAttribute.value.id,
-    { method: "DELETE" }
-  );
+    '/api/attributes/' + currentAttribute.value.id,
+    { method: 'DELETE' }
+  )
   if (data) {
     attributes.value = attributes.value.filter(
-      (cat) => cat.id !== currentAttribute.value.id
-    );
-    isAttributeEditDialogOpen.value = false;
+      cat => cat.id !== currentAttribute.value.id
+    )
+    isAttributeEditDialogOpen.value = false
     toast.add({
-      severity: "warn",
-      summary: "Атрибут удален",
+      severity: 'warn',
+      summary: 'Атрибут удален',
       detail: `Атрибут «${attributeLabel}» успешно удален.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-};
+}
 const removeMany = async () => {
-  const selectedIds = selectedAttributes.value.map((category) => category.id);
-  const { data } = await useApiCall<DeleteManyResponse>("/api/attributes", {
-    method: "DELETE",
-    query: { ids: selectedIds },
-  });
+  const selectedIds = selectedAttributes.value.map(category => category.id)
+  const { data } = await useApiCall<DeleteManyResponse>('/api/attributes', {
+    method: 'DELETE',
+    query: { ids: selectedIds }
+  })
   if (data) {
     attributes.value = attributes.value.filter(
-      (cat) => !selectedIds.includes(cat.id)
-    );
-    selectedAttributes.value = [];
+      cat => !selectedIds.includes(cat.id)
+    )
+    selectedAttributes.value = []
     toast.add({
-      severity: "warn",
-      summary: "Атрибуты удалены",
+      severity: 'warn',
+      summary: 'Атрибуты удалены',
       detail: `Выбранные атрибуты (${data.count}) успешно удалены.`,
-      life: 3000,
-    });
+      life: 3000
+    })
   }
-};
+}
 
 const duplicateAttribute = (attribute: Attribute) => {
-  openDialog({ ...attribute, id: undefined, name: attribute.name + " копия" });
-};
+  openDialog({ ...attribute, id: undefined, name: attribute.name + ' копия' })
+}
 
 const openDialog = (attribute = {} as AttributeDialogProp) => {
-  currentAttribute.value = { ...attribute };
-  isAttributeEditDialogOpen.value = true;
-};
+  currentAttribute.value = { ...attribute }
+  isAttributeEditDialogOpen.value = true
+}
 
 const confirmDeleteAttribute = (attribute: Attribute) => {
-  currentAttribute.value = attribute;
+  currentAttribute.value = attribute
   confirm.require({
-    header: "Удаление атрибута",
+    header: 'Удаление атрибута',
     message: `<p class="mb-2">Вы уверены, что хотите <b>удалить</b> атрибут <b class="white-space-nowrap">«${currentAttribute.value.name}»</b>?</p><p class="mb-2">Этот атрибут <b>будет удален у всех товаров</b>, которые его используют.</p>Это действие <b>невозможно отменить</b>.`,
-    icon: "pi pi-trash",
-    acceptClass: "p-button-danger",
-    accept: () => removeOne(),
-  });
-};
+    icon: 'pi pi-trash',
+    acceptClass: 'p-button-danger',
+    accept: () => removeOne()
+  })
+}
 const confirmDeleteAttributes = () => {
   confirm.require({
-    header: "Удаление атрибутов",
+    header: 'Удаление атрибутов',
     message: `<p class="mb-2">Вы уверены, что хотите <b>удалить</b> выбранные <b>(${selectedAttributes.value.length}) атрибуты</b>?</p><p class="mb-2">Эти атрибуты <b>будут удалены у всех товаров</b>, которые их используют.</p>Это действие <b>невозможно отменить</b>.`,
-    icon: "pi pi-trash",
-    acceptClass: "p-button-danger",
-    accept: () => removeMany(),
-  });
-};
+    icon: 'pi pi-trash',
+    acceptClass: 'p-button-danger',
+    accept: () => removeMany()
+  })
+}
 
 const closeHandler = () => {
-  currentAttribute.value = {} as Attribute;
-};
+  currentAttribute.value = {} as Attribute
+}
 
 const loadAttributes = async () => {
-  const { data } = await useFetch<Attribute[]>("/api/attributes");
+  const { data } = await useFetch<Attribute[]>('/api/attributes')
   if (!data.value) {
-    return;
+    return
   }
-  attributes.value = data.value;
-  isLoading.value = false;
-};
+  attributes.value = data.value
+  isLoading.value = false
+}
 
 definePageMeta({
-  layout: "admin",
-});
+  layout: 'admin'
+})
 useHead({
-  title: "Атрибуты",
-});
+  title: 'Атрибуты'
+})
 </script>
 
 <style lang="scss">

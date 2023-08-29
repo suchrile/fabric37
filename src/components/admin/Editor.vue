@@ -85,9 +85,9 @@
 
 <script setup lang="ts">
 defineProps({
-  modelValue: { type: String, default: "" },
-});
-defineEmits(["update:modelValue"]);
+  modelValue: { type: String, default: '' }
+})
+defineEmits(['update:modelValue'])
 </script>
 
 <style scoped></style>

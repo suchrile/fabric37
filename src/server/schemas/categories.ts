@@ -15,6 +15,7 @@ export const categoryUpdateSchema = joi.object({
       id: categoryIdSchema.optional(),
       name: joi.string().optional(),
       parentId: categoryIdSchema.allow(null).optional(),
+      view: joi.valid("cards", "table").optional(),
     })
     .required(),
 });
@@ -23,5 +24,6 @@ export const categoryCreateSchema = joi
   .object<CategoryCreateDto>({
     name: joi.string().required(),
     parentId: categoryIdSchema.allow(null).optional(),
+    view: joi.valid("cards", "table").optional(),
   })
   .required();

@@ -1,5 +1,5 @@
-import LinksRepository from "@/server/repositories/links.repository";
+import LinksRepository from '@/server/repositories/links.repository'
 
 export default defineEventHandler(() => {
-  return LinksRepository.findMany();
-});
+  return LinksRepository.findMany()
+})

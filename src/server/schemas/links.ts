@@ -1,21 +1,21 @@
-import joi from "joi";
-import type { LinkCreateDto, LinkUpdateDto } from "@/interfaces";
-import { Link } from "@/interfaces";
+import joi from 'joi'
+import type { LinkCreateDto, LinkUpdateDto } from '@/interfaces'
+import { Link } from '@/interfaces'
 
-export const linkIdSchema = joi.number().integer().positive();
+export const linkIdSchema = joi.number().integer().positive()
 export const linkIdsSchema = joi
   .array<number[]>()
   .items(linkIdSchema)
-  .required();
+  .required()
 
 export const linkCreateSchema = joi
   .object<LinkCreateDto>({
     title: joi.string().required(),
     url: joi.string().uri().required(),
     sortOrder: joi.number().integer().min(0).required(),
-    newTab: joi.boolean().optional(),
+    newTab: joi.boolean().optional()
   })
-  .required();
+  .required()
 
 export const linkUpdateSchema = joi.object({
   id: linkIdSchema.required(),
@@ -25,10 +25,10 @@ export const linkUpdateSchema = joi.object({
       title: joi.string().optional(),
       url: joi.string().uri().optional(),
       newTab: joi.boolean().optional(),
-      sortOrder: joi.number().integer().min(0).optional(),
+      sortOrder: joi.number().integer().min(0).optional()
     })
-    .required(),
-});
+    .required()
+})
 
 export const linksUpdateSchema = joi
   .array<Link[]>()
@@ -38,7 +38,7 @@ export const linksUpdateSchema = joi
       sortOrder: joi.number().integer().min(0).required(),
       title: joi.string().optional(),
       url: joi.string().uri().optional(),
-      newTab: joi.boolean().optional(),
+      newTab: joi.boolean().optional()
     })
   )
-  .required();
+  .required()

@@ -27,8 +27,7 @@
           v-for="error in v$.name.$errors"
           :key="error.$uid"
           class="block p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -61,8 +60,7 @@
           v-for="error in v$.dataType.$errors"
           :key="error.$uid"
           class="block p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -102,9 +100,7 @@
         :binary="true"
         @input="onShowInCatalogChange($event)"
       />
-      <label for="product-attribute-show-in-catalog"
-        >Показывать в каталоге</label
-      >
+      <label for="product-attribute-show-in-catalog">Показывать в каталоге</label>
     </div>
 
     <div class="field-checkbox mb-2">
@@ -114,9 +110,7 @@
         :disabled="loading"
         :binary="true"
       />
-      <label for="product-attribute-sortable"
-        >Использовать для сортировки</label
-      >
+      <label for="product-attribute-sortable">Использовать для сортировки</label>
     </div>
 
     <div class="field-checkbox mb-2">
@@ -126,9 +120,7 @@
         :disabled="loading"
         :binary="true"
       />
-      <label for="product-attribute-filterable"
-        >Использовать для фильтрации</label
-      >
+      <label for="product-attribute-filterable">Использовать для фильтрации</label>
     </div>
 
     <div class="field-checkbox mb-0">
@@ -161,87 +153,87 @@
 </template>
 
 <script setup lang="ts">
-import { useVuelidate } from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
-import type { ComputedRef, PropType, Ref } from "vue";
-import type { AttributeDialogOption, AttributeDialogProp } from "@/interfaces";
-import { AttributeDataType } from "@/interfaces";
-import { ProductAttributeDataTypes } from "@/consts";
+import { useVuelidate } from '@vuelidate/core'
+import { helpers, required } from '@vuelidate/validators'
+import type { ComputedRef, PropType, Ref } from 'vue'
+import type { AttributeDialogOption, AttributeDialogProp } from '@/interfaces'
+import { AttributeDataType } from '@/interfaces'
+import { ProductAttributeDataTypes } from '@/consts'
 
 const props = defineProps({
   value: { type: Object as PropType<AttributeDialogProp>, required: true },
   visible: { type: Boolean, default: false },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:visible", "create", "edit", "close"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:visible', 'create', 'edit', 'close'])
 
-const attribute: Ref<AttributeDialogProp> = ref({} as AttributeDialogProp);
-const optionsInput: Ref<string> = ref("");
-const options: Ref<AttributeDialogOption[]> = ref([]);
+const attribute: Ref<AttributeDialogProp> = ref({} as AttributeDialogProp)
+const optionsInput: Ref<string> = ref('')
+const options: Ref<AttributeDialogOption[]> = ref([])
 
 const submitLabel: ComputedRef<string> = computed(() =>
-  props.value.id ? "Сохранить" : "Добавить"
-);
+  props.value.id ? 'Сохранить' : 'Добавить'
+)
 const dialogHeader: ComputedRef<string> = computed(
-  () => (props.value.id ? "Редактирование" : "Добавление") + " атрибута"
-);
+  () => (props.value.id ? 'Редактирование' : 'Добавление') + ' атрибута'
+)
 
 const rules = computed(() => ({
-  name: { required: helpers.withMessage("Обязательное поле", required) },
-  dataType: { required: helpers.withMessage("Обязательное поле", required) },
-}));
-let v$ = useVuelidate(rules, attribute);
+  name: { required: helpers.withMessage('Обязательное поле', required) },
+  dataType: { required: helpers.withMessage('Обязательное поле', required) }
+}))
+let v$ = useVuelidate(rules, attribute)
 
 const addOption = () => {
   const isOptionExists = options.value.some(
-    (option) => option.label === optionsInput.value
-  );
+    option => option.label === optionsInput.value
+  )
   if (!isOptionExists) {
-    options.value.push({ label: optionsInput.value });
+    options.value.push({ label: optionsInput.value })
   }
-  optionsInput.value = "";
-};
+  optionsInput.value = ''
+}
 
 const removeOption = (option: AttributeDialogOption) => {
-  options.value = options.value.filter((item) => item.label !== option.label);
-};
+  options.value = options.value.filter(item => item.label !== option.label)
+}
 
 const onShowInCatalogChange = (isShowInCatalogChecked: boolean) => {
   if (isShowInCatalogChecked) {
-    attribute.value.required = true;
+    attribute.value.required = true
   }
-};
+}
 
 const submit = async () => {
-  const isFormValid = await v$.value.$validate();
+  const isFormValid = await v$.value.$validate()
   if (!isFormValid) {
-    return;
+    return
   }
   const toEmit = {
     ...attribute.value,
     unit: attribute.value.unit || null,
-    options: options.value,
-  };
-  if (props.value.id) {
-    emit("edit", toEmit);
-  } else {
-    emit("create", toEmit);
+    options: options.value
   }
-};
+  if (props.value.id) {
+    emit('edit', toEmit)
+  } else {
+    emit('create', toEmit)
+  }
+}
 
 const showHandler = () => {
-  attribute.value = props.value;
-  options.value = attribute.value.options || [];
-  v$ = useVuelidate(rules, attribute);
-};
+  attribute.value = props.value
+  options.value = attribute.value.options || []
+  v$ = useVuelidate(rules, attribute)
+}
 
 const hideHandler = () => {
-  v$.value.$reset();
-  attribute.value = {} as AttributeDialogProp;
-  optionsInput.value = "";
-  options.value = [];
-  emit("close");
-};
+  v$.value.$reset()
+  attribute.value = {} as AttributeDialogProp
+  optionsInput.value = ''
+  options.value = []
+  emit('close')
+}
 </script>
 
 <style lang="scss" scoped></style>

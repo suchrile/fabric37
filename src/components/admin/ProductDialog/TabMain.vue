@@ -18,8 +18,7 @@
           v-for="error in v$.product.name.$errors"
           :key="error.$uid"
           class="p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -55,8 +54,7 @@
           v-for="error in v$.product.code.$errors"
           :key="error.$uid"
           class="p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -77,8 +75,7 @@
           v-for="error in v$.categoryIds.$errors"
           :key="error.$uid"
           class="p-error"
-          >{{ error.$message }}</small
-        >
+        >{{ error.$message }}</small>
       </div>
     </div>
 
@@ -90,30 +87,28 @@
         :disabled="loading"
         @input="emit('update:product', { ...product, hidden: $event })"
       />
-      <label for="product-dialog-show-in-catalog"
-        >Не показывать в каталоге</label
-      >
+      <label for="product-dialog-show-in-catalog">Не показывать в каталоге</label>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { TreeNode, TreeSelectionKeys } from "primevue/tree";
-import type { Validation } from "@vuelidate/core";
-import type { ProductDialogProp } from "@/interfaces";
+import type { PropType } from 'vue'
+import type { TreeNode, TreeSelectionKeys } from 'primevue/tree'
+import type { Validation } from '@vuelidate/core'
+import type { ProductDialogProp } from '@/interfaces'
 
 defineProps({
   product: { type: Object as PropType<ProductDialogProp>, required: true },
   categories: { type: Object as PropType<TreeNode[]>, required: true },
   selectedCategories: {
     type: Object as PropType<TreeSelectionKeys>,
-    required: true,
+    required: true
   },
   v$: { type: Object as PropType<Validation>, required: true },
-  loading: { type: Boolean, default: false },
-});
-const emit = defineEmits(["update:product", "update:selectedCategories"]);
+  loading: { type: Boolean, default: false }
+})
+const emit = defineEmits(['update:product', 'update:selectedCategories'])
 </script>
 
 <style scoped></style>

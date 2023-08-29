@@ -10,6 +10,8 @@ export default defineEventHandler(async (event) => {
   const params = event.context.params!;
   const body = await readBody(event);
 
+  console.log(body);
+
   const { value, error } = categoryUpdateSchema.validate({
     id: +params.id,
     body,
